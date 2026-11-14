@@ -44,11 +44,6 @@
    "title": "Hoeken",
    "note": "Hoek, hoekpunt en benen, het teken ∠, hoeken op de klok en hoeken vergelijken. Uitleg en 60 vragen.",
    "url": "hoeken.html"
-  },
-  "splitsen": {
-   "title": "Splitsen tot 20 (groep 3)",
-   "note": "Splitsen met Pip: 2 t/m 20, 5 hoofdstukken met sterren en een beker.",
-   "url": "rekenles-splitsen.html"
   }
  },
  "columns": {
@@ -63,8 +58,7 @@
    "getallen",
    "plusmin",
    "keerdelen",
-   "decimalen",
-   "splitsen"
+   "decimalen"
   ]
  }
 }
