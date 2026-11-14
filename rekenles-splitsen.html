@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Splitsen tot 20 – groep 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1d3b2a;--muted:#4f6b5a;--leaf:#2fa84f;--leaf2:#1f7a3a;--sun:#ffc83d;--orange:#ff8a3d;--blue:#3da5ff;--card:#fffdf4;--line:#cfe6b8;--bad:#e85d5d}
+*{box-sizing:border-box}
+html{-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;font-family:'Baloo 2','Fredoka',system-ui,sans-serif;color:var(--ink);font-size:20px;
+ background:radial-gradient(circle at 85% 8%,#fff6b8 0 60px,transparent 62px),linear-gradient(180deg,#bfe9ff 0%,#d9f5c8 55%,#8fd17a 100%) fixed}
+.wrap{max-width:780px;margin:0 auto;padding:14px 16px 60px;position:relative;z-index:1}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.top a,.top button{font:700 16px 'Baloo 2',sans-serif;color:var(--leaf2);background:#ffffffcc;border:2px solid var(--line);border-radius:999px;padding:6px 14px;text-decoration:none;cursor:pointer}
+h1{font-size:clamp(30px,7vw,46px);line-height:1.05;margin:6px 0 4px;color:var(--leaf2);text-shadow:0 3px 0 #fff}
+h2{font-size:28px;margin:4px 0}
+.card{background:var(--card);border:3px solid var(--line);border-radius:26px;padding:18px;box-shadow:0 6px 0 #b6d89a}
+.pipbox{display:flex;align-items:center;gap:12px;margin:8px 0 14px}
+.pip{width:96px;flex:none;animation:bob 2.4s ease-in-out infinite}
+.pip.small{width:72px}
+@keyframes bob{50%{transform:translateY(-6px)}}
+.bubble{position:relative;background:#fff;border:3px solid var(--line);border-radius:22px;padding:10px 16px;font-weight:700;font-size:20px;flex:1}
+.bubble:before{content:"";position:absolute;left:-12px;top:50%;margin-top:-9px;border:9px solid transparent;border-right-color:var(--line);border-left:0}
+.bubble.good{background:#e4f9d6;border-color:#7ed36a}
+.bubble.bad{background:#fff0e0;border-color:#ffb066}
+.grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:560px){.grid{grid-template-columns:1fr 1fr}}
+.chap{display:flex;align-items:center;gap:12px;text-align:left;width:100%;font:inherit;color:inherit;background:var(--card);border:3px solid var(--line);border-radius:24px;padding:12px 14px;cursor:pointer;box-shadow:0 5px 0 #b6d89a;transition:transform .12s}
+.chap:hover{transform:translateY(-2px)}
+.chap:active{transform:translateY(3px);box-shadow:0 2px 0 #b6d89a}
+.chap .nr{flex:none;width:52px;height:52px;border-radius:50%;background:var(--c);color:#fff;font-size:28px;font-weight:800;display:grid;place-items:center;box-shadow:inset 0 -4px 0 #0002}
+.chap b{display:block;font-size:22px;line-height:1.1}
+.chap .st{font-size:26px;letter-spacing:2px;color:#ffb400;text-shadow:0 1px 0 #fff}
+.chap .st i{font-style:normal;color:#d7d7c5}
+.chap.cup{background:linear-gradient(135deg,#fff3b0,#ffe27a);border-color:#f0c64a;box-shadow:0 5px 0 #d9aa2a}
+.chap.cup.locked{filter:grayscale(1);opacity:.65}
+.big{font:800 22px 'Baloo 2',sans-serif;color:#fff;background:var(--leaf);border:0;border-radius:999px;padding:12px 28px;cursor:pointer;box-shadow:0 5px 0 var(--leaf2)}
+.big:active{transform:translateY(3px);box-shadow:0 2px 0 var(--leaf2)}
+.big.alt{background:#fff;color:var(--leaf2);border:3px solid var(--line);box-shadow:0 5px 0 #b6d89a}
+.row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:14px}
+.say{font:700 16px 'Baloo 2',sans-serif;background:#fff;color:var(--leaf2);border:2px solid var(--line);border-radius:999px;padding:4px 14px;cursor:pointer}
+.dots{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;max-width:420px;margin:10px auto}
+.dot{--d:clamp(22px,6.4vw,34px);width:var(--d);height:var(--d);border-radius:50%;border:0;padding:0;background:radial-gradient(circle at 35% 30%,#fff9 0 14%,transparent 16%),var(--col);box-shadow:inset 0 -4px 0 #0002;flex:none}
+.dot.o{--col:var(--orange)}.dot.b{--col:var(--blue)}
+.br{flex-basis:100%;height:0}
+button.dot{cursor:pointer;transition:transform .1s}button.dot:hover{transform:scale(1.15)}
+.demo{font-size:44px;font-weight:800;text-align:center;margin:4px 0}
+.demo .o{color:var(--orange)}.demo .b{color:var(--blue)}
+.progress{display:flex;gap:6px;justify-content:center;margin:6px 0 12px}
+.progress i{width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid var(--line)}
+.progress i.now{border-color:var(--leaf);transform:scale(1.2)}
+.progress i.ok{background:#7ed36a;border-color:#4aa83a}
+.progress i.no{background:#ffb066;border-color:#e8883a}
+.eq{display:flex;gap:8px;align-items:center;justify-content:center;font-size:clamp(40px,11vw,60px);font-weight:800;flex-wrap:wrap;margin:8px 0}
+.eq .n{background:#fff;border:3px solid var(--line);border-radius:16px;min-width:1.4em;text-align:center;padding:0 8px}
+.slot{background:#fff6c8!important;border:3px dashed #e0b43a!important;color:#c98a00}
+.slot.done{background:#e4f9d6!important;border:3px solid #7ed36a!important;color:var(--leaf2)}
+.house{width:min(300px,86%);margin:8px auto}
+.roof{height:100px;background:var(--leaf);clip-path:polygon(50% 0,100% 100%,0 100%);display:grid;place-items:end center;color:#fff;font-size:48px;font-weight:800;padding-bottom:2px}
+.rooms{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:4px}
+.room{height:96px;background:#fff;border:3px solid var(--line);border-radius:12px;display:grid;place-items:center;font-size:52px;font-weight:800}
+.prompt{text-align:center;font-weight:700;font-size:22px;margin:4px 0}
+.opts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.opts.three{grid-template-columns:1fr}
+.opt{font:800 34px 'Baloo 2',sans-serif;color:var(--ink);background:#fff;border:3px solid var(--line);border-radius:20px;padding:14px 4px;cursor:pointer;box-shadow:0 5px 0 #b6d89a;min-height:72px}
+.opts.three .opt{font-size:30px}
+.opt:active{transform:translateY(3px);box-shadow:0 2px 0 #b6d89a}
+.opt.wrong{background:#ffe3e3;border-color:var(--bad);animation:shake .35s;color:#aaa;box-shadow:none}
+.opt.right{background:#d4f5c3;border-color:#4aa83a;animation:pop .4s}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes pop{50%{transform:scale(1.12)}}
+.stars{display:flex;justify-content:center;gap:6px;font-size:76px;line-height:1}
+.stars span{color:#dcdcc8;display:inline-block}
+.stars span.on{color:#ffb400;text-shadow:0 3px 0 #c98a00;animation:starpop .6s both}
+@keyframes starpop{0%{transform:scale(0) rotate(-90deg)}70%{transform:scale(1.4) rotate(10deg)}100%{transform:scale(1)}}
+.center{text-align:center}
+.cupsvg{width:220px;animation:bob 2.2s ease-in-out infinite}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+.deco{position:fixed;bottom:-10px;width:170px;opacity:.9;pointer-events:none;z-index:0}
+.deco.l{left:-30px}.deco.r{right:-30px;transform:scaleX(-1)}
+.reset{margin-top:22px;text-align:center}
+.reset button{font:600 14px 'Baloo 2';background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<svg class="deco l" viewBox="0 0 200 200" aria-hidden="true"><g fill="#2c9a45"><path d="M10 200C0 120 40 50 110 20c-10 60-5 120 20 180z"/></g><g fill="#43c25f"><path d="M70 200C60 140 90 90 150 70c-5 50 0 90 20 130z"/></g><g fill="#1f7a3a"><path d="M0 200C10 150 30 120 60 100c0 40 10 70 30 100z"/></g></svg>
+<svg class="deco r" viewBox="0 0 200 200" aria-hidden="true"><g fill="#2c9a45"><path d="M10 200C0 120 40 50 110 20c-10 60-5 120 20 180z"/></g><g fill="#43c25f"><path d="M70 200C60 140 90 90 150 70c-5 50 0 90 20 130z"/></g><g fill="#1f7a3a"><path d="M0 200C10 150 30 120 60 100c0 40 10 70 30 100z"/></g></svg>
+<canvas id="confetti"></canvas>
+
+<div class="wrap">
+  <div class="top"><a href="index.html">← Alle lessen</a><button id="snd" aria-pressed="true">🔊 Geluid aan</button></div>
+
+  <section id="home">
+    <h1>Splitsen met Pip</h1>
+    <div class="pipbox"><div class="pip" data-pip></div><div class="bubble">Hoi! Ik ben Pip. Kies een stukje van het jungle-pad en we gaan splitsen!</div></div>
+    <div class="grid" id="chapters"></div>
+    <div class="reset"><button id="reset">Alles opnieuw beginnen</button></div>
+  </section>
+
+  <section id="intro" hidden>
+    <div class="card">
+      <h2 id="itTitle"></h2>
+      <div class="pipbox"><div class="pip small" data-pip></div><div class="bubble" id="itText"></div></div>
+      <div class="dots" id="itDots"></div>
+      <div class="demo" id="itEq"></div>
+      <div class="center"><button class="say" id="itSay">🔊 Lees voor</button></div>
+      <p class="center" style="margin:6px 0 0;font-size:18px;color:var(--muted)">Tik op een bolletje en kijk wat er gebeurt!</p>
+      <div class="row"><button class="big alt" id="itBack">← Terug</button><button class="big" id="itStart">Start! ▶</button></div>
+    </div>
+  </section>
+
+  <section id="quiz" hidden>
+    <div class="progress" id="prog"></div>
+    <div class="card">
+      <div class="center"><button class="say" id="qSay">🔊 Lees voor</button></div>
+      <div id="qBody"></div>
+      <div class="opts" id="qOpts"></div>
+    </div>
+    <div class="pipbox"><div class="pip small" data-pip></div><div class="bubble" id="qFb">Kijk goed en kies het antwoord!</div></div>
+    <div class="row"><button class="big" id="qNext" hidden>Verder ➜</button></div>
+  </section>
+
+  <section id="result" hidden>
+    <div class="card center">
+      <h2 id="rTitle"></h2>
+      <div class="stars" id="rStars"></div>
+      <p id="rText" style="font-size:24px;font-weight:700;margin:10px 0"></p>
+      <div class="row" id="rBtns"></div>
+    </div>
+  </section>
+
+  <section id="cup" hidden>
+    <div class="card center">
+      <h1 id="cTitle"></h1>
+      <div id="cSvg"></div>
+      <p id="cText" style="font-size:24px;font-weight:700;margin:6px 0"></p>
+      <div class="row"><button class="big" id="cBack">Naar het jungle-pad</button></div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+'use strict';
+var KEY='splitsen-groep3-v1';
+var CH=[
+ {title:'Splitsen 2 t/m 5',nums:[2,3,4,5],demo:5,color:'#ff8a3d',tip:'Kleine getallen kun je snel splitsen. Tel de bolletjes!'},
+ {title:'Splitsen 6 t/m 8',nums:[6,7,8],demo:7,color:'#3da5ff',tip:'Denk aan 5 en nog een paar erbij.'},
+ {title:'Splitsen 9 en 10',nums:[9,10],demo:10,color:'#9b6bff',tip:'Bij 10: 1 en 9, 2 en 8, 3 en 7, 4 en 6, 5 en 5.'},
+ {title:'Splitsen 11 t/m 15',nums:[11,12,13,14,15],demo:13,color:'#ff5fa2',tip:'Splits eerst in 10 en de rest. 13 is 10 en 3.'},
+ {title:'Splitsen 16 t/m 20',nums:[16,17,18,19,20],demo:18,color:'#2fa84f',tip:'Weer 10 en de rest. 18 is 10 en 8.'}
+];
+var PIP='<svg viewBox="0 0 120 120" aria-hidden="true"><ellipse cx="60" cy="108" rx="34" ry="7" fill="#0002"/><path d="M60 8c8 12 4 22-4 28 10-2 18-10 18-10 0 14-8 22-14 24" fill="#2c9a45"/><ellipse cx="60" cy="72" rx="42" ry="36" fill="#6fd65b"/><ellipse cx="60" cy="84" rx="28" ry="22" fill="#c8f5a8"/><circle cx="38" cy="46" r="17" fill="#fff"/><circle cx="82" cy="46" r="17" fill="#fff"/><circle cx="41" cy="48" r="8" fill="#1d3b2a"/><circle cx="79" cy="48" r="8" fill="#1d3b2a"/><circle cx="44" cy="45" r="3" fill="#fff"/><circle cx="82" cy="45" r="3" fill="#fff"/><path d="M42 76q18 18 36 0" fill="none" stroke="#1d3b2a" stroke-width="5" stroke-linecap="round"/><circle cx="26" cy="72" r="6" fill="#ff9ab0" opacity=".7"/><circle cx="94" cy="72" r="6" fill="#ff9ab0" opacity=".7"/></svg>';
+var CUPS={gold:['#fff1a0','#ffc83d','#c98a00','Gouden beker!','Wauw! Jij bent een echte splits-kampioen!'],silver:['#f4f7fa','#bfc8d2','#8795a3','Zilveren beker!','Super gedaan! Bijna alles lukte al.'],bronze:['#ffd9b0','#d9904a','#9c5f26','Bronzen beker!','Goed gedaan! Oefen nog eens, dan word je zilver of goud.']};
+
+var $=function(s){return document.querySelector(s)};
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function ri(a,b){return a+Math.floor(Math.random()*(b-a+1))}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+
+/* voortgang */
+var save={stars:CH.map(function(){return 0})};
+try{var r=JSON.parse(localStorage.getItem(KEY));if(r&&Array.isArray(r.stars))save.stars=CH.map(function(_,i){return Math.max(0,Math.min(3,+r.stars[i]||0))})}catch(e){}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(save))}catch(e){}}
+function total(){return save.stars.reduce(function(a,b){return a+b},0)}
+function allDone(){return save.stars.every(function(s){return s>0})}
+
+/* geluid en voorlezen */
+var snd=true,ac=null;
+function ctx(){if(!snd)return null;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume()}catch(e){ac=null}return ac}
+function tone(f,d,t,w){var c=ctx();if(!c)return;var o=c.createOscillator(),g=c.createGain(),s=c.currentTime+(w||0);o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,s);g.gain.exponentialRampToValueAtTime(.22,s+.02);g.gain.exponentialRampToValueAtTime(.0001,s+d);o.connect(g);g.connect(c.destination);o.start(s);o.stop(s+d+.05)}
+function sGood(){tone(523,.15,'triangle',0);tone(659,.15,'triangle',.12);tone(784,.3,'triangle',.24)}
+function sBad(){tone(220,.25,'sawtooth',0);tone(196,.3,'sawtooth',.15)}
+function sStar(i){tone(660+i*180,.3,'triangle',0)}
+function sFan(){[523,659,784,1047,784,1047].forEach(function(f,i){tone(f,.28,'triangle',i*.15)})}
+function speak(t){try{if(!snd||!window.speechSynthesis)return;speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='nl-NL';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+$('#snd').onclick=function(){snd=!snd;this.textContent=snd?'🔊 Geluid aan':'🔇 Geluid uit';this.setAttribute('aria-pressed',String(snd));if(!snd)try{speechSynthesis.cancel()}catch(e){}};
+
+/* confetti */
+var cv=$('#confetti'),cx=cv.getContext('2d'),parts=[],raf=0;
+function confetti(n){cv.width=innerWidth;cv.height=innerHeight;var cols=['#ff8a3d','#3da5ff','#ffc83d','#ff5fa2','#6fd65b','#9b6bff'];
+ for(var i=0;i<(n||120);i++)parts.push({x:Math.random()*cv.width,y:-20-Math.random()*cv.height*.4,vx:Math.random()*4-2,vy:2+Math.random()*4,s:6+Math.random()*8,c:pick(cols),r:Math.random()*6,vr:Math.random()*.3-.15});
+ if(!raf)(function loop(){cx.clearRect(0,0,cv.width,cv.height);parts=parts.filter(function(p){return p.y<cv.height+20});parts.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/3,p.s,p.s/1.6);cx.restore()});if(parts.length)raf=requestAnimationFrame(loop);else{raf=0;cx.clearRect(0,0,cv.width,cv.height)}})()}
+
+/* schermen */
+function show(id){['home','intro','quiz','result','cup'].forEach(function(s){$('#'+s).hidden=s!==id});try{speechSynthesis.cancel()}catch(e){}window.scrollTo(0,0)}
+function starsText(n){var s='';for(var i=0;i<3;i++)s+=i<n?'★':'<i>★</i>';return s}
+
+function home(){
+  var h='';
+  CH.forEach(function(c,i){h+='<button class="chap" data-i="'+i+'" style="--c:'+c.color+'"><span class="nr">'+(i+1)+'</span><span><b>'+c.title+'</b><span class="st">'+starsText(save.stars[i])+'</span></span></button>'});
+  var done=allDone();
+  h+='<button class="chap cup'+(done?'':' locked')+'" id="cupBtn"><span class="nr" style="--c:#ffb400">🏆</span><span><b>De beker</b><span style="font-size:16px;color:var(--muted)">'+(done?'Kijk wat je gewonnen hebt!':'Doe eerst alle stukjes van het pad')+'</span></span></button>';
+  $('#chapters').innerHTML=h;
+  $('#chapters').querySelectorAll('.chap[data-i]').forEach(function(b){b.onclick=function(){ctx();intro(+b.dataset.i)}});
+  $('#cupBtn').onclick=function(){ctx();if(allDone())cup();else{speak('Doe eerst alle stukjes van het pad.');}};
+  show('home');
+}
+
+/* bolletjes */
+function dotsHTML(a,b,btn){var h='';for(var i=0;i<a+b;i++){h+=(btn?'<button class="dot '+(i<a?'o':'b')+'" data-k="'+(i+1)+'" aria-label="splits na '+(i+1)+'"></button>':'<span class="dot '+(i<a?'o':'b')+'"></span>');if((i+1)%10===0&&i+1<a+b)h+='<i class="br"></i>'}return h}
+
+var cur=0,ia=0;
+function intro(ci){
+  cur=ci;var c=CH[ci],n=c.demo;ia=Math.floor(n/2);
+  $('#itTitle').textContent=c.title;
+  $('#itText').textContent='Splitsen is een getal in twee stukjes breken. '+c.tip;
+  function draw(){var b=n-ia;$('#itDots').innerHTML=dotsHTML(ia,b,true);$('#itEq').innerHTML=n+' = <span class="o">'+ia+'</span> + <span class="b">'+b+'</span>';
+    $('#itDots').querySelectorAll('button').forEach(function(d){d.onclick=function(){ctx();ia=Math.min(+d.dataset.k,n-1);tone(500+ia*30,.12,'triangle');draw()}})}
+  draw();
+  $('#itSay').onclick=function(){ctx();speak('Splitsen is een getal in twee stukjes breken. '+c.tip+' '+n+' is '+ia+' en '+(n-ia))};
+  $('#itBack').onclick=home;
+  $('#itStart').onclick=function(){ctx();startQuiz(ci)};
+  show('intro');
+}
+
+/* vragen */
+function numOptions(ans,n){var c=[];for(var v=1;v<=Math.max(n,ans+2);v++)if(v!==ans)c.push({v:v,k:Math.abs(v-ans)+Math.random()*1.5});c.sort(function(x,y){return x.k-y.k});
+  return shuffle([ans].concat(c.slice(0,3).map(function(x){return x.v})))}
+function makeQ(type,n,a){
+  var b=n-a,q={type:type,n:n,a:a,b:b},v;
+  if(type==='dots'){v=0;q.ans=b;q.say='Er zijn '+n+' bolletjes. '+a+' zijn oranje. Hoeveel zijn blauw?';q.prompt='Hoeveel bolletjes zijn blauw?';q.tip='Tip: tel vanaf '+a+' door tot '+n+'.';q.opts=numOptions(b,n)}
+  else if(type==='house'){v=Math.random()<.5?0:1;var known=v?b:a;q.hide=v;q.ans=v?a:b;q.say='Splitshuis van '+n+'. In de ene kamer staat '+known+'. Hoeveel staat er in de andere kamer?';q.prompt='Wat moet er in de lege kamer?';q.tip='Tip: '+known+' en hoeveel samen '+n+'?';q.opts=numOptions(q.ans,n)}
+  else if(type==='sum'){v=ri(0,2);
+    if(v===0){q.eq=[a,'+','?','=',n];q.ans=b;q.say=a+' plus hoeveel is '+n+'?'}
+    else if(v===1){q.eq=['?','+',b,'=',n];q.ans=a;q.say='Hoeveel plus '+b+' is '+n+'?'}
+    else{q.eq=[n,'=',a,'+','?'];q.ans=b;q.say=n+' is '+a+' plus hoeveel?'}
+    q.prompt='Welk getal hoort op het vraagteken?';q.tip='Tip: tel door tot '+n+'.';q.opts=numOptions(q.ans,n)}
+  else{v=0;var w=[[a,b+1],[a+1,b],[a-1,b],[a,b-1]].filter(function(p){return p[0]>=1&&p[1]>=1});
+    var wr=shuffle(w).slice(0,2),all=[[a,b]].concat(wr).map(function(p){return Math.random()<.5?p:[p[1],p[0]]});
+    q.options=all.map(function(p,i){return{label:p[0]+' en '+p[1],val:i===0?'ok':'x'+i}});q.ans='ok';q.opts=shuffle(q.options.slice());
+    q.say='Welke splitsing hoort bij '+n+'?';q.prompt='Welke splitsing hoort bij '+n+'?';q.tip='Tip: de twee getallen moeten samen '+n+' zijn.'}
+  q.key=type+'|'+n+'|'+a+'|'+v;return q}
+function buildChapter(ci){
+  var nums=CH[ci].nums,types=shuffle(['dots','dots','house','house','house','sum','sum','sum','pick','pick']),order=[];
+  while(order.length<10)order=order.concat(shuffle(nums.slice()));order=order.slice(0,10);
+  var seen={},qs=[];
+  for(var i=0;i<10;i++){var q,t=0;do{var n=order[i];q=makeQ(types[i],n,ri(1,n-1));t++}while(seen[q.key]&&t<40);seen[q.key]=1;qs.push(q)}
+  return qs}
+
+var Q=[],qi=0,tries=0,locked=false,pts=0,marks=[];
+function startQuiz(ci){cur=ci;Q=buildChapter(ci);qi=0;pts=0;marks=[];showQ();show('quiz')}
+function progress(){var h='';for(var i=0;i<Q.length;i++)h+='<i class="'+(i<marks.length?(marks[i]?'ok':'no'):(i===qi?'now':''))+'"></i>';$('#prog').innerHTML=h}
+function setFb(t,k){var f=$('#qFb');f.textContent=t;f.className='bubble'+(k?' '+k:'')}
+function showQ(){
+  var q=Q[qi];tries=0;locked=false;progress();$('#qNext').hidden=true;setFb('Kijk goed en kies het antwoord!');
+  var h='';
+  if(q.type==='dots'){h='<div class="dots">'+dotsHTML(q.a,q.b)+'</div><div class="eq"><span class="n">'+q.n+'</span><span>=</span><span class="n" style="color:var(--orange)">'+q.a+'</span><span>+</span><span class="n slot" id="slot">?</span></div>'}
+  else if(q.type==='house'){h='<div class="house"><div class="roof">'+q.n+'</div><div class="rooms"><div class="room'+(q.hide===0?' slot':'')+'"'+(q.hide===0?' id="slot"':'')+'>'+(q.hide===0?'?':q.a)+'</div><div class="room'+(q.hide===1?' slot':'')+'"'+(q.hide===1?' id="slot"':'')+'>'+(q.hide===1?'?':q.b)+'</div></div></div>'}
+  else if(q.type==='sum'){h='<div class="eq">'+q.eq.map(function(x){return x==='?'?'<span class="n slot" id="slot">?</span>':(typeof x==='number'?'<span class="n">'+x+'</span>':'<span>'+x+'</span>')}).join('')+'</div>'}
+  else{h='<div class="house" style="width:140px"><div class="roof" style="height:90px">'+q.n+'</div></div>'}
+  h+='<div class="prompt">'+q.prompt+'</div>';
+  $('#qBody').innerHTML=h;
+  var o=$('#qOpts');o.className='opts'+(q.type==='pick'?' three':'');
+  o.innerHTML=q.opts.map(function(x,i){var val=q.type==='pick'?x.val:x,label=q.type==='pick'?x.label:x;return'<button class="opt" data-v="'+val+'">'+label+'</button>'}).join('');
+  o.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){answer(b)}});
+  $('#qSay').onclick=function(){ctx();speak(q.say)};
+}
+function finishQ(ok){locked=true;marks.push(ok);if(ok)pts++;progress();var nx=$('#qNext');nx.hidden=false;nx.textContent=qi===Q.length-1?'Klaar! ⭐':'Verder ➜';nx.focus&&nx.focus()}
+function answer(btn){
+  if(locked)return;var q=Q[qi],v=btn.dataset.v,right=String(q.ans)===v,slot=$('#slot');
+  if(right){btn.classList.add('right');if(slot){slot.textContent=q.type==='pick'?'':q.ans;slot.classList.add('done')}
+    sGood();setFb(pick(['Goed zo!','Super!','Knap hoor!','Yes, helemaal goed!','Wat slim!']),'good');confetti(30);finishQ(tries===0)}
+  else{btn.classList.add('wrong');btn.disabled=true;tries++;sBad();
+    if(tries<2)setFb('Oeps, nog niet goed. '+q.tip,'bad');
+    else{var ob=[].slice.call(document.querySelectorAll('.opt')).filter(function(b){return String(q.ans)===b.dataset.v})[0];if(ob)ob.classList.add('right');if(slot&&q.type!=='pick'){slot.textContent=q.ans;slot.classList.add('done')}
+      setFb(q.type==='pick'?'Dit is de goede! Volgende keer lukt het.':'Het antwoord is '+q.ans+'. Volgende keer lukt het!','bad');finishQ(false)}}
+}
+$('#qNext').onclick=function(){ctx();if(qi<Q.length-1){qi++;showQ()}else result()};
+
+function result(){
+  var st=pts>=9?3:pts>=7?2:1;if(st>save.stars[cur]){save.stars[cur]=st;persist()}
+  $('#rTitle').textContent='Hoofdstuk '+(cur+1)+' klaar!';
+  var h='';for(var i=0;i<3;i++)h+='<span data-i="'+i+'">★</span>';$('#rStars').innerHTML=h;
+  $('#rText').textContent=pts+' van de 10 meteen goed. '+(st===3?'Fantastisch!':st===2?'Mooi gedaan!':'Goed gedaan, blijf oefenen!');
+  var b='<button class="big alt" id="rAgain">Nog een keer</button>';
+  if(allDone())b+='<button class="big" id="rCup">🏆 Naar de beker</button>';
+  else if(cur<CH.length-1)b+='<button class="big" id="rNext">Volgende ▶</button>';
+  b+='<button class="big alt" id="rHome">Jungle-pad</button>';
+  $('#rBtns').innerHTML=b;
+  $('#rAgain').onclick=function(){startQuiz(cur)};$('#rHome').onclick=home;
+  if($('#rNext'))$('#rNext').onclick=function(){intro(cur+1)};
+  if($('#rCup'))$('#rCup').onclick=cup;
+  show('result');
+  [].slice.call($('#rStars').children).forEach(function(s,i){if(i<st)setTimeout(function(){s.classList.add('on');sStar(i)},400+i*500)});
+  setTimeout(function(){confetti(80)},400);
+  speak(pts+' van de 10 goed.');
+}
+
+function cup(){
+  var t=total(),k=t>=13?'gold':t>=9?'silver':'bronze',c=CUPS[k];
+  $('#cTitle').textContent=c[3];
+  $('#cSvg').innerHTML='<div class="center"><svg class="cupsvg" viewBox="0 0 200 220" aria-hidden="true"><defs><linearGradient id="cg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+c[0]+'"/><stop offset=".5" stop-color="'+c[1]+'"/><stop offset="1" stop-color="'+c[2]+'"/></linearGradient></defs><path d="M45 40C5 40 5 100 55 112" fill="none" stroke="url(#cg)" stroke-width="14" stroke-linecap="round"/><path d="M155 40c40 0 40 60-10 72" fill="none" stroke="url(#cg)" stroke-width="14" stroke-linecap="round"/><path d="M42 24h116v50c0 42-26 66-58 66s-58-24-58-66z" fill="url(#cg)" stroke="'+c[2]+'" stroke-width="4"/><rect x="88" y="138" width="24" height="34" fill="url(#cg)"/><rect x="58" y="168" width="84" height="18" rx="6" fill="url(#cg)" stroke="'+c[2]+'" stroke-width="4"/><rect x="48" y="184" width="104" height="20" rx="6" fill="'+c[2]+'"/><path d="M100 50l9 19 21 3-15 15 4 21-19-10-19 10 4-21-15-15 21-3z" fill="#fff" opacity=".85"/><path d="M62 36v36" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".5"/></svg></div>';
+  $('#cText').textContent=c[4]+' Je hebt '+t+' van de 15 sterren.';
+  $('#cBack').onclick=home;
+  show('cup');sFan();confetti(200);setTimeout(function(){confetti(150)},1200);speak(c[3]+' '+c[4]);
+}
+
+$('#reset').onclick=function(){if(confirm('Weet je zeker dat je alle sterren wilt wissen?')){save.stars=CH.map(function(){return 0});persist();home()}};
+document.querySelectorAll('[data-pip]').forEach(function(e){e.innerHTML=PIP});
+home();
+})();
+</script>
+</body>
+</html>
