@@ -225,10 +225,9 @@ function makeQ(type,n,a){
   var b=n-a,q={type:type,n:n,a:a,b:b},v;
   if(type==='dots'){v=0;q.ans=b;q.say='Er zijn '+n+' bolletjes. '+a+' zijn oranje. Hoeveel zijn blauw?';q.prompt='Hoeveel bolletjes zijn blauw?';q.tip='Tip: tel vanaf '+a+' door tot '+n+'.';q.opts=numOptions(b,n)}
   else if(type==='house'){v=Math.random()<.5?0:1;var known=v?b:a;q.hide=v;q.ans=v?a:b;q.say='Splitshuis van '+n+'. In de ene kamer staat '+known+'. Hoeveel staat er in de andere kamer?';q.prompt='Wat moet er in de lege kamer?';q.tip='Tip: '+known+' en hoeveel samen '+n+'?';q.opts=numOptions(q.ans,n)}
-  else if(type==='sum'){v=ri(0,2);
+  else if(type==='sum'){v=ri(0,1);
     if(v===0){q.eq=[a,'+','?','=',n];q.ans=b;q.say=a+' plus hoeveel is '+n+'?'}
     else if(v===1){q.eq=['?','+',b,'=',n];q.ans=a;q.say='Hoeveel plus '+b+' is '+n+'?'}
-    else{q.eq=[n,'=',a,'+','?'];q.ans=b;q.say=n+' is '+a+' plus hoeveel?'}
     q.prompt='Welk getal hoort op het vraagteken?';q.tip='Tip: tel door tot '+n+'.';q.opts=numOptions(q.ans,n)}
   else{v=0;var w=[[a,b+1],[a+1,b],[a-1,b],[a,b-1]].filter(function(p){return p[0]>=1&&p[1]>=1});
     var wr=shuffle(w).slice(0,2),all=[[a,b]].concat(wr).map(function(p){return Math.random()<.5?p:[p[1],p[0]]});
@@ -249,7 +248,7 @@ function setFb(t,k){var f=$('#qFb');f.textContent=t;f.className='bubble'+(k?' '+
 function showQ(){
   var q=Q[qi];tries=0;locked=false;progress();$('#qNext').hidden=true;setFb('Kijk goed en kies het antwoord!');
   var h='';
-  if(q.type==='dots'){h='<div class="dots">'+dotsHTML(q.a,q.b)+'</div><div class="eq"><span class="n">'+q.n+'</span><span>=</span><span class="n" style="color:var(--orange)">'+q.a+'</span><span>+</span><span class="n slot" id="slot">?</span></div>'}
+  if(q.type==='dots'){h='<div class="dots">'+dotsHTML(q.a,q.b)+'</div><div class="eq"><span class="n" style="color:var(--orange)">'+q.a+'</span><span>+</span><span class="n slot" id="slot">?</span><span>=</span><span class="n">'+q.n+'</span></div>'}
   else if(q.type==='house'){h='<div class="house"><div class="roof">'+q.n+'</div><div class="rooms"><div class="room'+(q.hide===0?' slot':'')+'"'+(q.hide===0?' id="slot"':'')+'>'+(q.hide===0?'?':q.a)+'</div><div class="room'+(q.hide===1?' slot':'')+'"'+(q.hide===1?' id="slot"':'')+'>'+(q.hide===1?'?':q.b)+'</div></div></div>'}
   else if(q.type==='sum'){h='<div class="eq">'+q.eq.map(function(x){return x==='?'?'<span class="n slot" id="slot">?</span>':(typeof x==='number'?'<span class="n">'+x+'</span>':'<span>'+x+'</span>')}).join('')+'</div>'}
   else{h='<div class="house" style="width:140px"><div class="roof" style="height:90px">'+q.n+'</div></div>'}
