@@ -57,6 +57,15 @@ ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10p
 #status{font-weight:700}
 #status.ok{color:var(--good)}#status.err{color:var(--bad)}
 
+#settings h3{font-size:19px;margin:10px 0 0}
+.srow input{width:100%;font:inherit;padding:8px 10px;border:2px solid var(--line);border-radius:10px;background:var(--card);color:inherit;min-height:40px}
+.srow input.nt{font-size:14px;margin-top:6px}
+.srow label{display:block}
+.u{border-top:1px solid var(--line);padding:8px 0}
+.u table{border-collapse:collapse;width:100%;font-size:15px;margin-top:6px}
+.u th,.u td{text-align:left;padding:3px 8px 3px 0;border-bottom:1px solid var(--line)}
+.u small{color:var(--muted)}
+.credit{margin:10px 0 0;text-align:center;font-size:13px;color:var(--muted)}
 footer{margin-top:28px;display:flex;justify-content:center}footer button{font-size:14px;min-height:36px;color:var(--muted)}
 .hint2{font-size:14px}
 </style></head><body>
@@ -66,8 +75,11 @@ footer{margin-top:28px;display:flex;justify-content:center}footer button{font-si
   </header>
   <section id="settings" hidden>
     <h2>Instellingen</h2>
-    <p>Kies bij elke les of het wiskunde of rekenen is. Gebruik de pijltjes om de volgorde te veranderen. Wat je hier verandert, bewaart deze browser. Wil je dat alle leerlingen het zien? Download dan lessen.json en zet dat bestand in GitHub.</p>
+    <p>Verander de titel en de uitleg van elke les. Kies of het wiskunde of rekenen is. Gebruik de pijltjes om de volgorde te veranderen. Wat je hier verandert, bewaart deze browser. Wil je dat alle leerlingen het zien? Download dan lessen.json en zet dat bestand in GitHub.</p>
     <div id="srows"></div>
+    <h3>Gespeeld op dit apparaat</h3>
+    <p class="hint2">Alleen wat in deze browser is gemaakt. Wat leerlingen op hun eigen apparaat doen, zie je hier niet.</p>
+    <div id="usage"></div>
     <div class="bar"><button class="main" id="dl">Download lessen.json</button><button id="reset">Terug naar standaard</button><span id="status" role="status"></span></div>
   </section>
   <main class="cols">
@@ -75,10 +87,11 @@ footer{margin-top:28px;display:flex;justify-content:center}footer button{font-si
     <section class="col rekenen"><h2>Rekenen <small id="n-rekenen"></small></h2><ul id="list-rekenen"></ul></section>
   </main>
   <footer><button id="gear" aria-expanded="false">Instellingen (voor de docent)</button></footer>
+  <p class="credit">Ontwikkeld door Ani Davtyan</p>
 </div>
 <script>
 (function(){
-  var COLS=['wiskunde','rekenen'],LABEL={wiskunde:'Wiskunde',rekenen:'Rekenen'},KEY='lessen-indeling-v1';
+  var COLS=['wiskunde','rekenen'],LABEL={wiskunde:'Wiskunde',rekenen:'Rekenen'},KEY='lessen-indeling-v1',KEY2='lessen-titels-v1';
   var DEFAULT={"lessons": {"ruimtefiguren": {"title": "Ruimtefiguren en grensvlakken", "note": "Balk, kubus, piramide, bol, cilinder en kegel. Welke vorm heeft een grensvlak?", "url": "ruimtefiguren.html"}, "uitslag": {"title": "Uitslag, ribben en aanzichten", "note": "Uitslag van kubus en balk, ribben en hoekpunten, en voor-, zij- en bovenaanzicht.", "url": "uitslag.html"}, "lab": {"title": "Ruimtefiguren Lab", "note": "3D-figuren draaien, uitslagen vouwen, tellen en spelletjes.", "url": "ruimtefiguren-lab.html"}, "decimalen": {"title": "Decimalen afronden", "note": "Kijk naar het cijfer achter de streep. Rond af op centen en op andere plekken.", "url": "decimalen.html"}, "lijnen": {"title": "Lijnen en hoeken", "note": "Hoeken, loodrecht, evenwijdig, diagonalen en tekenen met de geodriehoek. Uitleg en 60 vragen.", "url": "lijnen-en-hoeken.html"}, "getallen": {"title": "Getallen en getalgevoel", "note": "Getallen herkennen, getallenlijn, plaatswaarde en getalgevoel. Uitleg en 30 vragen.", "url": "rekenles-getallen.html"}, "plusmin": {"title": "Plus en min", "note": "Optellen en aftrekken tot 100. Uitleg en 30 vragen.", "url": "rekenles-plus-min.html"}, "keerdelen": {"title": "Keer en delen", "note": "Keersommen en delen. Uitleg en 30 vragen.", "url": "rekenles-keer-delen.html"}, "hoeken": {"title": "Hoeken", "note": "Hoek, hoekpunt en benen, het teken ∠, hoeken op de klok en hoeken vergelijken. Uitleg en 60 vragen.", "url": "hoeken.html"}}, "columns": {"wiskunde": ["ruimtefiguren", "uitslag", "lab", "hoeken", "lijnen"], "rekenen": ["getallen", "plusmin", "keerdelen", "decimalen"]}};
   var state=null,base=null;
   function $(s){return document.querySelector(s)}
@@ -89,7 +102,8 @@ footer{margin-top:28px;display:flex;justify-content:center}footer button{font-si
     COLS.forEach(function(c){((s.columns&&s.columns[c])||[]).forEach(function(id){if(s.lessons[id]&&!seen[id]){seen[id]=1;out[c].push(id)}})});
     Object.keys(s.lessons).forEach(function(id){if(!seen[id])out.wiskunde.push(id)});
     s.columns=out;return s}
-  function render(){
+  function render(){renderLists();renderSettings()}
+  function renderLists(){
     COLS.forEach(function(c){
       var ul=$('#list-'+c);ul.textContent='';var ids=state.columns[c];
       $('#n-'+c).textContent=ids.length+(ids.length===1?' les':' lessen');
@@ -98,12 +112,16 @@ footer{margin-top:28px;display:flex;justify-content:center}footer button{font-si
         a.href=L.url;
         a.appendChild(el('b',null,L.title));if(L.note)a.appendChild(el('span',null,L.note));a.appendChild(el('em',null,'Open les →'));
         li.appendChild(a);ul.appendChild(li)})});
-    renderSettings();
   }
   function renderSettings(){
     var box=$('#srows');box.textContent='';
     COLS.forEach(function(c){state.columns[c].forEach(function(id,i){
-      var r=el('div','srow'),L=state.lessons[id];r.appendChild(el('b',null,L.title));
+      var r=el('div','srow'),L=state.lessons[id];
+      var f=el('label'),ti=el('input'),no=el('input','nt');
+      ti.type='text';ti.value=L.title;ti.maxLength=80;ti.setAttribute('aria-label','Titel van de les');
+      no.type='text';no.value=L.note||'';no.maxLength=200;no.setAttribute('aria-label','Uitleg onder de titel');no.placeholder='Uitleg onder de titel';
+      ti.oninput=function(){L.title=ti.value;saveEdits()};no.oninput=function(){L.note=no.value;saveEdits()};
+      f.appendChild(ti);f.appendChild(no);r.appendChild(f);
       var seg=el('div','seg');
       COLS.forEach(function(k){var b=el('button',k==='wiskunde'?'w':'r',LABEL[k]);b.setAttribute('aria-pressed',String(k===c));
         b.onclick=function(){if(k!==c){state.columns[c].splice(i,1);state.columns[k].push(id);changed()}};seg.appendChild(b)});
@@ -115,12 +133,17 @@ footer{margin-top:28px;display:flex;justify-content:center}footer button{font-si
       dn.onclick=function(){var a=state.columns[c];a.splice(i+1,0,a.splice(i,1)[0]);changed()};
       mv.appendChild(up);mv.appendChild(dn);r.appendChild(mv);box.appendChild(r)})});
   }
+  function saveEdits(){
+    var o={};Object.keys(state.lessons).forEach(function(id){o[id]={title:state.lessons[id].title,note:state.lessons[id].note||''}});
+    try{localStorage.setItem(KEY2,JSON.stringify(o));status('Opgeslagen in deze browser. Download lessen.json om het voor alle leerlingen te zetten.','ok')}
+    catch(e){status('Deze browser kan het niet bewaren. Download lessen.json.','err')}
+    renderLists()}
   function status(t,k){var s=$('#status');s.textContent=t;s.className=k||''}
   function changed(){
     try{localStorage.setItem(KEY,JSON.stringify(state.columns));status('Opgeslagen in deze browser. Download lessen.json om het voor alle leerlingen te zetten.','ok')}
     catch(e){status('Deze browser kan het niet bewaren. Download lessen.json.','err')}
     render()}
-  $('#reset').onclick=function(){try{localStorage.removeItem(KEY)}catch(e){}state=copy(base);render();status('Terug naar de standaard indeling.','')};
+  $('#reset').onclick=function(){try{localStorage.removeItem(KEY);localStorage.removeItem(KEY2)}catch(e){}state=copy(base);render();status('Terug naar de standaard indeling.','')};
   $('#dl').onclick=function(){
     var out={lessons:state.lessons,columns:state.columns};
     var blob=new Blob([JSON.stringify(out,null,1)],{type:'application/json'});
@@ -129,7 +152,22 @@ footer{margin-top:28px;display:flex;justify-content:center}footer button{font-si
     status('lessen.json is gedownload. Zet dit bestand in GitHub bij de andere bestanden.','ok')};
   var PWHASH='d5dc9de154995584767d24016e384e230fa1488abc78d9d46c8db7c78181ea90';
   function sha256(t){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return('0'+x.toString(16)).slice(-2)}).join('')})}
-  function toggleSettings(open){var s=$('#settings');s.hidden=!open;$('#gear').setAttribute('aria-expanded',String(open));if(open)s.scrollIntoView({block:'start'})}
+  function ls(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
+  function nl(d){var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(d||'');return m?m[3]+'-'+m[2]+'-'+m[1]:(d||'')}
+  function renderUsage(){
+    var box=$('#usage');box.textContent='';var any=false;
+    var db=ls('rekenles-getallen-v1'),map={1:'getallen',2:'plusmin',3:'keerdelen'},by={};
+    if(db&&db.pupils)Object.keys(db.pupils).forEach(function(k){var p=db.pupils[k];(p.sessions||[]).forEach(function(x){var id=map[x.chapter];if(!id)return;(by[id]=by[id]||[]).push({who:p.name,when:x.date,t:x.id||0,sc:x.points+' van '+x.max})})});
+    Object.keys(map).forEach(function(n){var id=map[n],rows=by[id];if(!rows||!state.lessons[id])return;any=true;
+      rows.sort(function(a,b){return b.t-a.t});
+      var d=el('div','u');d.appendChild(el('b',null,state.lessons[id].title+': '+rows.length+(rows.length===1?' keer gespeeld':' keer gespeeld')));
+      var t=el('table'),h=el('tr');['Wie','Wanneer','Goed'].forEach(function(x){h.appendChild(el('th',null,x))});t.appendChild(h);
+      rows.slice(0,30).forEach(function(r){var tr=el('tr');[r.who,nl(r.when),r.sc].forEach(function(x){tr.appendChild(el('td',null,x))});t.appendChild(tr)});
+      d.appendChild(t);if(rows.length>30)d.appendChild(el('small',null,'De laatste 30 staan hier.'));box.appendChild(d)});
+    [['hoeken','wiskunde-hoeken51-v1'],['lijnen','wiskunde-hoeken-v1']].forEach(function(x){var o=ls(x[1]);if(!o||!state.lessons[x[0]])return;var n=o.res?Object.keys(o.res).length:0;if(!n&&!o.name)return;any=true;
+      var d=el('div','u');d.appendChild(el('b',null,state.lessons[x[0]].title));d.appendChild(el('div',null,(o.name?'Naam: '+o.name+'. ':'')+n+' vragen gemaakt. '));d.appendChild(el('small',null,'Deze les bewaart geen datum.'));box.appendChild(d)});
+    if(!any)box.appendChild(el('p','hint2','Nog niets gespeeld op dit apparaat.'))}
+  function toggleSettings(open){var s=$('#settings');s.hidden=!open;if(open)renderUsage();$('#gear').setAttribute('aria-expanded',String(open));if(open)s.scrollIntoView({block:'start'})}
   $('#gear').onclick=function(){
     if(!$('#settings').hidden){toggleSettings(false);return}
     var pw=prompt('Wachtwoord voor de docent:');
@@ -142,6 +180,7 @@ footer{margin-top:28px;display:flex;justify-content:center}footer button{font-si
   function start(cfg){
     base=norm(copy(cfg));state=copy(base);
     try{var o=JSON.parse(localStorage.getItem(KEY)||'null');if(o&&o.wiskunde&&o.rekenen){state.columns=o;norm(state)}}catch(e){}
+    try{var e2=JSON.parse(localStorage.getItem(KEY2)||'null');if(e2)Object.keys(e2).forEach(function(id){if(state.lessons[id]&&e2[id]&&typeof e2[id].title==='string'&&e2[id].title.trim()){state.lessons[id].title=e2[id].title;state.lessons[id].note=e2[id].note||''}})}catch(e){}
     render()}
   fetch('lessen.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){if(!j.lessons)throw 0;start(j)}).catch(function(){start(DEFAULT)});
 })();
