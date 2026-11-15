@@ -424,7 +424,7 @@ function judge(ok,btn){if(S.locked)return;const q=S.qs[S.i];
       $('#fbk').innerHTML='<div class="fb no">Het goede antwoord is: '+q.show+' · 0 punten · '+sec+' sec</div><div class="fb tip">'+q.tip+'</div>';endQ()}}}
 function endQ(){$('#chk').hidden=true;$$('.opt,.acard,.mrow button,#ord button').forEach(b=>b.disabled=true);$('#nxt').hidden=false;$('#nxt').focus()}
 function finish(){setProg(100);const i=S.lv,p=S.pts,old=DB.lv[i]||{};
-  const tot=S.log.reduce((a,x)=>a+x.sec,0);S.mode='';DB.lv[i]={done:true,pts:Math.max(old.pts||0,p),last:p,time:tot};save();topbar(true);sfx('win');
+  const tot=S.log.reduce((a,x)=>a+x.sec,0);S.mode='';DB.lv[i]={done:true,pts:Math.max(old.pts||0,p),last:p,time:tot,n:(old.n||0)+1};save();topbar(true);sfx('win');
   const all=LV.every((_,j)=>DB.lv[j]&&DB.lv[j].done),s=starsOf(p);
   let h='<div class="card center"><h1>Onderdeel '+(i+1)+' klaar!</h1><div class="stars">'+starTxt(s)+'</div><p class="big">'+p+' van 10 meteen goed</p><p>Tijd: '+fmtT(tot)+' · gemiddeld '+Math.round(tot/Math.max(1,S.log.length))+' sec per vraag</p><details style="text-align:left"><summary>Bekijk elke vraag</summary><table class="lg"><tr><th>Vraag</th><th>Punten</th><th>Tijd</th></tr>'+S.log.map((x,j)=>'<tr><td>'+(j+1)+'</td><td>'+x.pts+'</td><td>'+x.sec+' sec</td></tr>').join('')+'</table></details><p>'+(p>=9?'Fantastisch!':p>=7?'Heel goed gedaan!':p>=5?'Goed bezig. Oefen nog een keer voor meer sterren.':'Blijf oefenen, dan wordt het steeds makkelijker.')+'</p>';
   if(all)h+='<div class="fb ok">Je hebt alle onderdelen gedaan! Totaal: '+totalPts()+' van 60 punten.</div>';

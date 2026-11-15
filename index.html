@@ -41,6 +41,10 @@ ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10p
 .lesson span{color:var(--muted);font-size:14px}
 .lesson em{font:600 15px var(--disp);font-style:normal;color:var(--c);margin-top:4px}
 .empty{color:var(--muted);padding:14px 4px}
+#zoek{display:block;width:100%;max-width:560px;margin:0 auto 16px;font:600 17px var(--disp);padding:12px 16px;border:2px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink)}
+.lesson .pr{display:flex;flex-direction:column;gap:4px;margin-top:6px;font-size:13px;color:var(--muted)}
+.lesson .pr i{display:block;height:7px;border-radius:9px;background:var(--line);overflow:hidden}.lesson .pr i s{display:block;height:100%;background:var(--good)}
+.nores{color:var(--muted);text-align:center;margin:8px 0}
 #settings{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:18px;margin-bottom:20px;display:flex;flex-direction:column;gap:12px}
 #settings h2{font-size:22px}
 #settings p{margin:0;color:var(--muted)}
@@ -82,6 +86,7 @@ footer{margin-top:28px;display:flex;justify-content:center}footer button{font-si
     <div id="usage"></div>
     <div class="bar"><button class="main" id="dl">Download lessen.json</button><button id="reset">Terug naar standaard</button><span id="status" role="status"></span></div>
   </section>
+  <input id="zoek" type="search" placeholder="Zoek een les, bijvoorbeeld breuken" aria-label="Zoek een les" autocomplete="off">
   <main class="cols">
     <section class="col wiskunde"><h2>Wiskunde <small id="n-wiskunde"></small></h2><ul id="list-wiskunde"></ul></section>
     <section class="col rekenen"><h2>Rekenen <small id="n-rekenen"></small></h2><ul id="list-rekenen"></ul></section>
@@ -103,6 +108,16 @@ footer{margin-top:28px;display:flex;justify-content:center}footer button{font-si
     Object.keys(s.lessons).forEach(function(id){if(!seen[id])out.wiskunde.push(id)});
     s.columns=out;return s}
   function render(){renderLists();renderSettings()}
+  function progress(id){
+    function lv(key){var o=ls(key);if(!o||!o.lv)return null;var d=0,p=0,n=0;Object.keys(o.lv).forEach(function(k){var r=o.lv[k];if(r&&r.done){d++;p+=r.pts||0;n+=r.n||1}});return d?{gedaan:Math.round(d/6*100),goed:Math.round(p/(d*10)*100),keer:n}:null}
+    function res(key,tot){var o=ls(key);if(!o||!o.res)return null;var ks=Object.keys(o.res),n=ks.length;if(!n)return null;var mx=1,p=0;ks.forEach(function(k){var v=o.res[k].pts||0;if(v>mx)mx=v;p+=v});return {gedaan:Math.round(n/tot*100),goed:Math.round(p/(n*mx)*100)}}
+    function rek(ch){var db=ls('rekenles-getallen-v1');if(!db||!db.pupils)return null;var best=null;Object.keys(db.pupils).forEach(function(k){var p=db.pupils[k],ss=(p.sessions||[]).filter(function(x){return x.chapter===ch});if(ss.length&&(!best||ss[ss.length-1].id>best.last.id))best={n:ss.length,last:ss[ss.length-1]}});return best?{gedaan:100,goed:Math.round(best.last.points/best.last.max*100),keer:best.n}:null}
+    if(id==='rss')return lv('wiskunde-recht-scherp-stomp-v1');if(id==='breuken')return lv('rekenles-breuken-v1');
+    if(id==='hoeken')return res('wiskunde-hoeken51-v1',60);if(id==='lijnen')return res('wiskunde-hoeken-v1',60);
+    if(id==='getallen')return rek(1);if(id==='plusmin')return rek(2);if(id==='keerdelen')return rek(3);return null}
+  function filterLists(){var q=($('#zoek').value||'').trim().toLowerCase(),any=false;
+    COLS.forEach(function(c){var ul=$('#list-'+c),shown=0;[].forEach.call(ul.children,function(li){if(li.className==='empty')return;var ok=!q||li.textContent.toLowerCase().indexOf(q)>-1;li.hidden=!ok;if(ok)shown++});any=any||shown>0;var m=ul.querySelector('.nores');if(m)m.remove();if(q&&!shown){var e=el('li','nores','Geen les gevonden.');ul.appendChild(e)}})}
+  $('#zoek').oninput=filterLists;
   function renderLists(){
     COLS.forEach(function(c){
       var ul=$('#list-'+c);ul.textContent='';var ids=state.columns[c];
@@ -110,8 +125,8 @@ footer{margin-top:28px;display:flex;justify-content:center}footer button{font-si
       if(!ids.length){ul.appendChild(el('li','empty','Nog geen lessen.'));return}
       ids.forEach(function(id){var L=state.lessons[id],li=el('li'),a=el('a','lesson');
         a.href=L.url;
-        a.appendChild(el('b',null,L.title));if(L.note)a.appendChild(el('span',null,L.note));a.appendChild(el('em',null,'Open les →'));
-        li.appendChild(a);ul.appendChild(li)})});
+        a.appendChild(el('b',null,L.title));if(L.note)a.appendChild(el('span',null,L.note));var pg=progress(id);if(pg){var d=el('div','pr'),b=el('i'),f=el('s');f.style.width=pg.gedaan+'%';b.appendChild(f);d.appendChild(b);d.appendChild(el('span',null,'Gedaan: '+pg.gedaan+'% · Goed: '+pg.goed+'%'+(pg.keer?' · '+pg.keer+(pg.keer===1?' keer':' keer')+' gespeeld':'')));a.appendChild(d)}a.appendChild(el('em',null,'Open les →'));
+        li.appendChild(a);ul.appendChild(li)})});filterLists()
   }
   function renderSettings(){
     var box=$('#srows');box.textContent='';
