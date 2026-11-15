@@ -41,6 +41,19 @@ ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10p
 .lesson span{color:var(--muted);font-size:14px}
 .lesson em{font:600 15px var(--disp);font-style:normal;color:var(--c);margin-top:4px}
 .empty{color:var(--muted);padding:14px 4px}
+header.hero{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;margin:20px 0 16px;padding:22px 24px;border-radius:26px;color:#fff;background:linear-gradient(135deg,#17324d,#2a4f8f)}
+.hero h1{color:#fff}.hero p{color:rgba(255,255,255,.88)}.hero .hi{margin:0 0 4px;font:600 15px var(--disp);color:#ffd45e}
+.hst{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.hst span{background:rgba(255,255,255,.14);border-radius:12px;padding:5px 12px;font:600 14px var(--disp)}.hst b{color:#ffd45e}
+.hbt{margin-top:14px}.go{display:inline-block;background:#ffc533;color:#3b2a00;font:600 17px var(--disp);padding:12px 20px;border-radius:14px;text-decoration:none;box-shadow:0 3px 0 #c98f00}.go:hover{transform:translateY(-1px)}
+.hm{display:flex;flex-direction:column;align-items:center;gap:8px;max-width:190px}
+.mas{width:104px;height:104px;padding:0;border:0;background:none;min-height:0;border-radius:50%}.mas svg{width:100%;height:100%;display:block}
+.mas.wig{animation:wig .6s}@keyframes wig{0%,100%{transform:rotate(0)}25%{transform:rotate(-12deg) scale(1.06)}75%{transform:rotate(12deg) scale(1.06)}}
+.bub{margin:0;background:#fff;color:#14213d!important;border-radius:14px;padding:8px 12px;font-size:14px;text-align:center;line-height:1.35}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0 0 14px}.chips button{border-radius:999px;padding:6px 18px;min-height:40px}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.cols.only{grid-template-columns:minmax(0,1fr)}
+@media(max-width:560px){header.hero{grid-template-columns:1fr}.hm{flex-direction:row;max-width:none}.mas{width:70px;height:70px;flex:none}}
+@media(prefers-reduced-motion:reduce){.mas.wig{animation:none}.go:hover{transform:none}}
 #zoek{display:block;width:100%;max-width:560px;margin:0 auto 16px;font:600 17px var(--disp);padding:12px 16px;border:2px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink)}
 .lesson .pr{display:flex;flex-direction:column;gap:4px;margin-top:6px;font-size:13px;color:var(--muted)}
 .lesson .pr i{display:block;height:7px;border-radius:9px;background:var(--line);overflow:hidden}.lesson .pr i s{display:block;height:100%;background:var(--good)}
@@ -74,9 +87,20 @@ footer{margin-top:28px;display:flex;justify-content:center}footer button{font-si
 .hint2{font-size:14px}
 </style></head><body>
 <div class="wrap">
-  <header>
-    <div><h1>Lessenoverzicht</h1><p>Kies een les om te beginnen.</p></div>
+  <header class="hero" id="hero">
+    <div class="hl">
+      <p class="hi" id="hi"></p>
+      <h1 id="hh">Lessenoverzicht</h1>
+      <p id="hp">Kies een les om te beginnen.</p>
+      <div class="hst" id="hst"></div>
+      <div class="hbt"><a class="go" id="go" href="#" hidden></a></div>
+    </div>
+    <div class="hm">
+      <button type="button" class="mas" id="mas" aria-label="Tik op mij voor een tip"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="#ffc533" stroke="#c98f00" stroke-width="4"/><path d="M26 74 L26 28 L76 74 Z" fill="#fff" stroke="#17324d" stroke-width="4" stroke-linejoin="round"/><path d="M26 62 L38 62 L38 74" fill="none" stroke="#d6336c" stroke-width="3.5"/><circle cx="40" cy="52" r="3" fill="#17324d"/><circle cx="52" cy="60" r="3" fill="#17324d"/><path d="M42 64 Q47 69 53 66" fill="none" stroke="#17324d" stroke-width="2.5" stroke-linecap="round"/></svg></button>
+      <p class="bub" id="bub" role="status">Tik op mij voor een tip!</p>
+    </div>
   </header>
+  <div class="chips" id="chips" role="group" aria-label="Kies een vak"><button type="button" data-f="alle" aria-pressed="true">Alle lessen</button><button type="button" data-f="wiskunde" aria-pressed="false">Wiskunde</button><button type="button" data-f="rekenen" aria-pressed="false">Rekenen</button></div>
   <section id="settings" hidden>
     <h2>Instellingen</h2>
     <p>Verander de titel en de uitleg van elke les. Kies of het wiskunde of rekenen is. Gebruik de pijltjes om de volgorde te veranderen. Wat je hier verandert, bewaart deze browser. Wil je dat alle leerlingen het zien? Download dan lessen.json en zet dat bestand in GitHub.</p>
@@ -115,6 +139,18 @@ footer{margin-top:28px;display:flex;justify-content:center}footer button{font-si
     if(id==='rss')return lv('wiskunde-recht-scherp-stomp-v1');if(id==='breuken')return lv('rekenles-breuken-v1');
     if(id==='hoeken')return res('wiskunde-hoeken51-v1',60);if(id==='lijnen')return res('wiskunde-hoeken-v1',60);
     if(id==='getallen')return rek(1);if(id==='plusmin')return rek(2);if(id==='keerdelen')return rek(3);return null}
+  var TIPS=['Lees de vraag rustig. Je hebt tijd.','Een fout maken is niet erg. Zo leer je.','Gebruik je geodriehoek bij hoeken.','Oefen elke dag een beetje. Dat werkt het best.','Lukt het niet? Lees de tip nog eens.','Teken het op papier. Dan zie je het beter.','Kijk goed naar het plaatje voor je antwoordt.','Pak je boek erbij als de les over een opdracht gaat.'];
+  function myName(){var n='';['wiskunde-recht-scherp-stomp-v1','rekenles-breuken-v1','wiskunde-hoeken51-v1','wiskunde-hoeken-v1'].forEach(function(k){var o=ls(k);if(!n&&o&&o.name)n=o.name});if(!n){var db=ls('rekenles-getallen-v1');if(db&&db.pupils){var best=0;Object.keys(db.pupils).forEach(function(k){var p=db.pupils[k],t=(p.sessions&&p.sessions.length)?p.sessions[p.sessions.length-1].id:0;if(p.name&&t>=best){best=t;n=p.name}})}}return n}
+  function renderHero(){var h=new Date().getHours(),g=h<12?'Goedemorgen':h<18?'Goedemiddag':'Goedenavond',n=myName();
+    $('#hi').textContent=g+(n?', '+n:'')+'!';$('#hh').textContent=n?'Kies een les en ga oefenen':'Lessenoverzicht';
+    var ids=Object.keys(state.lessons),done=0,sum=0,cnt=0;ids.forEach(function(id){var p=progress(id);if(p){done++;sum+=p.goed;cnt++}});
+    var st=$('#hst');st.textContent='';var t1=el('span');t1.appendChild(document.createTextNode('Lessen: '));t1.appendChild(el('b',null,String(ids.length)));st.appendChild(t1);
+    if(done){var t2=el('span');t2.appendChild(document.createTextNode('Jij speelde: '));t2.appendChild(el('b',null,done+(done===1?' les':' lessen')));st.appendChild(t2);var t3=el('span');t3.appendChild(document.createTextNode('Gemiddeld goed: '));t3.appendChild(el('b',null,Math.round(sum/cnt)+'%'));st.appendChild(t3)}
+    var last=null;try{last=localStorage.getItem('laatste-les')}catch(e){}var go=$('#go');
+    if(last&&state.lessons[last]){go.hidden=false;go.href=state.lessons[last].url;go.textContent='Ga verder: '+state.lessons[last].title+' ▶';go.onclick=null}else go.hidden=true}
+  $('#mas').onclick=function(){var m=this;m.classList.remove('wig');void m.offsetWidth;m.classList.add('wig');$('#bub').textContent=TIPS[Math.floor(Math.random()*TIPS.length)]};
+  $('#chips').onclick=function(e){var b=e.target.closest('button');if(!b)return;var f=b.getAttribute('data-f');[].forEach.call(this.children,function(x){x.setAttribute('aria-pressed',String(x===b))});
+    COLS.forEach(function(c){document.querySelector('.col.'+c).hidden=(f!=='alle'&&f!==c)});$('main.cols').classList.toggle('only',f!=='alle')};
   function filterLists(){var q=($('#zoek').value||'').trim().toLowerCase(),any=false;
     COLS.forEach(function(c){var ul=$('#list-'+c),shown=0;[].forEach.call(ul.children,function(li){if(li.className==='empty')return;var ok=!q||li.textContent.toLowerCase().indexOf(q)>-1;li.hidden=!ok;if(ok)shown++});any=any||shown>0;var m=ul.querySelector('.nores');if(m)m.remove();if(q&&!shown){var e=el('li','nores','Geen les gevonden.');ul.appendChild(e)}})}
   $('#zoek').oninput=filterLists;
@@ -126,7 +162,7 @@ footer{margin-top:28px;display:flex;justify-content:center}footer button{font-si
       ids.forEach(function(id){var L=state.lessons[id],li=el('li'),a=el('a','lesson');
         a.href=L.url;
         a.appendChild(el('b',null,L.title));if(L.note)a.appendChild(el('span',null,L.note));var pg=progress(id);if(pg){var d=el('div','pr'),b=el('i'),f=el('s');f.style.width=pg.gedaan+'%';b.appendChild(f);d.appendChild(b);d.appendChild(el('span',null,'Gedaan: '+pg.gedaan+'% · Goed: '+pg.goed+'%'+(pg.keer?' · '+pg.keer+(pg.keer===1?' keer':' keer')+' gespeeld':'')));a.appendChild(d)}a.appendChild(el('em',null,'Open les →'));
-        li.appendChild(a);ul.appendChild(li)})});filterLists()
+        a.onclick=function(){try{localStorage.setItem('laatste-les',id)}catch(e){}};li.appendChild(a);ul.appendChild(li)})});filterLists();renderHero()
   }
   function renderSettings(){
     var box=$('#srows');box.textContent='';
