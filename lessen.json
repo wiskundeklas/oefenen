@@ -49,6 +49,11 @@
    "title": "Breuken",
    "note": "Wat is een breuk? Plus en min met gelijke en verschillende noemers. Uitleg en 60 vragen.",
    "url": "rekenles-breuken.html"
+  },
+  "rss": {
+   "title": "5.2 Recht, scherp en stomp",
+   "note": "Hoofdstuk 5 Hoeken · oefenen en uitleg bij de opdrachten uit je boek",
+   "url": "recht-scherp-stomp.html"
   }
  },
  "columns": {
@@ -57,7 +62,8 @@
    "uitslag",
    "lab",
    "hoeken",
-   "lijnen"
+   "lijnen",
+   "rss"
   ],
   "rekenen": [
    "getallen",

@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>5.2 Recht, scherp en stomp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e8f3ff;--ink:#17324d;--soft:#4b6580;--blue:#2a6fdb;--blue2:#1d57b3;--orange:#e8870a;--good:#1d8a4a;--goodbg:#dff3e6;--oops:#c0392b;--oopsbg:#fde7e3;--card:#fff;--line:#c4dcf2;--yel:#ffc533;--rood:#d6336c}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 18px/1.5 Lexend,"Segoe UI",system-ui,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:12px 16px 60px}
+header.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.who{display:flex;align-items:center;gap:10px;font-weight:600;flex:1;min-width:140px}.who svg{width:44px;height:44px}
+.chip{border:0;border-radius:999px;padding:8px 14px;font:600 14px Lexend,sans-serif;background:var(--blue);color:#fff;cursor:pointer;min-height:40px}
+.chip.pts{background:var(--yel);color:#4a3200;cursor:default}
+.prog{height:12px;border-radius:99px;background:#c4dcf2;overflow:hidden;margin:6px 0 14px}.prog i{display:block;height:100%;background:var(--good);width:0;transition:width .3s}
+.card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:18px 18px 20px;margin-bottom:14px}
+h1{font-size:1.7rem;line-height:1.2;margin:.2em 0 .4em}h2{font-size:1.4rem;margin:.2em 0 .5em}h3{font-size:1.1rem;margin:.9em 0 .3em}
+p{margin:.5em 0}.note{color:var(--soft);font-size:.9rem}.center{text-align:center}
+.btn{border:0;border-radius:14px;padding:12px 20px;font:600 1.05rem Lexend,sans-serif;background:var(--blue);color:#fff;cursor:pointer;min-height:50px;box-shadow:0 3px 0 var(--blue2)}
+.btn:active{transform:translateY(2px);box-shadow:none}.btn:disabled{opacity:.5;box-shadow:none;cursor:default}
+.btn.alt{background:#fff;color:var(--blue);border:2px solid var(--blue);box-shadow:none}.btn.small{min-height:40px;padding:6px 14px;font-size:.95rem}
+.btn.good{background:var(--good);box-shadow:0 3px 0 #146b37}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}.row.sp{justify-content:space-between}
+.qhead{display:flex;justify-content:space-between;gap:8px;color:var(--soft);font-size:.9rem;font-weight:600}
+.q{font-size:1.2rem;font-weight:600;margin:8px 0}
+.opts{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}.opts.two{grid-template-columns:1fr 1fr}.opts.four{grid-template-columns:1fr 1fr}
+.opt{border:2px solid var(--line);background:#fff;border-radius:14px;padding:10px 14px;font:600 1.05rem Lexend,sans-serif;color:var(--ink);cursor:pointer;text-align:left;min-height:54px}
+.opt:hover{border-color:var(--blue)}.opt.ok{background:var(--goodbg);border-color:var(--good)}.opt.no{background:var(--oopsbg);border-color:var(--oops);opacity:.8}
+.opt svg{display:block;margin:0 auto;width:90px;height:auto}.opts.sg .opt{text-align:center}
+.fb{border-radius:14px;padding:12px 14px;margin-top:12px;font-weight:600}.fb.ok{background:var(--goodbg);color:#0f5a2c}.fb.no{background:var(--oopsbg);color:#7a2118}.fb.tip{background:#fff6d9;color:#5a4300;font-weight:400}
+.say{background:#f1f7ff;border-left:5px solid var(--blue);border-radius:10px;padding:10px 14px;margin:12px 0}
+.big{font-weight:700;font-size:1.3em}
+.kw{background:#fff0b3;border-radius:6px;padding:0 6px;font-weight:700}
+.fig{display:block;width:100%;margin:6px auto;touch-action:manipulation}.fig.ang{max-width:260px}.fig.poly{max-width:260px}
+.ray{stroke:var(--ink);stroke-width:4;stroke-linecap:round}.ray2{stroke:var(--blue);stroke-width:4;stroke-linecap:round}.ray.ghost{stroke:#9bb;stroke-dasharray:6 6;stroke-width:3}
+.arc{fill:none;stroke:var(--orange);stroke-width:3}.sgn{fill:none;stroke:var(--rood);stroke-width:3;stroke-linejoin:round}
+.geo{fill:rgba(255,197,51,.38);stroke:#b88600;stroke-width:3;stroke-linejoin:round}
+.vd{fill:var(--ink)}.pg{fill:#eaf4ff;stroke:var(--ink);stroke-width:3.5;stroke-linejoin:round}.lt{font:700 13px Lexend,sans-serif;fill:var(--ink)}
+.hd{fill:var(--orange);stroke:#fff;stroke-width:3;cursor:grab}.dr{touch-action:none;user-select:none;-webkit-user-select:none}
+.vtx{fill:#fff;stroke:var(--blue);stroke-width:3;cursor:pointer}.vtx.sel{fill:var(--orange)}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.acard{position:relative;border:2px solid var(--line);background:#fff;border-radius:14px;padding:4px 4px 8px;cursor:pointer;font:inherit;color:inherit;text-align:center}
+.acard:hover{border-color:var(--blue)}.acard.ok{background:var(--goodbg);border-color:var(--good)}.acard.no{background:var(--oopsbg);border-color:var(--oops);opacity:.8}
+.acard b{display:block}.acard .nb{position:absolute;top:6px;right:8px;background:var(--blue);color:#fff;border-radius:50%;width:28px;height:28px;display:grid;place-items:center;font-weight:700}
+.acard .fig{max-width:150px}.acard.sel{border-color:var(--blue);background:#eef5ff}
+.mrow{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:center;margin-top:8px;border-top:1px solid var(--line);padding-top:8px}.mrow .fig{max-width:110px;margin:0}
+.mrow .tri{display:flex;gap:6px;flex-wrap:wrap}.mrow .tri button{flex:1;min-width:70px;border:2px solid var(--line);background:#fff;border-radius:12px;font:600 .95rem Lexend,sans-serif;padding:8px 4px;cursor:pointer;min-height:44px;color:var(--ink)}
+.mrow .tri button.sel{background:var(--blue);color:#fff;border-color:var(--blue)}.mrow .tri button.ok{background:var(--goodbg);border-color:var(--good);color:var(--ink)}.mrow .tri button.no{background:var(--oopsbg);border-color:var(--oops);color:var(--ink)}
+.slider{width:100%;height:44px;accent-color:var(--blue)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.c2{border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font:600 1rem Lexend,sans-serif;color:var(--ink);cursor:pointer;min-height:42px}.c2.sel{background:var(--blue);color:#fff;border-color:var(--blue)}
+.wd{background:#f6faff;border:2px dashed var(--line);border-radius:16px;padding:12px;margin:12px 0}
+.verd{text-align:center;font-weight:700;font-size:1.25rem;min-height:1.6em}
+.lv{display:grid;gap:10px;margin-top:10px}.lvb{display:flex;align-items:center;gap:12px;border:2px solid var(--line);background:#fff;border-radius:16px;padding:12px 14px;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.lvb:hover{border-color:var(--blue)}.lvb b{display:block}.lvb small{color:var(--soft)}.lvn{width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700;display:grid;place-items:center;flex:none}.lvb.done .lvn{background:var(--good)}
+.lvb .st{margin-left:auto;color:#e5a400;font-size:1.3rem;white-space:nowrap}
+.lvb.bk{border-color:var(--orange);background:#fff8ec}.lvb.bk .lvn{background:var(--orange)}
+.stars{font-size:2.4rem;text-align:center;letter-spacing:6px;color:#e5a400}
+input.nm{font:600 1.2rem Lexend,sans-serif;width:100%;padding:12px;border:3px solid var(--line);border-radius:14px;color:var(--ink)}
+.lg{border-collapse:collapse;width:100%;font-size:.9rem;margin-top:6px}.lg th,.lg td{text-align:left;padding:3px 8px 3px 0;border-bottom:1px solid var(--line)}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}.badge{background:var(--blue);color:#fff;border-radius:12px;padding:6px 14px;font-weight:700}.badge.o{background:var(--orange)}
+.where{background:#fff6d9;border:2px solid #f0d27a;border-radius:14px;padding:12px 14px;margin:10px 0;font-weight:600}
+.stp{display:flex;gap:10px;align-items:flex-start;background:#f1f7ff;border-radius:12px;padding:10px 12px;margin:8px 0}.stp .n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700;display:grid;place-items:center}
+.ans{background:var(--goodbg);border:2px solid var(--good);border-radius:14px;padding:12px 14px;margin:10px 0}.ans ul{margin:.3em 0 0;padding-left:1.2em}
+img.bk{display:block;width:100%;border-radius:12px;border:2px solid var(--line);margin:8px 0}
+@keyframes pop{0%{transform:scale(.8)}60%{transform:scale(1.08)}100%{transform:scale(1)}}.pop{animation:pop .35s}
+</style></head><body><a href="index.html" id="back" style="display:inline-block;margin:10px 14px 0;color:#2a6fdb;font:700 15px/1.2 system-ui,sans-serif;text-decoration:none">← Alle lessen</a>
+<div class="wrap">
+<header class="bar" id="bar" hidden>
+ <div class="who"><span id="av"></span><span id="nm"></span></div>
+ <button class="chip" id="tp" type="button">🗣 Stem kiezen</button><button class="chip" id="ts" type="button"></button><span class="chip pts" id="pt">0 punten</span>
+</header>
+<div id="vmsg" class="fb tip" hidden></div><div class="card" id="vp" hidden></div>
+<div class="prog" id="pg" hidden><i></i></div>
+<main id="stage"></main>
+</div>
+<script>
+'use strict';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const KEY='wiskunde-recht-scherp-stomp-v1';
+let DB={name:'',lv:{},book:{},voice:true,sound:true};
+try{const r=localStorage.getItem(KEY);if(r)DB=Object.assign(DB,JSON.parse(r))}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}}
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=ri(0,i);[a[i],a[j]]=[a[j],a[i]]}return a}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* ---------- geluid en stem ---------- */
+let AC=null;
+function tone(f,t,d,type,g){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),v=AC.createGain();o.type=type||'sine';o.frequency.value=f;v.gain.setValueAtTime(0.0001,AC.currentTime+t);v.gain.exponentialRampToValueAtTime(g||.12,AC.currentTime+t+.02);v.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+t+d);o.connect(v);v.connect(AC.destination);o.start(AC.currentTime+t);o.stop(AC.currentTime+t+d+.05)}catch(e){}}
+function sfx(k){if(!DB.sound)return;
+  if(k==='ok'){[523,659,784].forEach((f,i)=>tone(f,i*.1,.25))}
+  else if(k==='no'){tone(300,0,.18,'triangle',.08);tone(260,.14,.22,'triangle',.08)}
+  else if(k==='tap')tone(620,0,.07,'sine',.07);
+  else if(k==='win'){[523,659,784,1047,784,1047].forEach((f,i)=>tone(f,i*.12,.3))}}
+let VOICES=[];
+function loadVoices(){try{VOICES=speechSynthesis.getVoices().filter(v=>/^nl([-_]|$)/i.test(v.lang))}catch(e){VOICES=[]}}
+try{loadVoices();speechSynthesis.addEventListener('voiceschanged',loadVoices)}catch(e){}
+function vScore(v){let n=0;if(/nl[-_]NL/i.test(v.lang))n+=3;if(/natural|online|neural|premium|enhanced|siri/i.test(v.name))n+=5;if(/colette|fenna|claire|ellen|google nederlands|female|vrouw|dena/i.test(v.name))n+=3;if(/maarten|xander|frank|ruben|arnaud/i.test(v.name))n-=2;if(v.localService)n+=1;return n}
+function bestVoice(){loadVoices();if(!VOICES.length)return null;if(DB.voiceName){const m=VOICES.find(v=>v.name===DB.voiceName);if(m)return m}return VOICES.slice().sort((a,b)=>vScore(b)-vScore(a))[0]}
+function stopSpeech(){try{speechSynthesis.cancel()}catch(e){}}
+let vmT=0;
+function noVoiceMsg(){const m=$('#vmsg');m.textContent='Op dit apparaat is geen Nederlandse stem gevonden. Daarom lees ik niet voor. Installeer een Nederlandse stem in de instellingen van je apparaat (bij Spraak), of gebruik Microsoft Edge of Google Chrome.';m.hidden=false;clearTimeout(vmT);vmT=setTimeout(()=>{m.hidden=true},9000)}
+function speak(t){if(!t)return;try{const v=bestVoice();if(!v){noVoiceMsg();return}stopSpeech();const u=new SpeechSynthesisUtterance(t);u.voice=v;u.lang=v.lang;u.rate=DB.rate||.9;u.pitch=1.05;speechSynthesis.speak(u)}catch(e){}}
+function listenBtn(t){const b=document.createElement('button');b.type='button';b.className='btn alt small';b.textContent='\u{1F50A} Lees voor';b.onclick=()=>speak(t);return b}
+const say=s=>String(s).replace(/<[^>]+>/g,' ').replace(/∠/g,'hoek ').replace(/[∟┐]/g,'hoekje').replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim();
+/* ---------- meetkunde ---------- */
+const rad=d=>d*Math.PI/180,deg=r=>r*180/Math.PI;
+const dir=a=>[Math.cos(rad(a)),-Math.sin(rad(a))];
+const PT=(V,a,r)=>{const d=dir(a);return [V[0]+r*d[0],V[1]+r*d[1]]};
+const f1=n=>(+n).toFixed(1),pp=p=>f1(p[0])+','+f1(p[1]);
+const cls=d=>Math.abs(d-90)<1?'recht':d<90?'scherp':'stomp';
+const NAME={recht:'recht',scherp:'scherp',stomp:'stomp'},ADJ={recht:'rechte',scherp:'scherpe',stomp:'stompe'};
+function rndDeg(c){return c==='recht'?90:c==='scherp'?ri(20,72):ri(108,160)}
+const rndRot=()=>ri(0,35)*10;
+function arcPath(V,a,b,r){let d=((b-a)%360+360)%360;if(d>180){const t=a;a=b;b=t;d=360-d}return 'M'+pp(PT(V,a,r))+' A'+r+' '+r+' 0 0 0 '+pp(PT(V,a+d,r))}
+function sqPath(V,a,b,s){const p1=PT(V,a,s),p3=PT(V,b,s),p2=[p1[0]+p3[0]-V[0],p1[1]+p3[1]-V[1]];return 'M'+pp(p1)+' L'+pp(p2)+' L'+pp(p3)}
+function angleSvg(d,rot,o){o=o||{};const V=[80,76],L=58,a1=rot,a2=rot+d;let s='';
+  if(o.geo){const g=[V,PT(V,a1,74),PT(V,a1+90,74)];s+='<polygon class="geo" points="'+g.map(pp).join(' ')+'"/><path class="sgn" style="stroke:#b88600" d="'+sqPath(V,a1,a1+90,12)+'"/>'}
+  s+='<line class="ray" x1="'+f1(V[0])+'" y1="'+f1(V[1])+'" x2="'+pp(PT(V,a1,L)).replace(',','" y2="')+'"/><line class="ray2" x1="'+f1(V[0])+'" y1="'+f1(V[1])+'" x2="'+pp(PT(V,a2,L)).replace(',','" y2="')+'"/>';
+  if(o.sq)s+='<path class="sgn" d="'+sqPath(V,a1,a2,15)+'"/>';else if(o.arc!==false)s+='<path class="arc" d="'+arcPath(V,a1,a2,20)+'"/>';
+  s+='<circle class="vd" cx="'+V[0]+'" cy="'+V[1]+'" r="4.5"/>';
+  return '<svg class="fig ang" viewBox="0 0 160 152" role="img" aria-label="Een hoek">'+s+'</svg>'}
+/* figuren */
+const LIB={
+ 'scherpe driehoek':[[20,150],[180,150],[110,25]],
+ 'stompe driehoek':[[20,150],[180,150],[100,90]],
+ 'rechthoekige driehoek':[[30,160],[170,160],[30,40]],
+ 'rechthoek':[[30,50],[170,50],[170,150],[30,150]],
+ 'parallellogram':[[50,50],[190,50],[150,150],[10,150]],
+ 'trapezium':[[20,150],[180,150],[130,50],[20,50]],
+ 'huisje':[[40,150],[160,150],[160,90],[100,10],[40,90]],
+ 'zeshoek':[[100,30],[160.6,65],[160.6,135],[100,170],[39.4,135],[39.4,65]],
+ 'vijfhoek':[[100,20],[176,75.2],[147,164.7],[53,164.7],[24,75.2]]
+};
+function polyData(name,rot){const base=LIB[name]||EXTRA[name],c=[100,100],r=rad(-rot);
+  const pts=base.map(p=>{const x=p[0]-c[0],y=p[1]-c[1];return [c[0]+x*Math.cos(r)-y*Math.sin(r),c[1]+x*Math.sin(r)+y*Math.cos(r)]});
+  const n=pts.length,info=pts.map((p,i)=>{const a=pts[(i+n-1)%n],b=pts[(i+1)%n],va=[a[0]-p[0],-(a[1]-p[1])],vb=[b[0]-p[0],-(b[1]-p[1])];
+    const A=deg(Math.atan2(va[1],va[0])),B=deg(Math.atan2(vb[1],vb[0]));let d=Math.abs(A-B);if(d>180)d=360-d;return{p,a:A,b:B,d,c:cls(d)}});
+  return{name,pts,info}}
+const LET='ABCDEF';
+function polySvg(name,rot,o){o=o||{};const D=polyData(name,rot),cen=[D.pts.reduce((s,p)=>s+p[0],0)/D.pts.length,D.pts.reduce((s,p)=>s+p[1],0)/D.pts.length];let s='<polygon class="pg" points="'+D.pts.map(pp).join(' ')+'"/>';
+  D.info.forEach((v,i)=>{if(o.mark===i)s+='<path class="arc" d="'+arcPath(v.p,v.a,v.b,18)+'"/>';if(o.sqs&&o.sqs.includes(i)&&v.c==='recht')s+='<path class="sgn" d="'+sqPath(v.p,v.a,v.b,13)+'"/>';
+    if(o.labels!==false){const dx=v.p[0]-cen[0],dy=v.p[1]-cen[1],l=Math.hypot(dx,dy)||1;s+='<text class="lt" text-anchor="middle" dominant-baseline="middle" x="'+f1(v.p[0]+dx/l*14)+'" y="'+f1(v.p[1]+dy/l*14)+'">'+LET[i]+'</text>'}
+    if(o.tap)s+='<circle class="vtx'+(o.sel===i?' sel':'')+'" data-v="'+i+'" cx="'+f1(v.p[0])+'" cy="'+f1(v.p[1])+'" r="9"/>'});
+  return {svg:'<svg class="fig poly" viewBox="-10 -10 220 220" role="img" aria-label="Figuur '+esc(name)+'">'+s+'</svg>',D}}
+function signSvg(k){const legs='<path d="M12 50 L52 50 M12 50 L12 10" stroke="#17324d" stroke-width="4" stroke-linecap="round" fill="none"/>';
+  const m={sq:'<path d="M12 38 L24 38 L24 50" fill="none" stroke="#d6336c" stroke-width="3.5" stroke-linejoin="round"/>',arc:'<path d="M12 32 A18 18 0 0 1 30 50" fill="none" stroke="#e8870a" stroke-width="3.5"/>',cross:'<path d="M17 36 L27 46 M27 36 L17 46" stroke="#c0392b" stroke-width="3.5" stroke-linecap="round"/>',dot:'<circle cx="24" cy="38" r="4" fill="#2a6fdb"/><circle cx="32" cy="38" r="4" fill="#2a6fdb"/>'};
+  return '<svg viewBox="0 0 64 60" aria-hidden="true">'+legs+m[k]+'</svg>'}
+/* ---------- vragen ---------- */
+const O=(v,h)=>({v,h});
+const O3=()=>[O('recht','Recht'),O('scherp','Scherp'),O('stomp','Stomp')];
+const LET4='ABCD';
+function build(plan,make){const seen=new Set(),out=[];let t=0;plan=shuffle(plan);
+  while(out.length<plan.length&&t<800){t++;const q=make(plan[out.length]);if(!q||seen.has(q.key))continue;seen.add(q.key);out.push(q)}
+  return out}
+function cardsQ(ds,rots){return ds.map((d,i)=>({d,rot:rots?rots[i]:rndRot()}))}
+function distinctDegs(n,gap,lo,hi){for(let t=0;t<200;t++){const a=[];while(a.length<n)a.push(ri(lo,hi));const s=a.slice().sort((x,y)=>x-y);let ok=true;for(let i=1;i<n;i++)if(s[i]-s[i-1]<gap)ok=false;if(ok)return a}return [30,70,120,150].slice(0,n)}
+const TF={
+ 1:[['Een rechte hoek past precies in de hoek van een vel papier.',1],['In een rechte hoek zet je een klein hoekje als teken.',1],['Loodrechte lijnen maken samen een rechte hoek.',1],['Een rechte hoek is kleiner dan een scherpe hoek.',0],['Als de benen van een hoek langer zijn, is de hoek groter.',0],['Het teken voor een rechte hoek is een boogje.',0]],
+ 2:[['Past het andere been precies langs de rand van de geodriehoek? Dan is de hoek recht.',1],['Steekt het andere been buiten de geodriehoek uit? Dan is de hoek stomp.',1],['Zit het andere been binnen de geodriehoek? Dan is de hoek scherp.',1],['Zit het andere been binnen de geodriehoek? Dan is de hoek stomp.',0],['Een geodriehoek heeft een rechte hoek.',1],['Je legt de geodriehoek ergens naast de hoek.',0]],
+ 3:[['Een stompe hoek is groter dan een rechte hoek.',1],['Een scherpe hoek is kleiner dan een rechte hoek.',1],['Een scherpe hoek is groter dan een rechte hoek.',0],['Een rechte hoek is een stompe hoek.',0],['Een stompe hoek is kleiner dan een rechte hoek.',0],['Hoe langer de benen, hoe stomper de hoek.',0]]};
+function mkTF(g){const [t,ok]=pick(TF[g]);return{key:'tf'+g+t,type:'mc',text:t,say:t,opts:[O('w','Waar'),O('n','Niet waar')],ans:ok?'w':'n',tip:'Tip: denk aan de rechte hoek van een vel papier of een geodriehoek.',show:ok?'Waar':'Niet waar',two:true}}
+function pickQ(c,text){const ds=shuffle([rndDeg(c)].concat(c==='recht'?[ri(25,65),ri(110,150),ri(30,70)]:c==='stomp'?[90,ri(25,70),ri(30,75)]:[90,ri(110,150),ri(115,160)]));
+  const idx=ds.findIndex(d=>cls(d)===c&&(c!=='recht'||d===90));const cards=cardsQ(ds);
+  return{key:'pk'+c+ds.join('-'),type:'pick',cards,text,say:text,ans:String(idx),tip:'Tip: vergelijk elke hoek met de hoek van een vel papier. Welke hoek is '+ADJ[c]+'?',show:'hoek '+LET4[idx]}}
+const M={
+ sign:()=>{const o=shuffle([O('sq',signSvg('sq')),O('arc',signSvg('arc')),O('cross',signSvg('cross')),O('dot',signSvg('dot'))]);return{key:'sign'+o.map(x=>x.v).join(''),type:'mc',sg:true,four:true,text:'Welk teken laat zien dat een hoek recht is?',say:'Welk teken laat zien dat een hoek recht is?',opts:o,ans:'sq',tip:'Tip: het teken is een klein hoekje, net als de hoek van een vel papier.',show:'het kleine hoekje'}},
+ isR:()=>{const yes=Math.random()<.5,d=yes?90:pick([ri(30,62),ri(118,150)]),rot=rndRot();return{key:'isR'+d+rot,type:'mc',fig:angleSvg(d,rot),text:'Is dit een rechte hoek?',say:'Is dit een rechte hoek?',opts:[O('j','Ja'),O('n','Nee')],ans:yes?'j':'n',two:true,tip:'Tip: denk aan de hoek van een vel papier. Past die precies?',show:yes?'Ja':'Nee'}},
+ pickR:()=>pickQ('recht','Tik op de rechte hoek.'),
+ pickS:()=>pickQ('scherp','Tik op de scherpe hoek.'),
+ pickT:()=>pickQ('stomp','Tik op de stompe hoek.'),
+ lood:()=>({key:'lood',type:'mc',text:'Twee lijnen staan loodrecht op elkaar. Wat voor hoek maken ze samen?',say:'Twee lijnen staan loodrecht op elkaar. Wat voor hoek maken ze samen?',opts:O3(),ans:'recht',tip:'Tip: loodrecht betekent: er ontstaat een rechte hoek.',show:'recht'}),
+ tf1:()=>mkTF(1),tf2:()=>mkTF(2),tf3:()=>mkTF(3),
+ draw:()=>({key:'dr'+rndRot()+Math.random(),type:'draw',goal:'recht',rot:rndRot(),text:'Sleep de oranje stip. Maak een rechte hoek.',say:'Sleep de oranje stip. Maak een rechte hoek.',tip:'Tip: een rechte hoek is net zo groot als de hoek van een vel papier. Als het goed is, verschijnt het hoekje.',show:'een rechte hoek'}),
+ drawS:()=>({key:'drs'+Math.random(),type:'draw',goal:'scherp',rot:rndRot(),text:'Sleep de oranje stip. Maak een scherpe hoek.',say:'Sleep de oranje stip. Maak een scherpe hoek.',tip:'Tip: een scherpe hoek is kleiner dan een rechte hoek.',show:'een scherpe hoek'}),
+ drawT:()=>({key:'drt'+Math.random(),type:'draw',goal:'stomp',rot:rndRot(),text:'Sleep de oranje stip. Maak een stompe hoek.',say:'Sleep de oranje stip. Maak een stompe hoek.',tip:'Tip: een stompe hoek is groter dan een rechte hoek.',show:'een stompe hoek'}),
+ corner:()=>{const good=pick(['de hoek van je schrift','de hoek van het bord','de hoek van een tafelblad','de hoek van een raam','de hoek van een deur']),bad=shuffle(['een rond bord','een bal','de rand van een munt','een wolk','een regenboog']).slice(0,3);
+  return{key:'cr'+good+bad.join(''),type:'mc',text:'Bij welk voorwerp zie je een rechte hoek?',say:'Bij welk voorwerp zie je een rechte hoek?',opts:shuffle([good].concat(bad)).map(x=>O(x,x)),ans:good,tip:'Tip: zoek een hoek die er uitziet als de hoek van een vel papier.',show:good}},
+ geo:()=>{const c=pick(['recht','scherp','stomp']),d=rndDeg(c),rot=rndRot();return{key:'geo'+d+rot,type:'mc',fig:angleSvg(d,rot,{geo:true,arc:false}),text:'De gele geodriehoek ligt in de hoek met één been langs de rand. Wat zie je?',say:'De geodriehoek ligt in de hoek. Wat zie je?',
+   opts:[O('recht','De hoek past precies. De hoek is recht.'),O('scherp','De blauwe lijn ligt binnen de geodriehoek. De hoek is scherp.'),O('stomp','De blauwe lijn steekt buiten de geodriehoek uit. De hoek is stomp.')],ans:c,tip:'Tip: ligt het andere been precies langs de rand? Dan is de hoek recht. Binnen de geodriehoek is scherp, erbuiten is stomp.',show:NAME[c]}},
+ steps:()=>{const st=['Leg de rechte hoek van je geodriehoek in het hoekpunt.','Leg één been van de hoek precies langs een rand van de geodriehoek.','Kijk waar het andere been ligt.','Zeg: de hoek is recht, scherp of stomp.'];
+   return{key:'steps',type:'order',cards:st.map((t,i)=>({h:t,r:i})),text:'Zet de stappen in de goede volgorde. Tik ze één voor één aan, de eerste stap eerst.',say:'Zet de stappen in de goede volgorde.',tip:'Tip: je begint met het hoekpunt. Het oordeel is de laatste stap.',show:'1, 2, 3, 4',text2:1}},
+ cls:()=>{const c=pick(['recht','scherp','stomp']),d=rndDeg(c),rot=rndRot();return{key:'cl'+d+rot,type:'mc',fig:angleSvg(d,rot),text:'Wat voor hoek is dit?',say:'Wat voor hoek is dit?',opts:O3(),ans:c,tip:'Tip: kleiner dan een rechte hoek is scherp. Groter dan een rechte hoek is stomp.',show:NAME[c]}},
+ vert:()=>{const nm=pick(Object.keys(LIB)),rot=pick([0,0,20,40,70,110,200]),D=polyData(nm,rot),i=ri(0,D.info.length-1),c=D.info[i].c;const r=polySvg(nm,rot,{mark:i});
+   return{key:'vt'+nm+rot+i,type:'mc',fig:r.svg,text:'Wat voor hoek is ∠'+LET[i]+'? Dat is de hoek met het boogje.',say:'Wat voor hoek is hoek '+LET[i]+'? Dat is de hoek met het boogje.',opts:O3(),ans:c,tip:'Tip: vergelijk de hoek met de hoek van een vel papier.',show:NAME[c]}},
+ count:()=>{const nm=pick(Object.keys(LIB)),rot=pick([0,0,20,40,70,110,200]),D=polyData(nm,rot),k=pick(['recht','scherp','stomp']),n=D.info.filter(v=>v.c===k).length;
+   const s=new Set([n]);let t=0;while(s.size<4&&t<60){t++;s.add(ri(0,Math.max(4,n+2)))}
+   return{key:'ct'+nm+rot+k,type:'mc',four:true,fig:polySvg(nm,rot).svg,text:'Hoeveel '+ADJ[k]+' hoeken heeft deze figuur?',say:'Hoeveel '+ADJ[k]+' hoeken heeft deze figuur?',opts:shuffle([...s]).map(x=>O(String(x),String(x))),ans:String(n),tip:'Tip: loop langs elk hoekpunt (A, B, C, ...) en bepaal bij elke hoek of hij recht, scherp of stomp is. Tel dan.',show:String(n)}},
+ which:()=>{const crit=pick([{t:'alleen scherpe hoeken',f:a=>a.every(x=>x==='scherp')},{t:'alleen stompe hoeken',f:a=>a.every(x=>x==='stomp')},{t:'een rechte hoek',f:a=>a.includes('recht')},{t:'precies één stompe hoek',f:a=>a.filter(x=>x==='stomp').length===1},{t:'twee stompe hoeken',f:a=>a.filter(x=>x==='stomp').length===2}]);
+   const names=Object.keys(LIB);for(let t=0;t<200;t++){const four=shuffle(names).slice(0,4),rots=four.map(()=>pick([0,0,30,60,100])),ds=four.map((n,i)=>polyData(n,rots[i]).info.map(v=>v.c)),m=ds.map(crit.f);
+     if(m.filter(Boolean).length===1){const idx=m.indexOf(true);const cards=four.map((n,i)=>({poly:polySvg(n,rots[i],{labels:false}).svg}));
+       return{key:'wh'+four.join('')+crit.t+rots.join(''),type:'pick',cards,text:'Welke figuur heeft '+crit.t+'?',say:'Welke figuur heeft '+crit.t+'?',ans:String(idx),tip:'Tip: loop bij elke figuur langs alle hoeken en bepaal of ze recht, scherp of stomp zijn.',show:'figuur '+LET4[idx]}}}return null},
+ multi:()=>{let ds;do{ds=[rndDeg(pick(['recht','scherp','stomp'])),rndDeg(pick(['recht','scherp','stomp'])),rndDeg(pick(['recht','scherp','stomp']))]}while(new Set(ds.map(cls)).size<2);
+   return{key:'mu'+ds.join('-'),type:'multi',cards:cardsQ(ds),ans:ds.map(cls),text:'Kies bij elke hoek: recht, scherp of stomp.',say:'Kies bij elke hoek: recht, scherp of stomp.',tip:'Tip: vergelijk elke hoek met de hoek van een vel papier.',show:ds.map((d,i)=>LET4[i]+': '+cls(d)).join(', ')}},
+ order:()=>{const ds=distinctDegs(3,22,25,155),cards=cardsQ(ds),rank=ds.map(d=>ds.filter(x=>x<d).length);
+   return{key:'od'+ds.join('-'),type:'order',cards:cards.map((c,i)=>Object.assign(c,{r:rank[i]})),text:'Zet de hoeken van klein naar groot. Tik eerst de kleinste hoek aan.',say:'Zet de hoeken van klein naar groot. Tik eerst de kleinste hoek aan.',tip:'Tip: scherpe hoeken zijn klein, dan komt de rechte hoek, dan de stompe hoeken.',show:'klein naar groot'}},
+ cmp:()=>{const c=pick(['recht','scherp','stomp','scherp','stomp']),d=rndDeg(c),rot=rndRot();return{key:'cm'+d+rot,type:'mc',fig:angleSvg(d,rot),text:'Is deze hoek groter of kleiner dan een rechte hoek?',say:'Is deze hoek groter of kleiner dan een rechte hoek?',opts:[O('stomp','Groter'),O('scherp','Kleiner'),O('recht','Even groot')],ans:c,tip:'Tip: vergelijk met de hoek van een vel papier.',show:c==='stomp'?'Groter':c==='scherp'?'Kleiner':'Even groot'}},
+ big:()=>{const ds=distinctDegs(3,22,25,155),cards=cardsQ(ds),idx=ds.indexOf(Math.max(...ds));return{key:'bg'+ds.join('-'),type:'pick',cards,text:'Tik op de grootste hoek.',say:'Tik op de grootste hoek.',ans:String(idx),tip:'Tip: de lengte van de benen maakt niet uit. Kijk naar hoe wijd de hoek open staat.',show:'hoek '+LET4[idx]}},
+ small:()=>{const ds=distinctDegs(3,22,25,155),cards=cardsQ(ds),idx=ds.indexOf(Math.min(...ds));return{key:'sm'+ds.join('-'),type:'pick',cards,text:'Tik op de kleinste hoek.',say:'Tik op de kleinste hoek.',ans:String(idx),tip:'Tip: de lengte van de benen maakt niet uit. Kijk naar hoe wijd de hoek open staat.',show:'hoek '+LET4[idx]}}
+};
+const mk=plan=>()=>build(plan,t=>M[t]());
+/* ---------- widgets voor de uitleg ---------- */
+function wAngle(box){let d=60;(function draw(){const c=cls(d),near=Math.abs(d-90)<=2;
+  box.innerHTML='<input class="slider" type="range" min="10" max="170" value="'+d+'" aria-label="Maak de hoek groter of kleiner">'+angleSvg(near?90:d,20,{ghost:1,sq:near})+'<div class="verd">'+(near?'Een rechte hoek! Zie je het hoekje?':c==='scherp'?'Een scherpe hoek: kleiner dan recht':'Een stompe hoek: groter dan recht')+'</div><p class="center note">Schuif en kijk wat er met de hoek gebeurt.</p>';
+  $('input',box).oninput=e=>{d=+e.target.value;redraw()}})();
+  function redraw(){const i=$('input',box),v=d;const c=cls(d),near=Math.abs(v-90)<=2;$('.fig',box).outerHTML=angleSvg(near?90:v,20,{sq:near});$('.verd',box).textContent=near?'Een rechte hoek! Zie je het hoekje?':c==='scherp'?'Een scherpe hoek: kleiner dan recht':'Een stompe hoek: groter dan recht';if(near)sfx('tap')}}
+function wGeo(box){let d=70;(function draw(){const near=Math.abs(d-90)<=2,dd=near?90:d;
+  box.innerHTML='<input class="slider" type="range" min="20" max="160" value="'+d+'" aria-label="Verander de hoek">'+angleSvg(dd,20,{geo:true,arc:false})+'<div class="verd"></div><p class="center note">De gele geodriehoek ligt vast. Schuif het blauwe been.</p>';
+  const upd=()=>{const near=Math.abs(d-90)<=2,dd=near?90:d;$('.fig',box).outerHTML=angleSvg(dd,20,{geo:true,arc:false});$('.verd',box).textContent=near?'Past precies: de hoek is recht.':dd<90?'Het been ligt binnen de geodriehoek: de hoek is scherp.':'Het been steekt buiten de geodriehoek uit: de hoek is stomp.'};
+  upd();$('input',box).oninput=e=>{d=+e.target.value;upd()}})()}
+function wCross(box){let d=60;(function draw(){box.innerHTML='<input class="slider" type="range" min="20" max="160" value="'+d+'" aria-label="Draai de lijn"><div id="cx"></div><p class="center note">Draai de blauwe lijn. Wanneer staan de lijnen loodrecht?</p>';
+  const upd=()=>{const near=Math.abs(d-90)<=2,a=near?90:d,V=[80,76];let s='<line class="ray" x1="10" y1="76" x2="150" y2="76"/><line class="ray2" x1="'+pp(PT(V,a,-62)).replace(',','" y1="')+'" x2="'+pp(PT(V,a,62)).replace(',','" y2="')+'"/><circle class="vd" cx="80" cy="76" r="4.5"/>';
+    if(near)s+=[[0,90],[90,180],[180,270],[270,360]].map(x=>'<path class="sgn" d="'+sqPath(V,x[0],x[1],13)+'"/>').join('');
+    $('#cx',box).innerHTML='<svg class="fig ang" viewBox="0 0 160 152" role="img" aria-label="Twee lijnen">'+s+'</svg><div class="verd">'+(near?'Loodrecht! Alle vier de hoeken zijn recht.':'Nog niet loodrecht.')+'</div>'};
+  upd();$('input',box).oninput=e=>{d=+e.target.value;upd()}})()}
+function wLegs(box){let L=40;(function draw(){box.innerHTML='<input class="slider" type="range" min="20" max="70" value="'+L+'" aria-label="Lengte van de benen"><div id="lg"></div><p class="center note">Maak de benen langer of korter. Verandert de hoek?</p>';
+  const upd=()=>{const V=[40,100],a=PT(V,25,L*2),b=PT(V,25+65,L*2);$('#lg',box).innerHTML='<svg class="fig ang" viewBox="0 0 160 152" role="img" aria-label="Hoek met benen"><line class="ray" x1="'+V[0]+'" y1="'+V[1]+'" x2="'+pp(PT(V,0,L*1.7)).replace(',','" y2="')+'"/><line class="ray2" x1="'+V[0]+'" y1="'+V[1]+'" x2="'+pp(PT(V,65,L*1.7)).replace(',','" y2="')+'"/><path class="arc" d="'+arcPath(V,0,65,22)+'"/><circle class="vd" cx="'+V[0]+'" cy="'+V[1]+'" r="4.5"/></svg><div class="verd">De hoek blijft even groot.</div>'};
+  upd();$('input',box).oninput=e=>{L=+e.target.value;upd()}})()}
+function wPoly(box){let nm='huisje',sel=0;(function draw(){const r=polySvg(nm,0,{tap:true,sel,mark:sel,sqs:[0,1,2,3,4,5]});
+  box.innerHTML='<div class="chips">'+Object.keys(LIB).map(x=>'<button type="button" class="c2'+(x===nm?' sel':'')+'" data-n="'+x+'">'+x+'</button>').join('')+'</div>'+r.svg+'<div class="verd">∠'+LET[sel]+' is '+(r.D.info[sel].c==='recht'?'een rechte hoek':'een '+ADJ[r.D.info[sel].c]+' hoek')+'</div><p class="center note">Tik op de bolletjes bij de hoekpunten.</p>';
+  $$('.c2',box).forEach(b=>b.onclick=()=>{nm=b.dataset.n;sel=0;sfx('tap');draw()});$$('.vtx',box).forEach(v=>v.onclick=()=>{sel=+v.dataset.v;sfx('tap');draw()})})()}
+const WID={angle:wAngle,geo:wGeo,cross:wCross,legs:wLegs,poly:wPoly};
+function figSigns(){const V=[40,60];const mk=(a,b,l)=>'<svg class="fig ang" style="max-width:110px;display:inline-block" viewBox="0 0 80 80"><line class="ray" x1="'+pp(V).replace(',','" y1="')+'" x2="'+pp(PT(V,a,34)).replace(',','" y2="')+'"/><line class="ray2" x1="'+pp(V).replace(',','" y1="')+'" x2="'+pp(PT(V,b,34)).replace(',','" y2="')+'"/><path class="sgn" d="'+sqPath(V,a,b,12)+'"/></svg>';
+  return '<div class="center">'+[[0,90],[180,90],[90,180],[270,0]].map(x=>mk(x[0],x[1])).join('')+'</div><p class="center note">Het hoekje staat altijd in de hoek, tussen de benen.</p>'}
+function figGeoDef(){const V=[30,100],s='<polygon class="geo" points="30,100 200,100 30,10"/><path class="sgn" style="stroke:#b88600" d="'+sqPath(V,0,90,16)+'"/><text class="lt" x="48" y="82">rechte hoek</text><text class="lt" x="120" y="92" style="font-size:11px">scherpe hoek</text><text class="lt" x="34" y="30" style="font-size:11px">scherpe hoek</text>';
+  return '<svg class="fig ang" style="max-width:300px" viewBox="0 0 230 120" role="img" aria-label="Een geodriehoek">'+s+'</svg>'}
+/* ---------- niveaus ---------- */
+const LV=[
+ {t:'De rechte hoek',sub:'Het teken en loodrechte lijnen',gen:mk(['sign','isR','isR','pickR','pickR','lood','tf1','draw','pickR','corner']),steps:[
+  {h:'Wat is een rechte hoek?',txt:'Een rechte hoek is net zo groot als de hoek van een vel papier of van een schrift.\nSchuif het bolletje en kijk wat er met de hoek gebeurt. Bij een rechte hoek verschijnt een klein hoekje.',w:'angle'},
+  {h:'Het teken van een rechte hoek',txt:'Een rechte hoek geef je aan met een klein hoekje, bijvoorbeeld ∟ of ┐.\nHet hoekje staat in het hoekpunt, tussen de twee benen.',fig:figSigns},
+  {h:'Loodrechte lijnen',txt:'Twee lijnen staan <b>loodrecht</b> op elkaar als ze een rechte hoek maken.\nDraai de lijn en zoek de stand waarbij de lijnen loodrecht staan.',w:'cross'}]},
+ {t:'De geodriehoek gebruiken',sub:'Controleren of een hoek recht is',gen:mk(['geo','geo','geo','geo','geo','geo','steps','tf2','draw','isR']),steps:[
+  {h:'De geodriehoek',txt:'Een geodriehoek heeft een rechte hoek. Daarmee kun je controleren of een hoek recht is.\nDe twee andere hoeken zijn scherp.',fig:figGeoDef},
+  {h:'Controleren in 4 stappen',txt:'1. Leg de rechte hoek van de geodriehoek in het hoekpunt.\n2. Leg één been van de hoek precies langs een rand.\n3. Kijk waar het andere been ligt.\n4. Zeg: recht, scherp of stomp.',w:'geo'}]},
+ {t:'Recht, scherp of stomp',sub:'Hoeken een naam geven',gen:mk(['cls','cls','cls','cls','cls','drawS','drawT','pickT','pickS','tf3']),steps:[
+  {h:'Drie soorten hoeken',txt:'Een hoek die <b>kleiner</b> is dan een rechte hoek noem je een <span class="kw">scherpe hoek</span>.\nEen hoek die <b>groter</b> is dan een rechte hoek noem je een <span class="kw">stompe hoek</span>.\nSchuif en kijk wanneer de hoek van naam verandert.',w:'angle'},
+  {h:'De benen maken de hoek niet groter',txt:'Hoe lang de benen zijn, maakt niet uit. Alleen de manier waarop de benen uit elkaar staan telt.',w:'legs'}]},
+ {t:'Hoeken in figuren',sub:'Hoeken zoeken en tellen',gen:mk(['vert','vert','vert','vert','count','count','count','which','which','which']),steps:[
+  {h:'Hoeken in een figuur',txt:'Een figuur heeft meerdere hoeken. Elk hoekpunt heeft een letter.\nKies een figuur en tik op de bolletjes. Je ziet bij elke hoek of hij recht, scherp of stomp is.',w:'poly'},
+  {h:'Zo tel je',txt:'1. Begin bij hoekpunt A.\n2. Bepaal of de hoek recht, scherp of stomp is.\n3. Ga door naar B, C, enzovoort.\n4. Tel daarna hoeveel hoeken van elke soort je hebt.'}]},
+ {t:'Sorteren en vergelijken',sub:'Welke hoek is groter?',gen:mk(['multi','multi','multi','order','order','order','cmp','cmp','big','small']),steps:[
+  {h:'Hoeken vergelijken',txt:'Een rechte hoek is je maatstaf. Is een hoek kleiner? Dan is hij scherp. Is hij groter? Dan is hij stomp.\nSchuif de hoek en vergelijk hem met het hoekje.',w:'angle'},
+  {h:'Op volgorde zetten',txt:'Van klein naar groot: eerst de scherpe hoeken, dan de rechte hoek, dan de stompe hoeken.'}]},
+ {t:'Alles door elkaar',sub:'Spelletjes met alle soorten vragen',gen:mk(['cls','pickR','geo','multi','draw','which','count','order','vert','tf2']),steps:[
+  {h:'Je kunt het!',txt:'Je weet nu alles over rechte, scherpe en stompe hoeken.\nVergelijk een hoek altijd met de hoek van een vel papier of van een geodriehoek.',w:'geo'}]}
+];
+/* ---------- opdrachten uit het boek ---------- */
+const PAD='Hoofdstuk 5 Hoeken · 5.2 Recht, scherp en stomp';
+const EXTRA={huis13:[[115,10],[170,90],[170,170],[60,170],[60,90]],f14a:[[10,165],[190,165],[60,100]],f14b:[[20,165],[180,165],[100,26.4]],f14c:LIB['zeshoek'],f14d:[[20,160],[180,160],[140,60],[60,60]]};
+const ang=(V,P)=>deg(Math.atan2(-(P[1]-V[1]),P[0]-V[0]));
+const arcP=(V,P,Q,r)=>arcPath(V,ang(V,P),ang(V,Q),r);
+const aDeg=(V,P,Q)=>{let d=Math.abs(ang(V,P)-ang(V,Q));return d>180?360-d:d};
+const LN=(p,q,c,st)=>'<line class="'+(c||'ray')+'" '+(st?'style="'+st+'" ':'')+'x1="'+f1(p[0])+'" y1="'+f1(p[1])+'" x2="'+f1(q[0])+'" y2="'+f1(q[1])+'"/>';
+const TX=(p,t,dx,dy)=>'<text class="lt" text-anchor="middle" dominant-baseline="middle" x="'+f1(p[0]+(dx||0))+'" y="'+f1(p[1]+(dy||0))+'">'+t+'</text>';
+const ARC=(V,P,Q,r,col)=>'<path class="arc" '+(col?'style="stroke:'+col+'" ':'')+'d="'+arcP(V,P,Q,r||14)+'"/>';
+const SV=(vb,s,max)=>'<svg class="fig" style="max-width:'+(max||320)+'px" viewBox="'+vb+'" role="img" aria-label="Eigen tekening bij de opdracht">'+s+'</svg>';
+function figDoor(){return SV('0 0 220 190','<rect x="0" y="0" width="220" height="190" fill="#bfe0ff"/><rect x="0" y="175" width="220" height="15" fill="#9a7b55"/><rect x="55" y="8" width="110" height="170" fill="#fff" stroke="#8a6a3a" stroke-width="6"/><rect x="72" y="24" width="76" height="74" fill="none" stroke="#d6336c" stroke-width="4"/><rect x="72" y="112" width="76" height="40" fill="none" stroke="#b9ad98" stroke-width="4"/><circle cx="62" cy="100" r="4" fill="#c9a227"/>',260)}
+function figMill(){const C=[110,72];let s='<rect width="220" height="200" fill="#d9ecff"/><rect y="185" width="220" height="15" fill="#8cc06a"/><polygon points="78,188 142,188 130,84 90,84" fill="#f4efe6" stroke="#17324d" stroke-width="3"/><polygon points="86,84 134,84 110,58" fill="#8a5a3c" stroke="#17324d" stroke-width="3"/><rect x="99" y="160" width="22" height="28" fill="#6b8e4e" stroke="#17324d" stroke-width="3"/>';
+  [45,135,225,315].forEach(a=>{const e=PT(C,a,66);s+='<line x1="'+C[0]+'" y1="'+C[1]+'" x2="'+f1(e[0])+'" y2="'+f1(e[1])+'" stroke="#b4533c" stroke-width="9" stroke-linecap="round"/>'});
+  return SV('0 0 220 200',s+'<circle cx="110" cy="72" r="7" fill="#ffc533" stroke="#17324d" stroke-width="2"/>',280)}
+function figShed(){const A=[40,70],B=[140,20],C=[240,70];return SV('0 0 280 190','<rect x="40" y="70" width="0" height="0"/>'+LN(A,[40,175],'ray')+LN(C,[240,175],'ray')+LN(A,B,'ray')+LN(B,C,'ray')+LN(A,C,'ray','stroke:#9bb;stroke-width:2.5')+ARC(A,[40,175],C,22,'#d6336c')+ARC(B,A,C,26,'#2a6fdb')+ARC(C,A,B,34,'#1d8a4a')+TX(A,'A',-14,-4)+TX(B,'B',0,-14)+TX(C,'C',14,-4)+'<text class="lt" x="100" y="150" style="font-size:11px;fill:#4b6580">voorkant tuinhuis</text>',340)}
+function figPQ(){return '<div style="display:flex;gap:8px"><div style="flex:1;text-align:center"><b>∠P</b>'+angleSvg(90,0,{geo:true,arc:false})+'</div><div style="flex:1;text-align:center"><b>∠Q</b>'+angleSvg(62,0,{geo:true,arc:false})+'</div></div>'}
+function labPoly(pts,names,w,h){const cen=[pts.reduce((s,p)=>s+p[0],0)/pts.length,pts.reduce((s,p)=>s+p[1],0)/pts.length];let s='<polygon class="pg" points="'+pts.map(pp).join(' ')+'"/>';
+  pts.forEach((p,i)=>{const n=pts.length,P=pts[(i+n-1)%n],Q=pts[(i+1)%n];s+=ARC(p,P,Q,13);const dx=p[0]-cen[0],dy=p[1]-cen[1],l=Math.hypot(dx,dy)||1;s+=TX(p,names[i],dx/l*14,dy/l*14)});return s}
+function figHuis(){const P=EXTRA.huis13;return SV('-12 -2 224 194',labPoly(P,'ABCDE'),250)}
+function fig14(){const L='ABCD',cols=['#ffc533','#ffe08a','#d6336c','#7a9fd6'];return '<div class="cards">'+['f14a','f14b','f14c','f14d'].map((n,i)=>{const P=EXTRA[n];return '<div class="acard" style="cursor:default"><svg class="fig" viewBox="-5 0 210 190" role="img" aria-label="Figuur '+L[i]+'"><polygon points="'+P.map(pp).join(' ')+'" fill="'+cols[i]+'" fill-opacity=".55" stroke="#17324d" stroke-width="3.5" stroke-linejoin="round"/></svg><b>Figuur '+L[i]+'</b></div>'}).join('')+'</div>'}
+function figL15(){const q1=[[20,110],[150,110],[150,30],[60,30]],q2=[[20,110],[120,110],[170,30],[70,30]];
+  return '<div style="display:flex;gap:8px;align-items:flex-end"><div style="flex:1"><b>① </b><svg class="fig" viewBox="-6 10 190 130" role="img" aria-label="Tekening 1">'+labPoly(q1,'ABCD')+'</svg></div><div style="flex:1"><b>② </b><svg class="fig" viewBox="-6 10 200 130" role="img" aria-label="Tekening 2">'+labPoly(q2,'EFGH')+'</svg></div></div>'}
+function figBoard(){return SV('0 0 300 200','<rect width="300" height="200" fill="#eef3f8"/><rect y="180" width="300" height="20" fill="#cdbfa8"/><rect x="30" y="25" width="180" height="115" fill="#dff1ff" stroke="#333" stroke-width="6"/><path d="M30 55H210M30 85H210M30 115H210M70 25V140M110 25V140M150 25V140M190 25V140" stroke="#bcd" stroke-width="1"/><polygon points="95,110 150,110 95,62" fill="#ffc533" fill-opacity=".7" stroke="#b88600" stroke-width="3"/><rect x="108" y="140" width="10" height="40" fill="#999"/><rect x="224" y="70" width="58" height="110" fill="#d3dae1" stroke="#555" stroke-width="3"/><line x1="253" y1="70" x2="253" y2="180" stroke="#555" stroke-width="2"/>',320)}
+function figO13P(){return '<div class="center">'+angleSvg(125,0,{geo:true,arc:false})+'<b>∠P</b></div>'}
+const REC={C:[10,110],D:[190,110],E:[190,10],G:[10,10],B:[10,40],H:[100,10],F:[10,90],A:[73,62],K:[10,62]};
+function figO13(){const R=REC;return SV('-22 -14 244 144',
+  '<rect x="10" y="10" width="180" height="100" fill="#f6faff" stroke="#17324d" stroke-width="3.5"/>'+LN(R.B,R.H,'ray')+LN(R.F,R.E,'ray')+LN(R.K,R.A,'ray')
+  +ARC(R.B,R.C,R.H,14)+ARC(R.F,R.B,R.E,16)+ARC(R.A,R.K,R.F,14)+ARC(R.E,R.H,R.F,18)+ARC(R.C,R.G,R.D,13)+ARC(R.D,R.C,R.E,13)
+  +TX(R.B,'B',-12,-2)+TX(R.F,'F',-12,4)+TX(R.A,'A',2,-12)+TX(R.E,'E',12,-2)+TX(R.C,'C',-11,10)+TX(R.D,'D',11,10),360)}
+function figSign(kind){const V=[80,76];const a=kind==='L'?[0,90]:[180,270];return SV('0 0 160 152',LN(V,PT(V,a[0],56))+LN(V,PT(V,a[1],56),'ray2')+'<path class="arc" d="'+arcPath(V,a[0],a[1],20)+'"/><circle class="vd" cx="80" cy="76" r="4.5"/>',150)}
+const CK=(t,ok)=>({t,ok});
+function Q(lab,text,opts,why,fig){const o=opts.map((t,i)=>({t,ok:i===0}));return{lab,text,opts:o,why,fig}}
+const R3=(lab,text,ans,why,fig)=>{const all=['recht','scherp','stomp'];return {lab,text,opts:all.map(t=>({t:t[0].toUpperCase()+t.slice(1),ok:t===ans})),why,fig}};
+const AB=(lab,text,ans,why)=>({lab,text,opts:['∠A','∠B','∠C'].map(t=>({t,ok:t===ans})),why,fig:figShed});
+const BOOK=[
+ {id:'9',page:15,nr:'9',title:'Loodrechte lijnen',about:'De rode lijnen op de deur staan loodrecht op elkaar. Jij zoekt drie voorwerpen in je lokaal waar lijnen ook loodrecht op elkaar staan.',fig:figDoor,
+  think:['Loodrecht betekent: de lijnen maken samen een rechte hoek.','Zoek een hoek die er uitziet als de hoek van een vel papier.','Houd je geodriehoek in die hoek. Past hij precies? Dan is het goed.'],
+  qs:[Q('a','Wat betekent het dat twee lijnen loodrecht op elkaar staan?',['Ze maken samen een rechte hoek.','Ze maken samen een scherpe hoek.','Ze lopen naast elkaar.'],'Loodrecht betekent: er ontstaat een rechte hoek. Dat is een hoek zoals de hoek van een vel papier.'),
+   Q('b','Welk voorwerp heeft lijnen die loodrecht op elkaar staan?',['De hoek van een tafelblad','De rand van een bal','De boog van een regenboog'],'De hoek van een tafelblad is een rechte hoek. De rand van een bal of een regenboog is rond.'),
+   Q('c','Welk voorwerp heeft ook lijnen die loodrecht op elkaar staan?',['De hoek van het raam','Een rond bord','Een wolk'],'Een raam is een rechthoek. Alle hoeken van een rechthoek zijn recht.'),
+   Q('d','Nog een voorwerp. Welk voorwerp heeft loodrechte lijnen?',['De hoek van je schrift','De rand van een munt','Een golf in het water'],'Een schrift heeft vier rechte hoeken. Zo heb je drie voorwerpen bij elkaar. In je boek mag je zelf voorwerpen opschrijven.')]},
+ {id:'10',page:15,nr:'10',title:'Rechte hoeken in de molen',about:'Op de tekening van de molen moet je drie rechte hoeken aanwijzen. Je gebruikt allebei de tekentjes ∟ en ┐ voor een rechte hoek.',fig:figMill,
+  think:['Zoek plekken waar twee lijnen elkaar raken of kruisen.','Kijk of de hoek er recht uitziet. Gebruik je geodriehoek om te controleren.','Zet in de hoek een klein hoekje. Dat is het teken voor een rechte hoek.'],
+  qs:[Q('a','Waar zie je een rechte hoek in de molen?',['Tussen twee wieken die naast elkaar zitten','Bovenin de punt van het dak','Aan de zijkant van de toren, waar die schuin loopt'],'De wieken zitten in de vorm van een kruis. Twee wieken naast elkaar maken een rechte hoek. De punt van het dak is scherp.'),
+   Q('b','Waar zie je nog een rechte hoek in de molen?',['In de hoek van de deur onderaan','Bij de punt van het dak','Aan de buitenkant van de toren'],'De deur is een rechthoek. De hoeken van een rechthoek zijn recht.'),
+   Q('c','Welk teken hoort bij deze rechte hoek? De benen gaan omhoog en naar rechts.',['∟','┐'],'Het hoekje ∟ staat links onderin de hoek, tussen de benen die omhoog en naar rechts gaan.',()=>figSign('L')),
+   Q('d','Welk teken hoort bij deze rechte hoek? De benen gaan naar links en omlaag.',['┐','∟'],'Het hoekje ┐ staat rechts bovenin de hoek, tussen de benen die naar links en omlaag gaan.',()=>figSign('R'))]},
+ {id:'11',page:16,nr:'11',title:'Hoeken in het tuinhuis',about:'Van de voorkant van een tuinhuis is een tekening gemaakt. Drie hoeken hebben een kleur: ∠A, ∠B en ∠C. Jij zoekt de rechte hoek, een hoek die kleiner is dan recht en een hoek die groter is dan recht.',fig:figShed,
+  think:['Kijk naar elke gekleurde hoek apart.','Leg de rechte hoek van je geodriehoek in de hoek.','Past hij precies? Dan is het recht. Is de hoek kleiner? Dan is hij scherp. Is de hoek groter? Dan is hij stomp.'],
+  qs:[AB('a','Welke gekleurde hoek is de rechte hoek?','∠A','∠A zit tussen de muur en de horizontale lijn. Die twee lijnen staan loodrecht op elkaar.'),
+   AB('b','Welke gekleurde hoek is kleiner dan de rechte hoek?','∠C','∠C is heel smal. Hij is kleiner dan een rechte hoek, dus scherp.'),
+   AB('c','Welke gekleurde hoek is groter dan de rechte hoek?','∠B','∠B zit bovenaan en staat wijd open. Hij is groter dan een rechte hoek, dus stomp.')]},
+ {id:'12',page:16,nr:'12',title:'Controleren met de geodriehoek',about:'Je ziet twee hoeken: ∠P en ∠Q, met de geodriehoek erbij. Je controleert of ∠P recht is en vergelijkt ∠Q met ∠P.',fig:figPQ,
+  think:['Leg de rechte hoek van de geodriehoek in het hoekpunt.','Leg één been van de hoek langs de rand.','Kijk waar het andere been ligt: precies langs de rand, binnen of buiten de geodriehoek?'],
+  qs:[Q('a','Klopt het dat ∠P een rechte hoek is?',['Ja, het klopt','Nee, het klopt niet'],'De rechte hoek van de geodriehoek past precies in ∠P. Dus ∠P is recht.'),
+   Q('b','Past de rechte hoek van de geodriehoek precies in ∠Q?',['Nee','Ja'],'Bij ∠Q zit het been binnen de geodriehoek. Er blijft ruimte over. Dus past hij niet precies.'),
+   Q('c','Is ∠Q groter of kleiner dan ∠P?',['Kleiner','Groter'],'∠Q past binnen de rechte hoek van de geodriehoek. Dus ∠Q is kleiner dan ∠P.'),
+   Q('d','Is ∠Q een scherpe of een stompe hoek?',['Een scherpe hoek','Een stompe hoek'],'∠Q is kleiner dan een rechte hoek. Dat noem je een scherpe hoek.')]},
+ {id:'13',page:17,nr:'13',title:'Hoeken in een huis',about:'Op de tekening zie je een huis. Bij een aantal hoeken staat een boogje: ∠A tot en met ∠E. Jij zoekt welke hoeken recht, scherp en stomp zijn.',fig:figHuis,
+  think:['Bekijk ∠A, ∠B, ∠C, ∠D en ∠E één voor één.','Vergelijk elke hoek met de hoek van een vel papier of van je geodriehoek.','Schrijf bij elke letter: recht, scherp of stomp. Zoek dan de goede groep.'],
+  qs:[{lab:'a',text:'Welke van deze hoeken zijn recht?',fig:figHuis,opts:[CK('∠C en ∠D',1),CK('∠A en ∠B'),CK('∠B en ∠E'),CK('∠A en ∠E')],why:'∠C en ∠D zitten onderin het huis. Daar staan de muur en de grond loodrecht op elkaar.'},
+   {lab:'b',text:'Welke van deze hoeken is scherp?',fig:figHuis,opts:[CK('∠A',1),CK('∠B'),CK('∠C'),CK('∠D')],why:'∠A zit in de punt van het dak. Die hoek is kleiner dan een rechte hoek.'},
+   {lab:'c',text:'En welke van deze hoeken zijn stomp?',fig:figHuis,opts:[CK('∠B en ∠E',1),CK('∠C en ∠D'),CK('∠A en ∠C'),CK('∠A en ∠D')],why:'∠B en ∠E zitten waar het dak de muur raakt. Die hoeken zijn groter dan een rechte hoek.'}]},
+ {id:'14',page:17,nr:'14',title:'Figuren A, B, C en D',about:'Je ziet vier vlakke figuren. Jij zoekt een figuur met alleen scherpe hoeken, een figuur met alleen stompe hoeken en telt de stompe hoeken van de andere figuren.',fig:fig14,
+  think:['Neem één figuur tegelijk.','Bekijk elke hoek: recht, scherp of stomp?','Heb je alle hoeken bekeken? Dan kun je de vraag beantwoorden.'],
+  qs:[{lab:'a',text:'Welke figuur heeft alleen scherpe hoeken?',fig:fig14,opts:[CK('Figuur B',1),CK('Figuur A'),CK('Figuur C'),CK('Figuur D')],why:'Figuur B is een driehoek met drie scherpe hoeken. Alle hoeken zijn kleiner dan een rechte hoek.'},
+   {lab:'b',text:'Welke figuur heeft alleen stompe hoeken?',fig:fig14,opts:[CK('Figuur C',1),CK('Figuur A'),CK('Figuur B'),CK('Figuur D')],why:'Figuur C is een zeshoek. Alle hoeken zijn groter dan een rechte hoek.'},
+   {lab:'c',text:'Hoeveel stompe hoeken heeft figuur A?',fig:fig14,opts:[CK('1',1),CK('0'),CK('2'),CK('3')],why:'Figuur A heeft één stompe hoek. De andere twee hoeken zijn scherp.'},
+   {lab:'c',text:'Hoeveel stompe hoeken heeft figuur D?',fig:fig14,opts:[CK('2',1),CK('0'),CK('1'),CK('4')],why:'Figuur D heeft twee stompe hoeken, bovenaan. De twee hoeken onderaan zijn scherp.'}]},
+ {id:'L15',page:17,nr:'L15',title:'Leerdoelen bereikt?',about:'Je ziet twee tekeningen met hoeken. Je laat zien of je hebt geleerd wat een rechte, scherpe en stompe hoek is.',fig:figL15,
+  think:['Zoek in tekening ① de rechte hoeken.','Zoek in tekening ① en ② de scherpe hoeken.','De hoeken die overblijven zijn stomp.'],
+  qs:[{lab:'a',text:'Bij welke hoeken in tekening ① zet je het teken voor een rechte hoek?',fig:figL15,opts:[CK('∠B en ∠C',1),CK('∠A en ∠D'),CK('∠A en ∠B'),CK('∠C en ∠D')],why:'∠B en ∠C zijn rechte hoeken. Daar zet je het hoekje.'},
+   {lab:'b',text:'Welke hoeken in tekening ① en ② zijn scherp?',fig:figL15,opts:[CK('∠A, ∠E en ∠G',1),CK('∠B, ∠F en ∠H'),CK('∠D, ∠F en ∠H'),CK('∠A, ∠C en ∠G')],why:'∠A, ∠E en ∠G zijn kleiner dan een rechte hoek.'},
+   {lab:'c',text:'Hoe noem je de overige hoeken in de tekeningen ① en ②?',fig:figL15,opts:[CK('Stompe hoeken',1),CK('Scherpe hoeken'),CK('Rechte hoeken')],why:'De overige hoeken zijn groter dan een rechte hoek. Dat zijn stompe hoeken.'}]},
+ {id:'O10',page:18,nr:'O10',title:'Rechte hoeken op de foto',about:'Op de foto in je boek zie je een smartboard. Je kunt met een geodriehoek controleren of een hoek recht is. Jij zoekt nog twee rechte hoeken op de foto en geeft ze aan.',fig:figBoard,
+  think:['Zoek hoeken die eruitzien als de hoek van een vel papier.','Controleer ze met je geodriehoek.','Zet in elke rechte hoek een hoekje. Gebruik ∟ én ┐.'],
+  qs:[Q('a','Waar zie je een rechte hoek?',['Een hoek van het bord','De boog van de gradenboog','De punt van de driehoek'],'Het bord is een rechthoek. Alle hoeken van een rechthoek zijn recht.'),
+   Q('b','Waar zie je nog een rechte hoek?',['Een hoek van de kast','De boog van de gradenboog','De punt van de driehoek'],'Ook de kast is een rechthoek. Dus de hoeken zijn recht.'),
+   Q('b','Welk teken zet je in de hoek linksonder van het bord?',['∟','┐'],'Linksonder gaan de benen omhoog en naar rechts. Daar hoort ∟.'),
+   Q('b','Welk teken zet je in de hoek rechtsboven van het bord?',['┐','∟'],'Rechtsboven gaan de benen naar links en omlaag. Daar hoort ┐.')]},
+ {id:'O13',page:18,nr:'O13',title:'Hoek P en de zes hoeken',about:'Hoek P is groter dan de rechte hoek van de geodriehoek. Daarna kijk je naar zes hoeken (∠A t/m ∠F) en zeg je bij elke hoek: recht, scherp of stomp.',fig:figO13P,
+  think:['Leg de rechte hoek van je geodriehoek in de hoek.','Past hij precies? Dan is de hoek recht.','Is de hoek kleiner? Scherp. Is de hoek groter? Stomp.'],
+  qs:[{lab:'a',text:'∠P is groter dan de rechte hoek van de geodriehoek. Is ∠P een stompe of een scherpe hoek?',fig:figO13P,opts:[CK('Een stompe hoek',1),CK('Een scherpe hoek')],why:'Groter dan een rechte hoek betekent stomp.'},
+   Object.assign(R3('b','∠A is...','scherp','∠A is heel smal, kleiner dan een rechte hoek. Dus scherp.'),{fig:figO13}),
+   Object.assign(R3('b','∠B is...','stomp','∠B is groter dan een rechte hoek. Dus stomp.'),{fig:figO13}),
+   Object.assign(R3('b','∠C is...','recht','∠C zit in de hoek van de rechthoek. Dus recht.'),{fig:figO13}),
+   Object.assign(R3('b','∠D is...','recht','∠D zit in de hoek van de rechthoek. Dus recht.'),{fig:figO13}),
+   Object.assign(R3('b','∠E is...','scherp','∠E is kleiner dan een rechte hoek. Dus scherp.'),{fig:figO13}),
+   Object.assign(R3('b','∠F is...','scherp','∠F is kleiner dan een rechte hoek. Dus scherp.'),{fig:figO13})]}
+];
+/* ---------- schermen ---------- */
+const stage=$('#stage');let S={lv:null,i:0,tries:0,pts:0,qs:[],locked:false,log:[],mode:'',t0:0,seq:[],ex:null};
+const mascot=()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="#ffc533" stroke="#c98f00" stroke-width="4"/><path d="M28 72 L28 30 L72 72 Z" fill="#fff" stroke="#17324d" stroke-width="4" stroke-linejoin="round"/><path d="M28 60 L40 60 L40 72" fill="none" stroke="#d6336c" stroke-width="3.5"/></svg>';
+function totalPts(){return Object.values(DB.lv).reduce((a,v)=>a+(v.pts||0),0)}
+function topbar(show){$('#bar').hidden=!show;if(!show)return;$('#av').innerHTML=mascot();$('#nm').textContent=DB.name;$('#pt').textContent=S.mode==='quiz'?('Punten: '+S.pts+' van 10'):(totalPts()+' van 60 punten');$('#ts').textContent=DB.sound?'\u{1F3B5} Geluid aan':'\u{1F515} Geluid uit'}
+function renderVP(){const box=$('#vp');loadVoices();const cur=bestVoice();let h='<h2>Kies een stem</h2>';
+  if(!VOICES.length)h+='<div class="say">Op dit apparaat is geen Nederlandse stem gevonden. Daarom wordt er niet voorgelezen. Installeer een Nederlandse stem in de instellingen van je apparaat (bij Spraak), of gebruik Microsoft Edge of Google Chrome.</div>';
+  else{h+='<p class="note">Tik op een stem om hem te horen. De stem die je kiest blijft bewaard.</p><div class="opts">'+VOICES.slice().sort((a,b)=>vScore(b)-vScore(a)).map((v,i)=>'<button class="opt'+(cur&&cur.name===v.name?' ok':'')+'" type="button" data-vn="'+esc(v.name)+'">'+esc(v.name)+' ('+esc(v.lang)+')'+(i===0?' · aanbevolen':'')+'</button>').join('')+'</div><p><b>Snelheid</b></p><div class="chips">'+[['Langzaam',.75],['Normaal',.9],['Snel',1.05]].map(x=>'<button type="button" class="c2'+((DB.rate||.9)===x[1]?' sel':'')+'" data-rt="'+x[1]+'">'+x[0]+'</button>').join('')+'</div>'}
+  h+='<div class="row"><button class="btn alt small" id="vc" type="button">Sluiten</button></div>';box.innerHTML=h;
+  $$('[data-vn]',box).forEach(b=>b.onclick=()=>{DB.voiceName=b.dataset.vn;save();speak('Hallo '+DB.name+'. Een rechte hoek is net zo groot als de hoek van een vel papier.');renderVP()});
+  $$('[data-rt]',box).forEach(b=>b.onclick=()=>{DB.rate=+b.dataset.rt;save();speak('Dit is de snelheid die je kiest.');renderVP()});
+  $('#vc').onclick=()=>{box.hidden=true}}
+$('#tp').onclick=()=>{const v=$('#vp');v.hidden=!v.hidden;if(!v.hidden)renderVP()};
+$('#ts').onclick=()=>{DB.sound=!DB.sound;save();topbar(true)};
+function setProg(p){const g=$('#pg');g.hidden=p==null;if(p!=null)$('i',g).style.width=p+'%'}
+const fmtT=t=>Math.floor(t/60)+':'+String(t%60).padStart(2,'0')+' min';
+const starsOf=p=>p>=9?3:p>=7?2:p>=5?1:0;
+const starTxt=n=>'★'.repeat(n)+'☆'.repeat(3-n);
+function nameScreen(){topbar(false);setProg(null);
+  stage.innerHTML='<div class="card"><h1>5.2 Recht, scherp en stomp</h1><p>In deze les leer je rechte, scherpe en stompe hoeken herkennen. Je maakt 60 vragen en je leert hoe je de opdrachten uit je boek aanpakt.</p><label for="nmi"><b>Schrijf hier je naam</b></label><div class="row"><input class="nm" id="nmi" maxlength="30" autocomplete="off"></div><div class="row"><button class="btn" id="go" type="button">Beginnen</button></div><p class="note" id="er" hidden>Schrijf eerst je naam.</p></div>';
+  const go=()=>{const v=$('#nmi').value.trim();if(v.length<2){$('#er').hidden=false;return}DB.name=v;save();menu()};
+  $('#go').onclick=go;$('#nmi').onkeydown=e=>{if(e.key==='Enter')go()}}
+function menu(){S.lv=null;S.mode='';stopSpeech();topbar(true);setProg(null);
+  const done=LV.every((_,i)=>DB.lv[i]&&DB.lv[i].done);
+  let h='<div class="card"><h1>Hoi '+esc(DB.name)+'!</h1><p>Kies een onderdeel. Je begint met de uitleg en daarna maak je 10 vragen.</p>'+(done?'<div class="fb ok">Je hebt alle onderdelen gedaan! Totaal: '+totalPts()+' van 60 punten.</div>':'')+'<div class="lv">';
+  LV.forEach((l,i)=>{const r=DB.lv[i];h+='<button class="lvb'+(r&&r.done?' done':'')+'" data-i="'+i+'" type="button"><span class="lvn">'+(i+1)+'</span><span><b>'+l.t+'</b><small>'+l.sub+(r&&r.done?' · '+r.pts+' van 10'+(r.time?' · '+fmtT(r.time):''):'')+'</small></span><span class="st">'+(r&&r.done?starTxt(starsOf(r.pts)):'')+'</span></button>'});
+  const nb=Object.keys(DB.book).length;
+  h+='<button class="lvb bk" id="bk" type="button"><span class="lvn">\u{1F4D6}</span><span><b>Extra: opdrachten uit je boek</b><small>Stap voor stap uitleg bij elke opdracht van 5.2 · '+nb+' van '+BOOK.length+' bekeken</small></span></button></div>';
+  h+='<div class="row"><button class="btn alt small" id="rs" type="button">Opnieuw beginnen</button><span class="note" id="rsn"></span></div></div>';
+  stage.innerHTML=h;$$('.lvb[data-i]').forEach(b=>b.onclick=()=>explain(+b.dataset.i,0));$('#bk').onclick=bookMenu;
+  let armed=0;$('#rs').onclick=function(){if(!armed){armed=1;$('#rsn').textContent='Zeker weten? Tik nog een keer. Je punten en je naam worden gewist.';setTimeout(()=>{armed=0;$('#rsn').textContent=''},4000)}else{DB={name:'',lv:{},book:{},voice:DB.voice,sound:DB.sound,rate:DB.rate,voiceName:DB.voiceName};save();nameScreen()}}}
+function explain(i,k){S.lv=i;S.mode='';stopSpeech();topbar(true);setProg(null);const L=LV[i],st=L.steps[k];
+  const paras=st.txt.split('\n').map(p=>'<div class="say">'+p+'</div>').join('');
+  stage.innerHTML='<div class="card"><div class="qhead"><span>Uitleg · onderdeel '+(i+1)+': '+L.t+'</span><span>'+(k+1)+' van '+L.steps.length+'</span></div><h2>'+st.h+'</h2>'+paras+(st.fig?'<div>'+st.fig()+'</div>':'')+(st.w?'<div class="wd" id="wd"></div>':'')+'<div class="row sp"><span id="lis"></span><span class="row" style="margin:0"><button class="btn alt small" id="bk2" type="button">'+(k?'← Terug':'← Menu')+'</button><button class="btn" id="nx" type="button">'+(k<L.steps.length-1?'Verder →':'Naar de vragen ▶')+'</button></span></div></div>';
+  if(st.w)WID[st.w]($('#wd'));
+  $('#lis').appendChild(listenBtn(say(st.h+'. '+st.txt.replace(/\n/g,' '))));
+  $('#bk2').onclick=()=>k?explain(i,k-1):menu();
+  $('#nx').onclick=()=>k<L.steps.length-1?explain(i,k+1):startQuiz(i)}
+/* ----- vragen ----- */
+function startQuiz(i){S={lv:i,i:0,tries:0,pts:0,qs:LV[i].gen(),locked:false,log:[],mode:'quiz',t0:0,seq:[],ex:null};showQ()}
+let DRAG=null;
+function drawSvg(q,ang){const V=[100,92],L=72,a1=q.rot;const diff=((ang-a1)%360+360)%360,bt=diff>180?360-diff:diff,near=Math.abs(bt-90)<=3;const h=PT(V,ang,L);
+  let s='<line class="ray" x1="100" y1="92" x2="'+pp(PT(V,a1,L)).replace(',','" y2="')+'"/><line class="ray2" x1="100" y1="92" x2="'+pp(h).replace(',','" y2="')+'"/>';
+  if(near)s+='<path class="sgn" d="'+sqPath(V,a1,ang,16)+'"/>';else s+='<path class="arc" d="'+arcPath(V,a1,ang,22)+'"/>';
+  s+='<circle class="vd" cx="100" cy="92" r="4.5"/><circle class="hd" cx="'+f1(h[0])+'" cy="'+f1(h[1])+'" r="11"/>';return s}
+function setupDraw(q){const svg=$('#drsvg');q.ang=q.rot+(q.goal==='stomp'?60:q.goal==='scherp'?150:30);q.ang=(q.ang+360)%360;q.bt=0;
+  const upd=()=>{svg.innerHTML=drawSvg(q,q.ang);const diff=((q.ang-q.rot)%360+360)%360;q.bt=diff>180?360-diff:diff};upd();
+  const toAng=e=>{const r=svg.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*200-100,y=(e.clientY-r.top)/r.height*184-92;return deg(Math.atan2(-y,x))};
+  svg.onpointerdown=e=>{if(S.locked)return;DRAG=1;try{svg.setPointerCapture(e.pointerId)}catch(_){}q.ang=toAng(e);upd()};
+  svg.onpointermove=e=>{if(!DRAG||S.locked)return;q.ang=toAng(e);upd()};
+  svg.onpointerup=svg.onpointercancel=()=>{DRAG=null};
+  q.set=a=>{q.ang=q.rot+a;upd()}}
+function drawOk(q){const b=q.bt;return q.goal==='recht'?Math.abs(b-90)<=6:q.goal==='scherp'?(b>=12&&b<=76):(b>=104&&b<=168)}
+function progress(){const L=S.qs.length;let h='';for(let i=0;i<L;i++){h+='<i style="display:inline-block;width:22px;height:22px;margin:0 3px;border-radius:50%;border:3px solid '+(i<S.log.length?(S.log[i].pts?'#4aa83a':'#e8883a'):(i===S.i?'#2a6fdb':'#c4dcf2'))+';background:'+(i<S.log.length?(S.log[i].pts?'#7ed36a':'#ffb066'):'#fff')+'"></i>'}return '<div class="center" style="margin:4px 0 10px">'+h+'</div>'}
+function showQ(){stopSpeech();S.t0=Date.now();S.seq=[];topbar(true);const L=LV[S.lv],q=S.qs[S.i];S.tries=0;S.locked=false;setProg(S.i/S.qs.length*100);
+  let h='<div class="card"><div class="qhead"><span>'+L.t+'</span><span>Vraag '+(S.i+1)+' van '+S.qs.length+'</span></div>'+progress();
+  if(q.fig)h+=q.fig;
+  h+='<div class="q">'+q.text+'</div><div id="ans">';
+  if(q.type==='mc')h+='<div class="opts'+(q.two?' two':'')+(q.four?' four':'')+(q.sg?' sg':'')+'">'+q.opts.map(o=>'<button class="opt" type="button" data-v="'+esc(o.v)+'">'+o.h+'</button>').join('')+'</div>';
+  else if(q.type==='pick')h+='<div class="cards">'+q.cards.map((c,i)=>'<button class="acard" type="button" data-v="'+i+'">'+(c.poly||angleSvg(c.d,c.rot,{arc:true}))+'<b>'+LET4[i]+'</b></button>').join('')+'</div>';
+  else if(q.type==='multi')h+=q.cards.map((c,i)=>'<div class="mrow" data-r="'+i+'">'+angleSvg(c.d,c.rot)+'<div><b>'+LET4[i]+'</b><div class="tri">'+['recht','scherp','stomp'].map(k=>'<button type="button" data-k="'+k+'">'+k[0].toUpperCase()+k.slice(1)+'</button>').join('')+'</div></div></div>').join('');
+  else if(q.type==='order'){const cs=shuffle(q.cards.map((c,i)=>i));h+='<div class="'+(q.cards[0].h?'opts':'cards')+'" id="ord">'+cs.map(i=>{const c=q.cards[i];return '<button class="'+(c.h?'opt':'acard')+'" type="button" data-v="'+i+'">'+(c.h?c.h:angleSvg(c.d,c.rot)+'<b>'+LET4[i]+'</b>')+'<span class="nb" hidden></span></button>'}).join('')+'</div>'}
+  else if(q.type==='draw')h+='<svg class="fig dr" id="drsvg" viewBox="0 0 200 184" style="max-width:300px" role="img" aria-label="Sleep de stip om de hoek te maken"></svg>';
+  h+='</div><div id="fbk" role="status" aria-live="polite"></div><div class="row"><span id="lis"></span><button class="btn" id="chk" type="button">Controleer</button><button class="btn good" id="nxt" type="button" hidden>'+(S.i===S.qs.length-1?'Klaar ▶':'Volgende →')+'</button></div></div>';
+  stage.innerHTML=h;$('#lis').appendChild(listenBtn(q.say||say(q.text)));
+  const chk=$('#chk');
+  if(q.type==='mc'){chk.hidden=true;$$('.opt').forEach(b=>b.onclick=()=>judge(b.dataset.v===q.ans,b))}
+  else if(q.type==='pick'){chk.hidden=true;$$('.acard').forEach(b=>b.onclick=()=>judge(b.dataset.v===q.ans,b))}
+  else if(q.type==='multi'){S.sel=[];$$('.mrow').forEach(r=>$$('button',r).forEach(b=>b.onclick=()=>{if(S.locked)return;sfx('tap');$$('button',r).forEach(x=>x.classList.remove('sel'));b.classList.add('sel');S.sel[+r.dataset.r]=b.dataset.k}));
+    chk.onclick=()=>{if(S.locked)return;if(S.sel.filter(Boolean).length<q.cards.length){fb('tip','Kies bij elke hoek eerst een antwoord.');return}const ok=q.ans.every((a,i)=>S.sel[i]===a);if(!ok)$$('.mrow').forEach((r,i)=>$$('button',r).forEach(b=>{b.classList.remove('no');if(b.dataset.k===S.sel[i]&&S.sel[i]!==q.ans[i])b.classList.add('no')}));judge(ok)}}
+  else if(q.type==='order'){chk.hidden=true;S.seq=[];$$('#ord > button').forEach(b=>b.onclick=()=>{if(S.locked||S.seq.includes(+b.dataset.v))return;sfx('tap');S.seq.push(+b.dataset.v);const nb=$('.nb',b);nb.hidden=false;nb.textContent=S.seq.length;b.classList.add('sel');
+      if(S.seq.length===q.cards.length){const ok=S.seq.every((v,i)=>q.cards[v].r===i);if(ok)judge(true);else{judge(false);if(!S.locked){S.seq=[];$$('#ord > button').forEach(x=>{x.classList.remove('sel');$('.nb',x).hidden=true})}}}})}
+  else if(q.type==='draw'){setupDraw(q);chk.onclick=()=>{if(!S.locked)judge(drawOk(q))}}
+  $('#nxt').onclick=()=>{S.i<S.qs.length-1?(S.i++,showQ()):finish()}}
+function fb(k,t){$('#fbk').innerHTML='<div class="fb '+k+'">'+t+'</div>'}
+function judge(ok,btn){if(S.locked)return;const q=S.qs[S.i];
+  if(ok){S.locked=true;sfx('ok');const aw=S.tries===0?1:0,sec=Math.round((Date.now()-S.t0)/1000);S.pts+=aw;S.log.push({pts:aw,sec});topbar(true);if(btn)btn.classList.add('ok');
+    fb('ok',pick(['Goed zo!','Super!','Knap gedaan!','Helemaal goed!'])+' '+(aw?'+1 punt':'Geen punt, want het was niet de eerste keer goed.')+' · '+sec+' sec');endQ()}
+  else{S.tries++;sfx('no');if(btn){btn.classList.add('no');btn.disabled=true}
+    if(S.tries===1)fb('no','Nog niet goed. Probeer het nog een keer.');
+    else if(S.tries===2)$('#fbk').innerHTML='<div class="fb no">Nog niet goed.</div><div class="fb tip">'+q.tip+'</div>';
+    else{S.locked=true;const sec=Math.round((Date.now()-S.t0)/1000);S.log.push({pts:0,sec});
+      if(q.type==='mc'||q.type==='pick')$$('.opt,.acard').forEach(b=>{if(b.dataset.v===q.ans)b.classList.add('ok')});
+      if(q.type==='multi')$$('.mrow').forEach((r,i)=>$$('button',r).forEach(b=>{b.classList.remove('no','sel');if(b.dataset.k===q.ans[i])b.classList.add('ok')}));
+      if(q.type==='order'){const o=q.cards.map((c,i)=>i).sort((a,b)=>q.cards[a].r-q.cards[b].r);$$('#ord > button').forEach(b=>{const n=o.indexOf(+b.dataset.v)+1;const nb=$('.nb',b);nb.hidden=false;nb.textContent=n})}
+      if(q.type==='draw')q.set(q.goal==='recht'?90:q.goal==='scherp'?45:135);
+      $('#fbk').innerHTML='<div class="fb no">Het goede antwoord is: '+q.show+' · 0 punten · '+sec+' sec</div><div class="fb tip">'+q.tip+'</div>';endQ()}}}
+function endQ(){$('#chk').hidden=true;$$('.opt,.acard,.mrow button,#ord button').forEach(b=>b.disabled=true);$('#nxt').hidden=false;$('#nxt').focus()}
+function finish(){setProg(100);const i=S.lv,p=S.pts,old=DB.lv[i]||{};
+  const tot=S.log.reduce((a,x)=>a+x.sec,0);S.mode='';DB.lv[i]={done:true,pts:Math.max(old.pts||0,p),last:p,time:tot};save();topbar(true);sfx('win');
+  const all=LV.every((_,j)=>DB.lv[j]&&DB.lv[j].done),s=starsOf(p);
+  let h='<div class="card center"><h1>Onderdeel '+(i+1)+' klaar!</h1><div class="stars">'+starTxt(s)+'</div><p class="big">'+p+' van 10 meteen goed</p><p>Tijd: '+fmtT(tot)+' · gemiddeld '+Math.round(tot/Math.max(1,S.log.length))+' sec per vraag</p><details style="text-align:left"><summary>Bekijk elke vraag</summary><table class="lg"><tr><th>Vraag</th><th>Punten</th><th>Tijd</th></tr>'+S.log.map((x,j)=>'<tr><td>'+(j+1)+'</td><td>'+x.pts+'</td><td>'+x.sec+' sec</td></tr>').join('')+'</table></details><p>'+(p>=9?'Fantastisch!':p>=7?'Heel goed gedaan!':p>=5?'Goed bezig. Oefen nog een keer voor meer sterren.':'Blijf oefenen, dan wordt het steeds makkelijker.')+'</p>';
+  if(all)h+='<div class="fb ok">Je hebt alle onderdelen gedaan! Totaal: '+totalPts()+' van 60 punten.</div>';
+  h+='<div class="row" style="justify-content:center"><button class="btn alt" id="ag" type="button">Nog een keer</button>'+(i<LV.length-1?'<button class="btn" id="nl" type="button">Volgend onderdeel ▶</button>':'<button class="btn" id="tb" type="button">Naar het boek ▶</button>')+'<button class="btn alt" id="mn" type="button">Menu</button></div></div>';
+  stage.innerHTML=h;$('#ag').onclick=()=>startQuiz(i);$('#mn').onclick=menu;if($('#nl'))$('#nl').onclick=()=>explain(i+1,0);if($('#tb'))$('#tb').onclick=bookMenu;window.scrollTo(0,0)}
+/* ----- opdrachten uit het boek ----- */
+function bookMenu(){S.mode='';stopSpeech();topbar(true);setProg(null);
+  const pages=[...new Set(BOOK.map(b=>b.page))];
+  let h='<div class="card"><h1>Opdrachten uit je boek</h1><div class="where">Pak je boek. Zoek <b>'+PAD+'</b>. Kies hieronder de opdracht waar je mee bezig bent.</div>';
+  pages.forEach(pg=>{h+='<h3>Bladzijde '+pg+'</h3><div class="lv">'+BOOK.filter(b=>b.page===pg).map(b=>'<button class="lvb bk" data-id="'+b.id+'" type="button"><span class="lvn" style="font-size:.95rem">'+b.nr+'</span><span><b>Opdracht '+b.nr+'</b><small>'+b.title+'</small></span><span class="st">'+(DB.book[b.id]?'✓':'')+'</span></button>').join('')+'</div>'});
+  h+='<div class="row"><button class="btn alt" id="mn" type="button">← Menu</button></div></div>';
+  stage.innerHTML=h;$$('.lvb[data-id]').forEach(b=>b.onclick=()=>bookEx(b.dataset.id));$('#mn').onclick=menu;window.scrollTo(0,0)}
+function bookEx(id){stopSpeech();topbar(true);setProg(null);const B=BOOK.find(x=>x.id===id),ix=BOOK.indexOf(B);let qi=0,good=0;const IMG='<a href="boek/p'+B.page+'-opdracht-'+B.nr+'.png" target="_blank" rel="noopener"><img class="bk" src="boek/p'+B.page+'-opdracht-'+B.nr+'.png" alt="Opdracht '+B.nr+' uit je boek, bladzijde '+B.page+'"></a><p class="note center" style="margin:0">Tik op de afbeelding om groter te zien.</p>';
+  stage.innerHTML='<div class="card"><div class="badges"><span class="badge">Bladzijde '+B.page+'</span><span class="badge o">Opdracht '+B.nr+'</span></div><p class="note" style="margin-top:0">'+PAD+'</p><h2>'+B.title+'</h2>'
+   +'<div class="where">Pak je boek. Sla open <b>bladzijde '+B.page+'</b> en zoek <b>opdracht '+B.nr+'</b>.</div>'
+   +'<h3>Waar gaat het over?</h3><div class="say">'+B.about+'</div>'
+   +'<h3>De opdracht uit je boek</h3>'+IMG+'<p class="note center">Zo staat de opdracht in je boek. Het antwoord staat er niet bij.</p>'
+   +'<h3>Zo denk je</h3>'+B.think.map((t,i)=>'<div class="stp"><span class="n">'+(i+1)+'</span><span>'+t+'</span></div>').join('')
+   +'<div class="row"><span id="lis"></span></div><h3>Nu jij</h3><div id="qz"></div>'
+   +'<div class="row sp" style="margin-top:18px"><button class="btn alt small" id="bl" type="button">← Alle opdrachten</button>'+(ix<BOOK.length-1?'<button class="btn alt small" id="nn" type="button">Volgende opdracht →</button>':'')+'</div></div>';
+  $('#lis').appendChild(listenBtn(say(B.title+'. '+B.about+' Zo denk je. '+B.think.join(' '))));
+  const qz=$('#qz');
+  function showQ(){const q=B.qs[qi];S.bq={B:B.id,qi};
+    qz.innerHTML='<div class="qhead"><span>Opdracht '+B.nr+' · vraag '+q.lab+'</span><span>Stap '+(qi+1)+' van '+B.qs.length+'</span></div>'+IMG+(q.fig&&q.fig!==B.fig?'<div>'+q.fig()+'</div>':'')+'<div class="q">'+q.text+'</div><div class="opts" id="bo">'+shuffle(q.opts).map((o,i)=>'<button class="opt" type="button" data-ok="'+(o.ok?1:0)+'">'+o.t+'</button>').join('')+'</div><div id="bf"></div><div class="row"><span id="bl2"></span><button class="btn good" id="bn" type="button" hidden>'+(qi<B.qs.length-1?'Volgende vraag →':'Klaar met opdracht '+B.nr+' ✓')+'</button></div>';
+    $('#bl2').appendChild(listenBtn(say(q.text)));
+    $$('#bo .opt').forEach(b=>b.onclick=()=>{const ok=b.dataset.ok==='1';sfx(ok?'ok':'no');if(ok)good++;
+      $$('#bo .opt').forEach(x=>{x.disabled=true;if(x.dataset.ok==='1')x.classList.add('ok')});if(!ok)b.classList.add('no');
+      const right=q.opts.filter(o=>o.ok).map(o=>o.t).join(', ');
+      $('#bf').innerHTML='<div class="fb '+(ok?'ok':'no')+'">'+(ok?'Goed zo!':'Niet goed. Het goede antwoord is: '+right)+'</div><div class="ans"><b>Waarom?</b> '+q.why+'</div>';
+      $('#bn').hidden=false;$('#bn').focus()});
+    $('#bn').onclick=()=>{if(qi<B.qs.length-1){qi++;showQ()}else done()}}
+  function done(){DB.book[B.id]=1;save();sfx('win');qz.innerHTML='<div class="fb ok">Opdracht '+B.nr+' klaar! Je had '+good+' van '+B.qs.length+' meteen goed.</div><p>Maak nu de opdracht ook in je boek. Je weet hoe je het moet aanpakken.</p>'+(ix<BOOK.length-1?'<div class="row"><button class="btn" id="nx2" type="button">Volgende opdracht ▶</button></div>':'');
+    if($('#nx2'))$('#nx2').onclick=()=>bookEx(BOOK[ix+1].id);window.scrollTo({top:$('#qz').offsetTop-200,behavior:'smooth'})}
+  showQ();$('#bl').onclick=bookMenu;if($('#nn'))$('#nn').onclick=()=>bookEx(BOOK[ix+1].id);window.scrollTo(0,0)}
+window.BR={S:()=>S,LV,BOOK,LIB,polyData,M,EXTRA};
+if(DB.name)menu();else nameScreen();
+</script></body></html>
