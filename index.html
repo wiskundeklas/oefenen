@@ -179,7 +179,7 @@ footer{margin-top:28px;display:flex;justify-content:center}footer button{font-si
   };
   function start(cfg){
     base=norm(copy(cfg));state=copy(base);
-    try{var o=JSON.parse(localStorage.getItem(KEY)||'null');if(o&&o.wiskunde&&o.rekenen){state.columns=o;norm(state)}}catch(e){}
+    try{var o=JSON.parse(localStorage.getItem(KEY)||'null');if(o&&o.wiskunde&&o.rekenen){var seen={};COLS.forEach(function(c){o[c].forEach(function(id){seen[id]=1})});COLS.forEach(function(c){base.columns[c].forEach(function(id){if(!seen[id]){o[c].push(id);seen[id]=1}})});state.columns=o;norm(state)}}catch(e){}
     try{var e2=JSON.parse(localStorage.getItem(KEY2)||'null');if(e2)Object.keys(e2).forEach(function(id){if(state.lessons[id]&&e2[id]&&typeof e2[id].title==='string'&&e2[id].title.trim()){state.lessons[id].title=e2[id].title;state.lessons[id].note=e2[id].note||''}})}catch(e){}
     render()}
   fetch('lessen.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){if(!j.lessons)throw 0;start(j)}).catch(function(){start(DEFAULT)});
