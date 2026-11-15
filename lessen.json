@@ -44,6 +44,11 @@
    "title": "Hoeken",
    "note": "Hoek, hoekpunt en benen, het teken ∠, hoeken op de klok en hoeken vergelijken. Uitleg en 60 vragen.",
    "url": "hoeken.html"
+  },
+  "breuken": {
+   "title": "Breuken",
+   "note": "Wat is een breuk? Plus en min met gelijke en verschillende noemers. Uitleg en 60 vragen.",
+   "url": "rekenles-breuken.html"
   }
  },
  "columns": {
@@ -58,7 +63,8 @@
    "getallen",
    "plusmin",
    "keerdelen",
-   "decimalen"
+   "decimalen",
+   "breuken"
   ]
  }
 }
