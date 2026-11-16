@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rekenen: Breuken keer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff3e6;--ink:#3a2412;--soft:#7a5a40;--blue:#d9620b;--blue2:#a94a06;--orange:#2a6fdb;--good:#1d8a4a;--goodbg:#dff3e6;--oops:#c0392b;--oopsbg:#fde7e3;--card:#fff;--line:#f1d3b4;--yel:#ffc533;--p1:#7db7ff;--p2:#ffb866}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 18px/1.5 Lexend,"Segoe UI",system-ui,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:12px 16px 60px}
+header.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.who{display:flex;align-items:center;gap:10px;font-weight:600;flex:1;min-width:140px}.who svg{width:44px;height:44px}
+.chip{border:0;border-radius:999px;padding:8px 14px;font:600 14px Lexend,sans-serif;background:var(--blue);color:#fff;cursor:pointer;min-height:40px}
+.chip.pts{background:var(--yel);color:#4a3200;cursor:default}
+.prog{height:12px;border-radius:99px;background:#f1d3b4;overflow:hidden;margin:6px 0 14px}.prog i{display:block;height:100%;background:var(--good);width:0;transition:width .3s}
+.card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:18px 18px 20px;margin-bottom:14px}
+h1{font-size:1.7rem;line-height:1.2;margin:.2em 0 .4em}h2{font-size:1.4rem;margin:.2em 0 .5em}
+p{margin:.5em 0}.note{color:var(--soft);font-size:.9rem}.center{text-align:center}
+.btn{border:0;border-radius:14px;padding:12px 20px;font:600 1.05rem Lexend,sans-serif;background:var(--blue);color:#fff;cursor:pointer;min-height:50px;box-shadow:0 3px 0 var(--blue2)}
+.btn:active{transform:translateY(2px);box-shadow:none}.btn:disabled{opacity:.5;box-shadow:none;cursor:default}
+.btn.alt{background:#fff;color:var(--blue);border:2px solid var(--blue);box-shadow:none}.btn.small{min-height:40px;padding:6px 14px;font-size:.95rem}
+.btn.good{background:var(--good);box-shadow:0 3px 0 #146b37}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}.row.sp{justify-content:space-between}
+.qhead{display:flex;justify-content:space-between;color:var(--soft);font-size:.9rem;font-weight:600}
+.q{font-size:1.2rem;font-weight:600;margin:8px 0}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.opts.one{grid-template-columns:1fr}.opts.three{grid-template-columns:repeat(3,1fr)}
+.opt{border:2px solid var(--line);background:#fff;border-radius:14px;padding:10px 14px;font:600 1.15rem Lexend,sans-serif;color:var(--ink);cursor:pointer;text-align:center;min-height:58px}
+.opt:hover{border-color:var(--blue)}.opt.ok{background:var(--goodbg);border-color:var(--good)}.opt.no{background:var(--oopsbg);border-color:var(--oops);opacity:.8}
+.fb{border-radius:14px;padding:12px 14px;margin-top:12px;font-weight:600}.fb.ok{background:var(--goodbg);color:#0f5a2c}.fb.no{background:var(--oopsbg);color:#7a2118}.fb.tip{background:#fff6d9;color:#5a4300;font-weight:400}
+.say{background:#fff7ec;border-left:5px solid var(--blue);border-radius:10px;padding:10px 14px;margin:12px 0}
+.big{font-weight:700;font-size:1.3em}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.1;margin:0 .15em;font-weight:700}
+.fr i{font-style:normal;padding:0 .3em;min-width:1em;text-align:center}.fr i:first-child{border-bottom:2.5px solid currentColor}
+.fr.q i:first-child{color:var(--orange)}
+.fig{display:block;width:100%;margin:6px auto;touch-action:manipulation}
+.fig.pie{max-width:210px}.fig.bar{max-width:420px}
+.part{fill:#fff;stroke:var(--ink);stroke-width:2.5;stroke-linejoin:round}
+.part.on{fill:var(--p1)}.part.b2{fill:var(--p2)}.part.cx{fill:#f4d3cf}.part.tp{cursor:pointer}.part.tp:hover{fill:#e5f0ff}.part.tp.on:hover{fill:var(--p1)}
+.xx{stroke:var(--oops);stroke-width:4;stroke-linecap:round;fill:none}
+.brow{display:flex;align-items:center;gap:12px;max-width:520px;margin:0 auto}.brow .fr{min-width:44px}.brow .fig{margin:4px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.c2{border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font:600 1rem Lexend,sans-serif;color:var(--ink);cursor:pointer;min-height:42px}
+.c2.sel{background:var(--blue);color:#fff;border-color:var(--blue)}
+.stp{display:inline-flex;align-items:center;gap:8px;margin:4px 10px}.stp button{width:42px;height:42px;border-radius:50%;border:2px solid var(--blue);background:#fff;color:var(--blue);font:700 1.3rem Lexend,sans-serif;cursor:pointer}
+.stp button:disabled{opacity:.35;cursor:default}.stp b{min-width:1.6em;text-align:center;font-size:1.3rem}
+.wd{background:#fffaf4;border:2px dashed var(--line);border-radius:16px;padding:12px;margin:12px 0}
+.fin{display:inline-flex;flex-direction:column;align-items:center;gap:6px;margin-top:12px}
+.fin input::placeholder{font-size:.8rem;font-weight:400}
+.fin input,.num input{font:700 1.5rem Lexend,sans-serif;width:120px;padding:8px;border:3px solid var(--line);border-radius:14px;text-align:center;color:var(--ink)}
+.fin hr{width:100%;border:0;border-top:3px solid var(--ink);margin:0}
+.num{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:1.2rem}
+.lv{display:grid;gap:10px;margin-top:10px}.lvb{display:flex;align-items:center;gap:12px;border:2px solid var(--line);background:#fff;border-radius:16px;padding:12px 14px;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.lvb:hover{border-color:var(--blue)}.lvb b{display:block}.lvb small{color:var(--soft)}.lvn{width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700;display:grid;place-items:center;flex:none}.lvb.done .lvn{background:var(--good)}
+.lvb .st{margin-left:auto;color:#e5a400;font-size:1.3rem;white-space:nowrap}
+.lg{border-collapse:collapse;width:100%;font-size:.9rem;margin-top:6px}.lg th,.lg td{text-align:left;padding:3px 8px 3px 0;border-bottom:1px solid var(--line)}
+.stars{font-size:2.4rem;text-align:center;letter-spacing:6px;color:#e5a400}
+input.nm{font:600 1.2rem Lexend,sans-serif;width:100%;padding:12px;border:3px solid var(--line);border-radius:14px;color:var(--ink)}
+.dg{fill:#fffaf4;stroke:#e0c9ad;stroke-width:2}.dg.on{fill:#ffe9d2;stroke:var(--blue)}
+.dt{fill:#e6d3be;stroke:#b8997a;stroke-width:1.5}.dt.on{fill:var(--blue);stroke:var(--blue2)}.dt.tp{cursor:pointer}
+.fig.dots,.fig.rect{max-width:360px}
+.band1{fill:var(--p1);fill-opacity:.55}.band2{fill:var(--p2);fill-opacity:.6}.ov{fill:var(--good);fill-opacity:.7}
+.rc{fill:transparent;stroke:#3a2412;stroke-width:1.5}.rc.tp{cursor:pointer}.rc.sel{fill:rgba(29,138,74,.75)}
+@keyframes pop{0%{transform:scale(.8)}60%{transform:scale(1.08)}100%{transform:scale(1)}}.pop{animation:pop .35s}
+</style></head><body><a href="index.html" id="back" style="display:inline-block;margin:10px 14px 0;color:#d9620b;font:700 15px/1.2 system-ui,sans-serif;text-decoration:none">← Alle lessen</a>
+<div class="wrap">
+<header class="bar" id="bar" hidden>
+ <div class="who"><span id="av"></span><span id="nm"></span></div>
+ <button class="chip" id="tp" type="button">🗣 Stem kiezen</button><button class="chip" id="tv" type="button" hidden></button><button class="chip" id="ts" type="button"></button><span class="chip pts" id="pt">0 punten</span>
+</header>
+<div id="vmsg" class="fb tip" hidden></div><div class="card" id="vp" hidden></div>
+<div class="prog" id="pg" hidden><i></i></div>
+<main id="stage"></main>
+</div>
+<script src="resultaten.js"></script>
+<script>
+'use strict';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const KEY='rekenles-breuken-keer-v1';
+let DB={name:'',lv:{},voice:true,sound:true};
+try{const r=localStorage.getItem(KEY);if(r)DB=Object.assign(DB,JSON.parse(r))}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}}
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=ri(0,i);[a[i],a[j]]=[a[j],a[i]]}return a}
+/* ---------- geluid en stem ---------- */
+let AC=null;
+function tone(f,t,d,type,g){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),v=AC.createGain();o.type=type||'sine';o.frequency.value=f;v.gain.setValueAtTime(0.0001,AC.currentTime+t);v.gain.exponentialRampToValueAtTime(g||.12,AC.currentTime+t+.02);v.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+t+d);o.connect(v);v.connect(AC.destination);o.start(AC.currentTime+t);o.stop(AC.currentTime+t+d+.05)}catch(e){}}
+function sfx(k){if(!DB.sound)return;
+  if(k==='ok'){[523,659,784].forEach((f,i)=>tone(f,i*.1,.25))}
+  else if(k==='no'){tone(300,0,.18,'triangle',.08);tone(260,.14,.22,'triangle',.08)}
+  else if(k==='tap')tone(620,0,.07,'sine',.07);
+  else if(k==='win'){[523,659,784,1047,784,1047].forEach((f,i)=>tone(f,i*.12,.3))}}
+let VOICES=[];
+function loadVoices(){try{VOICES=speechSynthesis.getVoices().filter(v=>/^nl([-_]|$)/i.test(v.lang))}catch(e){VOICES=[]}}
+try{loadVoices();speechSynthesis.addEventListener('voiceschanged',loadVoices)}catch(e){}
+function vScore(v){let n=0;if(/nl[-_]NL/i.test(v.lang))n+=3;if(/natural|online|neural|premium|enhanced|siri/i.test(v.name))n+=5;if(/colette|fenna|claire|ellen|google nederlands|female|vrouw|dena/i.test(v.name))n+=3;if(/maarten|xander|frank|ruben|arnaud/i.test(v.name))n-=2;if(v.localService)n+=1;return n}
+function bestVoice(){loadVoices();if(!VOICES.length)return null;if(DB.voiceName){const m=VOICES.find(v=>v.name===DB.voiceName);if(m)return m}return VOICES.slice().sort((a,b)=>vScore(b)-vScore(a))[0]}
+function stopSpeech(){try{speechSynthesis.cancel()}catch(e){}}
+let vmT=0;
+function noVoiceMsg(){const m=$('#vmsg');m.textContent='Op dit apparaat is geen Nederlandse stem gevonden. Daarom lees ik niet voor. Installeer een Nederlandse stem in de instellingen van je apparaat (bij Spraak), of gebruik Microsoft Edge of Google Chrome.';m.hidden=false;clearTimeout(vmT);vmT=setTimeout(()=>{m.hidden=true},9000)}
+function speak(t,force){if(!t||(!DB.voice&&!force))return;try{const v=bestVoice();if(!v){noVoiceMsg();return}stopSpeech();const u=new SpeechSynthesisUtterance(t);u.voice=v;u.lang=v.lang;u.rate=DB.rate||.9;u.pitch=1.05;speechSynthesis.speak(u)}catch(e){}}
+function listenBtn(t){const b=document.createElement('button');b.type='button';b.className='btn alt small';b.textContent='\u{1F50A} Lees voor';b.onclick=()=>speak(t,true);return b}
+/* ---------- breuken in tekst ---------- */
+const NUMW=['nul','een','twee','drie','vier','vijf','zes','zeven','acht','negen','tien','elf','twaalf'];
+const ORD={2:'half',3:'derde',4:'vierde',5:'vijfde',6:'zesde',7:'zevende',8:'achtste',9:'negende',10:'tiende',11:'elfde',12:'twaalfde'};
+const fr=(a,b,c)=>'<span class="fr'+(c?' '+c:'')+'"><i>'+a+'</i><i>'+b+'</i></span>';
+const TOK=/\{([\d?]+)\/([\d?]+)\}/g;
+const fmt=s=>s.replace(TOK,(m,a,b)=>fr(a,b,a==='?'?'q':''));
+function spokenFr(a,b){if(a!=='?'&&+a===+b)return 'een heel';const n=a==='?'?'hoeveel':(NUMW[+a]||a);return n+' '+(ORD[+b]||b)}
+function say(s){return s.replace(TOK,(m,a,b)=>spokenFr(a,b)).replace(/<[^>]+>/g,'').replace(/ \+ /g,' plus ').replace(/ × /g,' keer ').replace(/ ÷ /g,' gedeeld door ').replace(/ − /g,' min ').replace(/ = /g,' is ').replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim()}
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+const same=(a,b,c,d)=>a*d===b*c;
+/* ---------- figuren ---------- */
+function pieSvg(n,k,o){o=o||{};const R=72,C=80;let s='';
+  for(let i=0;i<n;i++){const a0=-Math.PI/2+2*Math.PI*i/n,a1=-Math.PI/2+2*Math.PI*(i+1)/n;
+    const x0=C+R*Math.cos(a0),y0=C+R*Math.sin(a0),x1=C+R*Math.cos(a1),y1=C+R*Math.sin(a1);
+    s+='<path class="part'+(o.paint?' tp':'')+(i<k?' on':'')+'" data-i="'+i+'" d="M'+C+','+C+' L'+x0.toFixed(1)+','+y0.toFixed(1)+' A'+R+','+R+' 0 '+(a1-a0>Math.PI?1:0)+' 1 '+x1.toFixed(1)+','+y1.toFixed(1)+' Z"/>'}
+  return '<svg class="fig pie" viewBox="0 0 160 160" role="img" aria-label="Cirkel in '+n+' gelijke delen, '+k+' gekleurd">'+s+'</svg>'}
+function barSvg(n,k,o){o=o||{};const W=320,H=52,pw=W/n;let s='';
+  for(let i=0;i<n;i++){const x=i*pw+1,w=pw-2;let c='part';if(o.paint)c+=' tp';const cx=o.cx&&i>=k-o.cx&&i<k;
+    if(cx)c+=' cx';else if(i<k)c+=' on';else if(o.k2&&i<k+o.k2)c+=' b2';
+    s+='<rect class="'+c+'" data-i="'+i+'" x="'+x.toFixed(1)+'" y="2" width="'+w.toFixed(1)+'" height="'+(H-4)+'" rx="6"/>';
+    if(cx)s+='<path class="xx" d="M'+(x+8)+',12 L'+(x+w-8)+','+(H-12)+' M'+(x+w-8)+',12 L'+(x+8)+','+(H-12)+'"/>'}
+  return '<svg class="fig bar" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Balk in '+n+' gelijke delen">'+s+'</svg>'}
+const brow=(a,b,svg)=>'<div class="brow">'+fr(a,b)+svg+'</div>';
+const shape=(sh,n,k,o)=>sh==='pie'?pieSvg(n,k,o):barSvg(n,k,o);
+/* ---------- opties ---------- */
+function fracOptions(k,n){const c=[[k+1,n],[k-1,n],[k,n+1],[k,n-1],[n-k,n],[k+2,n],[k,n+2]].filter(p=>p[0]>=1&&p[1]>=2&&p[0]<=p[1]&&!same(p[0],p[1],k,n));
+  const seen={},out=[];shuffle(c).forEach(p=>{const s=p.join('/');if(!seen[s]&&out.length<3){seen[s]=1;out.push(s)}});return shuffle([k+'/'+n].concat(out))}
+function numOptions(ans,lo,hi){const s=new Set([ans]);let t=0;while(s.size<4&&t<60){t++;const v=ans+pick([-2,-1,1,2,3]);if(v>=lo&&v<=hi)s.add(v)}for(let v=lo;s.size<4&&v<=hi;v++)s.add(v);return shuffle([...s])}
+function twoOpts(a,b){const s=new Set([a,b]);let t=0;while(s.size<4&&t<80){t++;s.add(ri(1,10))}return shuffle([...s])}
+const optHtml=o=>/^\d+\/\d+$/.test(o)?fr(...o.split('/')):esc(o);
+/* ---------- vragen maken ---------- */
+function build(plan,make){const seen=new Set(),out=[];let t=0;plan=shuffle(plan);
+  while(out.length<plan.length&&t<600){t++;const q=make(plan[out.length]);if(!q||seen.has(q.key))continue;seen.add(q.key);out.push(q)}
+  return out}
+const eqStr=(n,d)=>n+'/'+d;
+const f1=n=>(+n).toFixed(1);
+/* ---------- figuren: bolletjes en rechthoek ---------- */
+function dotsSvg(T,g,k,o){o=o||{};const W=320;let s='',H;
+  if(o.groups){const pr=g<=4?g:Math.ceil(g/2),rows=Math.ceil(g/pr),gw=W/pr,gh=74,sz=T/g,dc=Math.ceil(Math.sqrt(sz*1.4)),dr=Math.ceil(sz/dc),sp=Math.min((gw-14)/dc,(gh-14)/dr),r=Math.min(9,sp*.38);H=rows*gh;
+    for(let i=0;i<g;i++){const gx=(i%pr)*gw,gy=Math.floor(i/pr)*gh;s+='<rect class="dg'+(i<k?' on':'')+'" x="'+f1(gx+3)+'" y="'+f1(gy+3)+'" width="'+f1(gw-6)+'" height="'+(gh-6)+'" rx="10"/>';
+      for(let j=0;j<sz;j++){const cx=gx+gw/2+((j%dc)-(dc-1)/2)*sp,cy=gy+gh/2+(Math.floor(j/dc)-(dr-1)/2)*sp;s+='<circle class="dt'+(i<k?' on':'')+'" cx="'+f1(cx)+'" cy="'+f1(cy)+'" r="'+f1(r)+'"/>'}}}
+  else{const cols=T<=12?6:T<=24?8:10,rows=Math.ceil(T/cols),sp=W/cols,r=Math.min(14,sp*.36);H=rows*sp;for(let j=0;j<T;j++)s+='<circle class="dt'+(o.tap?' tp':'')+(j<k?' on':'')+'" data-i="'+j+'" cx="'+f1((j%cols+.5)*sp)+'" cy="'+f1((Math.floor(j/cols)+.5)*sp)+'" r="'+f1(r)+'"/>'}
+  return '<svg class="fig dots" viewBox="0 0 '+W+' '+f1(H)+'" role="img" aria-label="'+T+' bolletjes">'+s+'</svg>'}
+function rectSvg(b,d,a,c,o){o=o||{};const W=300,H=150,cw=W/b,ch=H/d;
+  let s='<rect class="band1" x="0" y="0" width="'+f1(a*cw)+'" height="'+H+'"/><rect class="band2" x="0" y="0" width="'+W+'" height="'+f1(c*ch)+'"/>';
+  if(o.show)s+='<rect class="ov" x="0" y="0" width="'+f1(a*cw)+'" height="'+f1(c*ch)+'"/>';
+  for(let i=0;i<b;i++)for(let j=0;j<d;j++)s+='<rect class="rc'+(o.tap?' tp':'')+'" data-i="'+i+'" data-j="'+j+'" x="'+f1(i*cw)+'" y="'+f1(j*ch)+'" width="'+f1(cw)+'" height="'+f1(ch)+'"/>';
+  return '<svg class="fig rect" viewBox="-2 -2 304 154" role="img" aria-label="Rechthoek in '+b+' kolommen en '+d+' rijen">'+s+'</svg>'}
+/* ---------- vragen ---------- */
+const pickB=()=>pick([2,3,4,5,6,8,10]);
+function pickTB(minB){let b;do{b=pickB()}while(b<(minB||2));const mx=b===10?4:b>=8?5:6,sz=ri(2,mx);return{b,sz,T:b*sz}}
+const SD=[(a,b,T)=>'Een klas heeft '+T+' leerlingen. {'+a+'/'+b+'} van de klas gaat zwemmen. Hoeveel leerlingen gaan zwemmen?',(a,b,T)=>'Een zak bevat '+T+' snoepjes. Sam eet {'+a+'/'+b+'} van de snoepjes. Hoeveel snoepjes eet Sam?',(a,b,T)=>'Een fietsroute is '+T+' km lang. Jij hebt al {'+a+'/'+b+'} van de route gefietst. Hoeveel km is dat?',(a,b,T)=>'Een doos heeft '+T+' potloden. {'+a+'/'+b+'} van de potloden is rood. Hoeveel potloden zijn rood?',(a,b,T)=>'Een film duurt '+T+' minuten. {'+a+'/'+b+'} van de film is voorbij. Hoeveel minuten is dat?'];
+const SK=[(n,a,b)=>'Een glas bevat {'+a+'/'+b+'} liter. Je drinkt '+n+' glazen. Hoeveel liter is dat?',(n,a,b)=>'Een plank is {'+a+'/'+b+'} meter lang. Je legt '+n+' planken achter elkaar. Hoe lang is dat samen, in meter?',(n,a,b)=>'Een pakje boter weegt {'+a+'/'+b+'} kilo. Je koopt '+n+' pakjes. Hoeveel kilo is dat samen?'];
+function frac2(max){const L=[[1,2],[1,3],[1,4],[1,5],[2,3],[3,4],[2,5],[3,5],[1,6]];let x,y,t=0;do{x=pick(L);y=pick(L);t++}while((x[1]*y[1]>(max||20)||(x[0]===y[0]&&x[1]===y[1]&&t<30))&&t<200);return [x,y]}
+const Q={
+ n1:()=>{const {b,sz,T}=pickTB();return{key:'n1'+b+T,type:'num',fig:b<=6?dotsSvg(T,b,1,{groups:true}):'',text:'Hoeveel is {1/'+b+'} van '+T+'?',ans:sz,tip:'Tip: deel '+T+' door '+b+'. '+T+' ÷ '+b+' = '+sz+'.',show:String(sz)}},
+ dots1:()=>{const {b,sz,T}=pickTB();return{key:'d1'+b+T,type:'dots',dots:{T,g:b},text:'Kleur {1/'+b+'} van de '+T+' bolletjes. Tik op de bolletjes.',say:'Kleur een '+(ORD[b]||b)+' van de '+T+' bolletjes.',ans:sz,tip:'Tip: deel '+T+' door '+b+'. Dat is '+sz+'. Kleur dus '+sz+' bolletjes.',show:sz+' bolletjes'}},
+ d1mc:()=>{const {b,T}=pickTB();return{key:'dm'+b+T,type:'mc',text:'Welke som hoort bij {1/'+b+'} van '+T+'?',opts:shuffle([T+' ÷ '+b,T+' × '+b,T+' − '+b,T+' + '+b]),ans:T+' ÷ '+b,tip:'Tip: een '+(ORD[b]||b)+' van een getal vind je door te delen door '+b+'.',show:T+' ÷ '+b}},
+ s1:()=>{const {b,sz,T}=pickTB();const st=pick(SD)(1,b,T);return{key:'s1'+st,type:'num',text:st,ans:sz,tip:'Tip: deel '+T+' door '+b+'.',show:String(sz)}},
+ n2:()=>{const {b,sz,T}=pickTB(3);const a=ri(2,b-1);return{key:'n2'+a+b+T,type:'num',fig:b<=6?dotsSvg(T,b,a,{groups:true}):'',text:'Hoeveel is {'+a+'/'+b+'} van '+T+'?',ans:a*sz,tip:'Tip: eerst '+T+' ÷ '+b+' = '+sz+'. Dat is {1/'+b+'}. Dan '+a+' × '+sz+' = '+a*sz+'.',show:String(a*sz)}},
+ dots2:()=>{const {b,sz,T}=pickTB(3);const a=ri(2,b-1);return{key:'d2'+a+b+T,type:'dots',dots:{T,g:b},text:'Kleur {'+a+'/'+b+'} van de '+T+' bolletjes. Tik op de bolletjes.',say:'Kleur '+spokenFr(a,b)+' van de '+T+' bolletjes.',ans:a*sz,tip:'Tip: eerst '+T+' ÷ '+b+' = '+sz+'. Dat is een groep. Je kleurt '+a+' groepen: '+a+' × '+sz+' = '+a*sz+'.',show:a*sz+' bolletjes'}},
+ first:()=>{const {b,T}=pickTB(3);const a=ri(2,b-1);return{key:'fi'+a+b+T,type:'mc',text:'Wat doe je als eerste bij {'+a+'/'+b+'} van '+T+'?',opts:shuffle([T+' ÷ '+b,T+' × '+a,T+' − '+b,T+' ÷ '+a]),ans:T+' ÷ '+b,tip:'Tip: eerst deel je door de noemer ('+b+'). Dan weet je hoe groot één deel is.',show:T+' ÷ '+b}},
+ s2:()=>{const {b,sz,T}=pickTB(3);const a=ri(2,b-1),st=pick(SD)(a,b,T);return{key:'s2'+st,type:'num',text:st,ans:a*sz,tip:'Tip: eerst '+T+' ÷ '+b+' = '+sz+'. Dan '+a+' × '+sz+'.',show:String(a*sz)}},
+ step:()=>{const {b,sz,T}=pickTB(3);const a=ri(2,b-1);return{key:'st'+a+b+T,type:'num',text:'Vul in: {1/'+b+'} van '+T+' is '+sz+'. Dus {'+a+'/'+b+'} van '+T+' is ...',say:'Een '+(ORD[b]||b)+' van '+T+' is '+sz+'. Dus '+spokenFr(a,b)+' van '+T+' is hoeveel?',ans:a*sz,tip:'Tip: je hebt '+a+' groepen van '+sz+'. '+a+' × '+sz+' = '+a*sz+'.',show:String(a*sz)}},
+ m3p:()=>{const n=ri(2,5),a=ri(1,2);if(n*a+1>10)return null;const b=ri(n*a+1,10);return{n,a,b}},
+ m3frac:()=>{const p=Q.m3p();if(!p)return null;const {n,a,b}=p;return{key:'f3'+n+a+b,type:'frac',fig:barSvg(b,n*a),text:'Reken uit: '+n+' × {'+a+'/'+b+'} = ?',ans:{n:n*a,d:b},tip:'Tip: de noemer blijft '+b+'. De teller wordt '+n+' × '+a+' = '+n*a+'.',show:fr(n*a,b)}},
+ m3bar:()=>{const p=Q.m3p();if(!p)return null;const {n,a,b}=p;if(b>10)return null;return{key:'b3'+n+a+b,type:'paint',paint:{sh:'bar',n:b,k:n*a},text:'Kleur '+n+' × {'+a+'/'+b+'}. Tik op de stukken.',say:'Kleur '+n+' keer '+spokenFr(a,b)+'. Tik op de stukken.',tip:'Tip: '+n+' × '+a+' = '+n*a+'. Kleur '+n*a+' stukken van de '+b+'.',show:fr(n*a,b)}},
+ m3mc:()=>{const p=Q.m3p();if(!p)return null;const {n,a,b}=p;return{key:'c3'+n+a+b,type:'mc',text:'Reken uit: '+n+' × {'+a+'/'+b+'} = ?',opts:fracOptions(n*a,b),ans:eqStr(n*a,b),tip:'Tip: de noemer blijft '+b+'. De teller is '+n+' × '+a+' = '+n*a+'.',show:fr(n*a,b)}},
+ m3miss:()=>{const p=Q.m3p();if(!p)return null;const {n,a,b}=p;return{key:'x3'+n+a+b,type:'num',text:'Vul in: '+n+' × {'+a+'/'+b+'} = {?/'+b+'}',say:'Vul in: '+n+' keer '+spokenFr(a,b)+' is hoeveel '+(ORD[b]||b),ans:n*a,tip:'Tip: de teller is '+n+' × '+a+'.',show:String(n*a)}},
+ m3s:()=>{const p=Q.m3p();if(!p)return null;const {n,a,b}=p;const st=pick(SK)(n,a,b);return{key:'t3'+st,type:'frac',text:st,ans:{n:n*a,d:b},tip:'Tip: '+n+' × {'+a+'/'+b+'}. De noemer blijft '+b+'. De teller is '+n+' × '+a+' = '+n*a+'.',show:fr(n*a,b)}},
+ m4p:()=>{const b=ri(2,6),a=ri(1,b-1),n=ri(2,8);if((n*a)%b!==0||n*a/b>6)return null;return{n,a,b,X:n*a,res:n*a/b}},
+ m4w:()=>{const p=Q.m4p();if(!p)return null;const {n,a,b,X,res}=p;return{key:'w4'+n+a+b,type:'num',text:'Reken uit: '+n+' × {'+a+'/'+b+'} = ?',ans:res,tip:'Tip: eerst de teller: '+n+' × '+a+' = '+X+'. Dan {'+X+'/'+b+'}: '+X+' ÷ '+b+' = '+res+'.',show:String(res)}},
+ m4conv:()=>{const b=ri(2,6),res=ri(1,6),X=b*res;return{key:'v4'+b+res,type:'num',text:'Hoeveel hele is {'+X+'/'+b+'}?',say:'Hoeveel hele is '+X+' '+(ORD[b]||b)+'?',ans:res,tip:'Tip: deel de teller door de noemer: '+X+' ÷ '+b+' = '+res+'.',show:String(res)}},
+ m4mc:()=>{const p=Q.m4p();if(!p)return null;const {n,a,b,res}=p;return{key:'c4'+n+a+b,type:'mc',text:'Reken uit: '+n+' × {'+a+'/'+b+'} = ?',opts:numOptions(res,1,9).map(String),ans:String(res),tip:'Tip: eerst '+n+' × '+a+' = '+n*a+'. Dan '+n*a+' ÷ '+b+' = '+res+'.',show:String(res)}},
+ m4s:()=>{const p=Q.m4p();if(!p)return null;const {n,a,b,X,res}=p;const st=pick(SK)(n,a,b);return{key:'t4'+st,type:'num',text:st,ans:res,tip:'Tip: eerst '+n+' × '+a+' = '+X+'. Dan {'+X+'/'+b+'} = '+X+' ÷ '+b+' = '+res+'.',show:String(res)}},
+ m4miss:()=>{const p=Q.m4p();if(!p)return null;const {n,a,b,X}=p;return{key:'x4'+n+a+b,type:'num',text:'Vul in: '+n+' × {'+a+'/'+b+'} = {?/'+b+'}',say:'Vul in: '+n+' keer '+spokenFr(a,b)+' is hoeveel '+(ORD[b]||b),ans:X,tip:'Tip: de teller is '+n+' × '+a+' = '+X+'.',show:String(X)}},
+ m5rect:()=>{const [[a,b],[c,d]]=frac2(20);return{key:'r5'+a+b+c+d,type:'rect',rect:{b,d,a,c},text:'Kleur het stuk dat {'+a+'/'+b+'} van {'+c+'/'+d+'} is. De blauwe kolommen zijn {'+a+'/'+b+'}. De oranje rijen zijn {'+c+'/'+d+'}. Tik op de vakjes waar blauw en oranje over elkaar liggen.',say:'Kleur het deel waar blauw en oranje over elkaar liggen. Tik op die vakjes.',tip:'Tip: de blauwe kolommen en de oranje rijen liggen over elkaar in '+a+' kolommen en '+c+' rijen. Dat zijn '+a+' × '+c+' = '+a*c+' vakjes.',show:a*c+' vakjes'}},
+ m5frac:()=>{const [[a,b],[c,d]]=frac2(20);return{key:'f5'+a+b+c+d,type:'frac',fig:rectSvg(b,d,a,c,{show:true}),text:'Reken uit: {'+a+'/'+b+'} × {'+c+'/'+d+'} = ?',ans:{n:a*c,d:b*d},tip:'Tip: teller × teller: '+a+' × '+c+' = '+a*c+'. Noemer × noemer: '+b+' × '+d+' = '+b*d+'.',show:fr(a*c,b*d)}},
+ m5frac2:()=>{const [[a,b],[c,d]]=frac2(30);return{key:'g5'+a+b+c+d,type:'frac',text:'Reken uit: {'+a+'/'+b+'} × {'+c+'/'+d+'} = ?',ans:{n:a*c,d:b*d},tip:'Tip: teller × teller: '+a+' × '+c+' = '+a*c+'. Noemer × noemer: '+b+' × '+d+' = '+b*d+'.',show:fr(a*c,b*d)}},
+ m5mc:()=>{const [[a,b],[c,d]]=frac2(20);const n=a*c,m=b*d;if(n>=m)return null;return{key:'k5'+a+b+c+d,type:'mc',text:'Reken uit: {'+a+'/'+b+'} × {'+c+'/'+d+'} = ?',opts:fracOptions(n,m),ans:eqStr(n,m),tip:'Tip: teller × teller: '+a+' × '+c+' = '+a*c+'. Noemer × noemer: '+b+' × '+d+' = '+b*d+'.',show:fr(n,m)}},
+ m5miss:()=>{const [[a,b],[c,d]]=frac2(20);return{key:'x5'+a+b+c+d,type:'num',text:'Vul in: {'+a+'/'+b+'} × {'+c+'/'+d+'} = {?/'+b*d+'}',say:'Vul in: '+spokenFr(a,b)+' keer '+spokenFr(c,d)+' is hoeveel '+(ORD[b*d]||b*d),ans:a*c,tip:'Tip: de teller is '+a+' × '+c+' = '+a*c+'.',show:String(a*c)}},
+ m5s:()=>{const [[a,b],[c,d]]=frac2(20);const st=pick(['Er is nog {'+a+'/'+b+'} van een pizza over. Jij eet {'+c+'/'+d+'} van die rest. Welk deel van de hele pizza eet jij?','Een fles is voor {'+a+'/'+b+'} gevuld met sap. Je drinkt {'+c+'/'+d+'} van het sap in de fles. Welk deel van de hele fles heb je gedronken?','Een tuin is voor {'+a+'/'+b+'} bedekt met gras. {'+c+'/'+d+'} van het gras is net gemaaid. Welk deel van de hele tuin is gemaaid?']);return{key:'s5'+st,type:'frac',text:st,ans:{n:a*c,d:b*d},tip:'Tip: {'+a+'/'+b+'} × {'+c+'/'+d+'}. Teller × teller en noemer × noemer: {'+a*c+'/'+b*d+'}.',show:fr(a*c,b*d)}},
+ check:()=>{const p=Q.m3p();if(!p)return null;const {n,a,b}=p;const good=Math.random()<.4,shown=good?'{'+n*a+'/'+b+'}':'{'+n*a+'/'+n*b+'}';return{key:'ck'+n+a+b+good,type:'mc',one:true,text:'Sam zegt: '+n+' × {'+a+'/'+b+'} = '+shown+'. Klopt dat?',say:'Sam zegt: '+n+' keer '+spokenFr(a,b)+' is '+spokenFr(n*a,good?b:n*b)+'. Klopt dat?',opts:['Ja, dat klopt','Nee, dat klopt niet'],ans:good?'Ja, dat klopt':'Nee, dat klopt niet',tip:'Tip: bij n × een breuk blijft de noemer hetzelfde. Alleen de teller wordt n keer zo groot.',show:good?'Ja':'Nee, het is '+fr(n*a,b)}}
+};
+const gen=plan=>()=>build(plan,t=>Q[t]());
+/* ---------- widgets voor de uitleg ---------- */
+function stepper(id,val,min,max){return '<span class="stp"><button type="button" data-st="'+id+'" data-d="-1" aria-label="min"'+(val<=min?' disabled':'')+'>−</button><b>'+val+'</b><button type="button" data-st="'+id+'" data-d="1" aria-label="plus"'+(val>=max?' disabled':'')+'>+</button></span>'}
+function chips(list,cur,attr,fn){return '<div class="chips">'+list.map(x=>'<button type="button" class="c2'+(String(x)===String(cur)?' sel':'')+'" data-'+attr+'="'+x+'">'+(fn?fn(x):x)+'</button>').join('')+'</div>'}
+function wire(box,fn){$$('[data-st]',box).forEach(b=>b.onclick=()=>{sfx('tap');fn('st',b.dataset.st,+b.dataset.d)});['n','b','m','e'].forEach(a=>$$('[data-'+a+']',box).forEach(b=>b.onclick=()=>{sfx('tap');fn(a,b.dataset[a])}))}
+function wDeel(box){let b=4,s=3,k=1;(function draw(){const T=b*s;
+  box.innerHTML=chips([2,3,4,5,6],b,'b',x=>x+' groepen')+'<div class="center">Bolletjes per groep '+stepper('s',s,1,6)+' Gekleurde groepen '+stepper('k',k,1,b)+'</div>'+dotsSvg(T,b,k,{groups:true})+'<p class="center big">'+fr(k,b)+' van '+T+' = '+T+' ÷ '+b+(k>1?' × '+k:'')+' = '+(s*k)+'</p><p class="center note">Eerst deel je '+T+' door '+b+'. Dat is '+s+'. '+(k>1?'Dat doe je '+k+' keer: '+k+' × '+s+' = '+(s*k)+'.':'Dat is één groep.')+'</p>';
+  wire(box,(t,v,d)=>{if(t==='b'){b=+v;k=Math.min(k,b)}else if(v==='s')s+=d;else k+=d;draw()})})()}
+function wKeer(box,def){let b=def?def[2]:4,n=def?def[0]:3,a=def?def[1]:1;(function draw(){const tot=n*a,rows=Math.ceil(tot/b);let bars='';for(let i=0;i<rows;i++)bars+=barSvg(b,Math.min(b,tot-i*b));
+  box.innerHTML=chips([2,3,4,5,6,8],b,'b',x=>'noemer '+x)+'<div class="center">Keer '+stepper('n',n,1,8)+' Teller '+stepper('a',a,1,Math.max(1,b-1))+'</div>'+bars+'<p class="center big">'+n+' × '+fr(a,b)+' = '+fr(tot,b)+(tot%b===0?' = '+(tot/b):(tot>b?' = '+Math.floor(tot/b)+' en '+fr(tot%b,b):''))+'</p><p class="center note">Teller: '+n+' × '+a+' = '+tot+'. De noemer blijft '+b+'.'+(tot%b===0?' '+tot+' ÷ '+b+' = '+(tot/b)+' hele.':'')+'</p>';
+  wire(box,(t,v,d)=>{if(t==='b'){b=+v;a=Math.min(a,Math.max(1,b-1))}else if(v==='n')n+=d;else a+=d;draw()})})()}
+function wRect(box){let fa=[1,2],fb=[1,3];const L=['1/2','1/3','1/4','2/3','3/4','1/5'];(function draw(){const [a,b]=fa,[c,d]=fb;
+  box.innerHTML='<p class="center note" style="margin:0">Eerste breuk (blauw)</p>'+chips(L,a+'/'+b,'m',x=>fr(...x.split('/')))+'<p class="center note" style="margin:0">Tweede breuk (oranje)</p>'+chips(L,c+'/'+d,'e',x=>fr(...x.split('/')))+rectSvg(b,d,a,c,{show:true})+'<p class="center big">'+fr(a,b)+' × '+fr(c,d)+' = '+fr(a*c,b*d)+'</p><p class="center note">Waar blauw en oranje over elkaar liggen (groen) is het antwoord. Teller keer teller: '+a+' × '+c+' = '+a*c+'. Noemer keer noemer: '+b+' × '+d+' = '+b*d+'.</p>';
+  wire(box,(t,v)=>{if(t==='m')fa=v.split('/').map(Number);else fb=v.split('/').map(Number);draw()})})()}
+const WID={deel:wDeel,keer:b=>wKeer(b),keer2:b=>wKeer(b,[4,1,2]),rect:wRect};
+/* ---------- niveaus ---------- */
+const LV=[
+ {t:'Een breuk van een getal',sub:'Bijvoorbeeld 1/4 van 12',gen:gen(['n1','n1','n1','dots1','dots1','dots1','d1mc','d1mc','s1','s1']),steps:[
+  {h:'Wat betekent "van"?',txt:'{1/4} van 12 betekent: verdeel 12 in 4 gelijke groepen. Eén groep is {1/4} van 12.\n12 ÷ 4 = 3. Dus {1/4} van 12 is 3.',fig:()=>dotsSvg(12,4,1,{groups:true})+'<p class="center big">'+fr(1,4)+' van 12 = 12 ÷ 4 = 3</p>'},
+  {h:'Probeer het zelf',txt:'Kies hoeveel groepen en hoeveel bolletjes er in een groep zitten.\nKijk wat één groep is van het getal. Zet eerst de gekleurde groepen op 1.',w:'deel'},
+  {h:'De regel',txt:'1. Deel het getal door de noemer.\n2. Dat is één deel van het getal.\nVoorbeeld: {1/5} van 20 = 20 ÷ 5 = 4.'}]},
+ {t:'Meer stukken',sub:'Bijvoorbeeld 3/4 van 12',gen:gen(['n2','n2','n2','dots2','dots2','first','first','s2','s2','step']),steps:[
+  {h:'Meer groepen kleuren',txt:'{3/4} van 12: eerst deel je 12 in 4 groepen. Eén groep is 3. Je neemt 3 groepen.\n3 × 3 = 9. Dus {3/4} van 12 is 9.',fig:()=>dotsSvg(12,4,3,{groups:true})+'<p class="center big">'+fr(3,4)+' van 12 = 12 ÷ 4 × 3 = 9</p>'},
+  {h:'Probeer het zelf',txt:'Zet nu de gekleurde groepen op meer dan 1. De teller zegt hoeveel groepen je neemt.',w:'deel'},
+  {h:'De regel',txt:'1. Deel het getal door de noemer. Dat is één deel.\n2. Doe dat keer de teller.\nVoorbeeld: {2/3} van 15. Eerst 15 ÷ 3 = 5. Dan 2 × 5 = 10.'}]},
+ {t:'Getal keer een breuk',sub:'Bijvoorbeeld 3 × 1/4',gen:gen(['m3frac','m3frac','m3frac','m3bar','m3bar','m3mc','m3mc','m3miss','m3s','m3s']),steps:[
+  {h:'Keer betekent: herhalen',txt:'3 × {1/4} betekent: 3 keer {1/4}.\n{1/4} + {1/4} + {1/4} = {3/4}.\nJe telt de stukken. De noemer blijft 4. De teller is 3 × 1 = 3.',w:'keer'},
+  {h:'De regel',txt:'1. De noemer blijft hetzelfde.\n2. De teller doe je keer het getal.\nVoorbeeld: 3 × {2/9} = {6/9}.'}]},
+ {t:'Een heel getal',sub:'Bijvoorbeeld 4 × 1/2 = 2',gen:gen(['m4w','m4w','m4w','m4conv','m4conv','m4mc','m4mc','m4s','m4s','m4miss']),steps:[
+  {h:'Hele stukken',txt:'4 × {1/2} = {4/2}. En {4/2} betekent 4 ÷ 2 = 2.\nDe uitkomst is een heel getal. Kijk naar de balken: elke balk is vol.',w:'keer2'},
+  {h:'De regel',txt:'1. Doe de teller keer het getal.\n2. Deel door de noemer als dat kan.\nVoorbeeld: 3 × {2/3} = {6/3} = 2.'}]},
+ {t:'Breuk keer breuk',sub:'Bijvoorbeeld 1/2 × 1/4',gen:gen(['m5rect','m5rect','m5frac','m5frac','m5frac','m5frac2','m5mc','m5miss','m5s','m5s']),steps:[
+  {h:'Een breuk van een breuk',txt:'{1/2} × {1/4} betekent: de helft van een kwart.\nIn de rechthoek zie je de blauwe kolommen en de oranje rijen. Waar ze over elkaar liggen (groen) is het antwoord.',w:'rect'},
+  {h:'De regel',txt:'1. Teller keer teller.\n2. Noemer keer noemer.\nVoorbeeld: {2/3} × {3/4} = {6/12}. Je mag de breuk korter maken: {6/12} = {1/2}.'}]},
+ {t:'Alles door elkaar',sub:'Alle soorten sommen',gen:gen(['n2','dots2','m3frac','m4w','m5rect','m5frac2','s2','m3s','first','check']),steps:[
+  {h:'Eerst kijken wat er staat',txt:'Staat er "een breuk van een getal"? Deel door de noemer en doe keer de teller.\nStaat er "getal × breuk"? Doe de teller keer het getal. De noemer blijft.\nStaat er "breuk × breuk"? Teller keer teller en noemer keer noemer.',w:'keer'}]}
+];
+/* ---------- scherm ---------- */
+const stage=$('#stage');let S={lv:null,i:0,tries:0,pts:0,qs:[],locked:false,log:[],mode:'',t0:0};
+const mascot=()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="#fff" stroke="#3a2412" stroke-width="4"/><path d="M50 50 L50 6 A44 44 0 0 1 94 50 Z" fill="#ffc533" stroke="#3a2412" stroke-width="4"/><circle cx="36" cy="58" r="5" fill="#3a2412"/><circle cx="62" cy="64" r="5" fill="#3a2412"/><path d="M38 76q12 8 24 0" fill="none" stroke="#3a2412" stroke-width="4" stroke-linecap="round"/></svg>';
+function totalPts(){return Object.values(DB.lv).reduce((a,v)=>a+(v.pts||0),0)}
+function topbar(show){$('#bar').hidden=!show;if(!show)return;$('#av').innerHTML=mascot();$('#nm').textContent=DB.name;$('#pt').textContent=S.mode==='quiz'?('Punten: '+S.pts+' van 10'):(totalPts()+' van 60 punten');
+  $('#tv').textContent=DB.voice?'\u{1F50A} Stem aan':'\u{1F507} Stem uit';$('#ts').textContent=DB.sound?'\u{1F3B5} Geluid aan':'\u{1F515} Geluid uit'}
+$('#tv').onclick=()=>{DB.voice=!DB.voice;if(!DB.voice)stopSpeech();save();topbar(true)};
+function renderVP(){const box=$('#vp');loadVoices();const cur=bestVoice();let h='<h2>Kies een stem</h2>';
+  if(!VOICES.length)h+='<div class="say">Op dit apparaat is geen Nederlandse stem gevonden. Daarom wordt er niet voorgelezen. Installeer een Nederlandse stem in de instellingen van je apparaat (bij Spraak), of gebruik Microsoft Edge of Google Chrome.</div>';
+  else{h+='<p class="note">Tik op een stem om hem te horen. De stem die je kiest blijft bewaard.</p><div class="opts one">'+VOICES.slice().sort((a,b)=>vScore(b)-vScore(a)).map((v,i)=>'<button class="opt'+(cur&&cur.name===v.name?' ok':'')+'" type="button" data-vn="'+esc(v.name)+'">'+esc(v.name)+' ('+esc(v.lang)+')'+(i===0?' · aanbevolen':'')+'</button>').join('')+'</div><p><b>Snelheid</b></p><div class="chips">'+[['Langzaam',.75],['Normaal',.9],['Snel',1.05]].map(x=>'<button type="button" class="c2'+((DB.rate||.9)===x[1]?' sel':'')+'" data-rt="'+x[1]+'">'+x[0]+'</button>').join('')+'</div>'}
+  h+='<div class="row"><button class="btn alt small" id="vc" type="button">Sluiten</button></div>';box.innerHTML=h;
+  $$('[data-vn]',box).forEach(b=>b.onclick=()=>{DB.voiceName=b.dataset.vn;save();speak('Hallo '+DB.name+'. Een vierde van twaalf is drie.',true);renderVP()});
+  $$('[data-rt]',box).forEach(b=>b.onclick=()=>{DB.rate=+b.dataset.rt;save();speak('Dit is de snelheid die je kiest.',true);renderVP()});
+  $('#vc').onclick=()=>{box.hidden=true}}
+$('#tp').onclick=()=>{const v=$('#vp');v.hidden=!v.hidden;if(!v.hidden)renderVP()};
+$('#ts').onclick=()=>{DB.sound=!DB.sound;save();topbar(true)};
+function setProg(p){const g=$('#pg');g.hidden=p==null;if(p!=null)$('i',g).style.width=p+'%'}
+const fmtT=t=>Math.floor(t/60)+':'+String(t%60).padStart(2,'0')+' min';
+const starsOf=p=>p>=9?3:p>=7?2:p>=5?1:0;
+const starTxt=n=>'★'.repeat(n)+'☆'.repeat(3-n);
+function nameScreen(){topbar(false);setProg(null);
+  stage.innerHTML='<div class="card"><h1>Breuken keer</h1><p>In deze les leer je een breuk van een getal nemen en breuken vermenigvuldigen (keer). Je speelt spelletjes en maakt 60 vragen.</p><label for="nmi"><b>Schrijf hier je naam</b></label><div class="row"><input class="nm" id="nmi" maxlength="30" autocomplete="off"></div><div class="row"><button class="btn" id="go" type="button">Beginnen</button></div><p class="note" id="er" hidden>Schrijf eerst je naam.</p></div>';
+  const go=()=>{const v=$('#nmi').value.trim();if(v.length<2){$('#er').hidden=false;return}DB.name=v;save();menu()};
+  $('#go').onclick=go;$('#nmi').onkeydown=e=>{if(e.key==='Enter')go()}}
+function menu(){S.lv=null;S.mode='';stopSpeech();topbar(true);setProg(null);
+  const done=LV.every((_,i)=>DB.lv[i]&&DB.lv[i].done);
+  let h='<div class="card"><h1>Hoi '+esc(DB.name)+'!</h1><p>Kies een onderdeel. Je begint met de uitleg en daarna maak je 10 vragen.</p>'+(done?'<div class="fb ok">Je hebt alles gedaan! Totaal: '+totalPts()+' van 60 punten.</div>':'')+'<div class="lv">';
+  LV.forEach((l,i)=>{const r=DB.lv[i];h+='<button class="lvb'+(r&&r.done?' done':'')+'" data-i="'+i+'" type="button"><span class="lvn">'+(i+1)+'</span><span><b>'+l.t+'</b><small>'+l.sub+(r&&r.done?' · '+r.pts+' van 10'+(r.time?' · '+fmtT(r.time):''):'')+'</small></span><span class="st">'+(r&&r.done?starTxt(starsOf(r.pts)):'')+'</span></button>'});
+  h+='</div><div class="row"><button class="btn alt small" id="rs" type="button">Opnieuw beginnen</button><span class="note" id="rsn"></span></div></div>';
+  stage.innerHTML=h;$$('.lvb').forEach(b=>b.onclick=()=>explain(+b.dataset.i,0));
+  let armed=0;$('#rs').onclick=function(){if(!armed){armed=1;$('#rsn').textContent='Zeker weten? Tik nog een keer. Je punten en je naam worden gewist.';setTimeout(()=>{armed=0;$('#rsn').textContent=''},4000)}else{DB={name:'',lv:{},voice:DB.voice,sound:DB.sound};save();nameScreen()}}}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function explain(i,k){S.lv=i;S.mode='';stopSpeech();topbar(true);setProg(null);const L=LV[i],st=L.steps[k];
+  const paras=st.txt.split('\n').map(p=>'<div class="say">'+fmt(p)+'</div>').join('');
+  stage.innerHTML='<div class="card"><div class="qhead"><span>Uitleg · onderdeel '+(i+1)+': '+L.t+'</span><span>'+(k+1)+' van '+L.steps.length+'</span></div><h2>'+st.h+'</h2>'+paras+(st.fig?'<div>'+st.fig()+'</div>':'')+(st.w?'<div class="wd" id="wd"></div>':'')+'<div class="row sp"><span id="lis"></span><span class="row" style="margin:0"><button class="btn alt small" id="bk" type="button">'+(k?'← Terug':'← Menu')+'</button><button class="btn" id="nx" type="button">'+(k<L.steps.length-1?'Verder →':'Naar de vragen ▶')+'</button></span></div></div>';
+  if(st.w)WID[st.w]($('#wd'));
+  $('#lis').appendChild(listenBtn(say(st.h+'. '+st.txt.replace(/\n/g,' '))));
+  $('#bk').onclick=()=>k?explain(i,k-1):menu();
+  $('#nx').onclick=()=>k<L.steps.length-1?explain(i,k+1):startQuiz(i)}
+function startQuiz(i){S={lv:i,i:0,tries:0,pts:0,qs:LV[i].gen(),locked:false,log:[],mode:'quiz',t0:0};showQ()}
+function showQ(){stopSpeech();S.t0=Date.now();topbar(true);const L=LV[S.lv],q=S.qs[S.i];S.tries=0;S.locked=false;setProg(S.i/S.qs.length*100);
+  let h='<div class="card"><div class="qhead"><span>'+L.t+'</span><span>Vraag '+(S.i+1)+' van '+S.qs.length+'</span></div>';
+  if(q.fig)h+=q.fig;
+  if(q.type==='paint')h+='<div id="pt1">'+shape(q.paint.sh,q.paint.n,0,{paint:true})+'</div>';
+  if(q.type==='dots')h+='<div id="pt1">'+dotsSvg(q.dots.T,q.dots.g,0,{tap:true})+'</div>';
+  if(q.type==='rect')h+='<div id="pt1">'+rectSvg(q.rect.b,q.rect.d,q.rect.a,q.rect.c,{tap:true})+'</div>';
+  h+='<div class="q">'+fmt(q.text)+'</div><div id="ans">';
+  if(q.type==='mc')h+='<div class="opts'+(q.one?' one':q.three?' three':'')+'">'+q.opts.map(o=>'<button class="opt" type="button" data-v="'+esc(o)+'">'+optHtml(o)+'</button>').join('')+'</div>';
+  else if(q.type==='frac')h+='<div class="center"><div class="fin"><input id="ft" inputmode="numeric" maxlength="3" aria-label="Teller" placeholder="teller"><hr><input id="fd" inputmode="numeric" maxlength="3" aria-label="Noemer" placeholder="noemer"></div></div><p class="note center">Je mag je antwoord ook korter schrijven.</p>';
+  else if(q.type==='num')h+='<div class="num"><span>Antwoord:</span><input id="nu" inputmode="numeric" maxlength="3" aria-label="Antwoord"></div>';
+  h+='</div><div id="fbk" role="status" aria-live="polite"></div><div class="row"><span id="lis"></span><button class="btn" id="chk" type="button">Controleer</button><button class="btn good" id="nxt" type="button" hidden>'+(S.i===S.qs.length-1?'Klaar ▶':'Volgende →')+'</button></div></div>';
+  stage.innerHTML=h;
+  $('#lis').appendChild(listenBtn(q.say||say(q.text)));
+  if(q.type==='mc'){$('#chk').hidden=true;$$('.opt').forEach(b=>b.onclick=()=>judge(b.dataset.v===q.ans,b))}
+  else if(q.type==='paint'){$$('#pt1 .part').forEach(p=>p.onclick=()=>{sfx('tap');if(S.locked)return;p.classList.toggle('on')});$('#chk').onclick=()=>judge($$('#pt1 .part.on').length===q.paint.k)}
+  else if(q.type==='dots'){$$('#pt1 .dt').forEach(p=>p.onclick=()=>{sfx('tap');if(S.locked)return;p.classList.toggle('on')});$('#chk').onclick=()=>judge($$('#pt1 .dt.on').length===q.ans)}
+  else if(q.type==='rect'){$$('#pt1 .rc').forEach(p=>p.onclick=()=>{sfx('tap');if(S.locked)return;p.classList.toggle('sel')});$('#chk').onclick=()=>judge($$('#pt1 .rc').every(c=>c.classList.contains('sel')===(+c.dataset.i<q.rect.a&&+c.dataset.j<q.rect.c)))}
+  else{const inputs=$$('#ans input');inputs[0].focus();inputs.forEach(x=>x.onkeydown=e=>{if(e.key==='Enter')$('#chk').click()});
+    $('#chk').onclick=()=>{if(q.type==='frac'){const t=parseInt($('#ft').value,10),d=parseInt($('#fd').value,10);if(isNaN(t)||isNaN(d)){fb('tip','Vul de teller en de noemer allebei in.');return}judge(d>0&&same(t,d,q.ans.n,q.ans.d))}
+      else{const v=parseInt($('#nu').value,10);if(isNaN(v)){fb('tip','Vul een getal in.');return}judge(v===q.ans)}}}
+  $('#nxt').onclick=()=>{S.i<S.qs.length-1?(S.i++,showQ()):finish()}}
+function fb(k,t){$('#fbk').innerHTML='<div class="fb '+k+'">'+t+'</div>'}
+function judge(ok,btn){if(S.locked)return;const q=S.qs[S.i];
+  if(ok){S.locked=true;sfx('ok');const aw=S.tries===0?1:0,sec=Math.round((Date.now()-S.t0)/1000);S.pts+=aw;S.log.push({pts:aw,sec});topbar(true);if(btn)btn.classList.add('ok');fb('ok',pick(['Goed zo!','Super!','Knap gedaan!','Helemaal goed!'])+' '+(aw?'+1 punt':'Geen punt, want het was niet de eerste keer goed.')+' · '+sec+' sec');endQ()}
+  else{S.tries++;sfx('no');if(btn){btn.classList.add('no');btn.disabled=true}
+    if(S.tries===1)fb('no','Nog niet goed. Probeer het nog een keer.');
+    else if(S.tries===2)$('#fbk').innerHTML='<div class="fb no">Nog niet goed.</div><div class="fb tip">'+fmt(q.tip)+'</div>';
+    else{S.locked=true;const sec3=Math.round((Date.now()-S.t0)/1000);S.log.push({pts:0,sec:sec3});if(q.type==='mc')$$('.opt').forEach(b=>{if(b.dataset.v===q.ans)b.classList.add('ok')});
+      if(q.type==='paint'){$('#pt1').innerHTML=shape(q.paint.sh,q.paint.n,q.paint.k)}
+      if(q.type==='dots')$$('#pt1 .dt').forEach((d,i)=>d.classList.toggle('on',i<q.ans));
+      if(q.type==='rect')$('#pt1').innerHTML=rectSvg(q.rect.b,q.rect.d,q.rect.a,q.rect.c,{show:true});
+      $('#fbk').innerHTML='<div class="fb no">Het goede antwoord is: '+q.show+' · 0 punten · '+sec3+' sec</div><div class="fb tip">'+fmt(q.tip)+'</div>';endQ()}}}
+function endQ(){$('#chk').hidden=true;$$('.opt').forEach(b=>b.disabled=true);$$('#ans input').forEach(x=>x.disabled=true);$('#nxt').hidden=false;$('#nxt').focus()}
+function finish(){setProg(100);const i=S.lv,p=S.pts,old=DB.lv[i]||{};
+  const tot=S.log.reduce((a,x)=>a+x.sec,0);S.mode='';DB.lv[i]={done:true,pts:Math.max(old.pts||0,p),last:p,time:tot,n:(old.n||0)+1};save();topbar(true);sfx('win');
+  const all=LV.every((_,j)=>DB.lv[j]&&DB.lv[j].done),s=starsOf(p);
+  let h='<div class="card center"><h1>Onderdeel '+(i+1)+' klaar!</h1><div class="stars">'+starTxt(s)+'</div><p class="big">'+p+' van 10 meteen goed</p><p>Tijd: '+fmtT(tot)+' · gemiddeld '+Math.round(tot/Math.max(1,S.log.length))+' sec per vraag</p><details style="text-align:left"><summary>Bekijk elke vraag</summary><table class="lg"><tr><th>Vraag</th><th>Punten</th><th>Tijd</th></tr>'+S.log.map((x,j)=>'<tr><td>'+(j+1)+'</td><td>'+x.pts+'</td><td>'+x.sec+' sec</td></tr>').join('')+'</table></details><p>'+(p>=9?'Fantastisch!':p>=7?'Heel goed gedaan!':p>=5?'Goed bezig. Oefen nog een keer voor meer sterren.':'Blijf oefenen, dan wordt het steeds makkelijker.')+'</p>';
+  if(all)h+='<div class="fb ok">Je hebt alle 6 onderdelen gedaan! Totaal: '+totalPts()+' van 60 punten.</div>';
+  h+='<div class="row" style="justify-content:center"><button class="btn alt" id="ag" type="button">Nog een keer</button>'+(i<LV.length-1?'<button class="btn" id="nl" type="button">Volgend onderdeel ▶</button>':'')+'<button class="btn alt" id="mn" type="button">Menu</button></div></div>';
+  stage.innerHTML=h;$('#ag').onclick=()=>startQuiz(i);$('#mn').onclick=menu;if($('#nl'))$('#nl').onclick=()=>explain(i+1,0);window.scrollTo(0,0)}
+window.BR={S:()=>S,LV};
+if(DB.name)menu();else nameScreen();
+</script></body></html>

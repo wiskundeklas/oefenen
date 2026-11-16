@@ -59,6 +59,11 @@
    "title": "5.3 De kompasroos",
    "note": "Hoofdstuk 5 Hoeken · kompasroos, graden en uitleg bij de opdrachten uit je boek",
    "url": "kompasroos.html"
+  },
+  "breukenkeer": {
+   "title": "Breuken keer",
+   "note": "Een breuk van een getal, getal keer een breuk en breuk keer breuk. Uitleg, spelletjes en 60 vragen.",
+   "url": "rekenles-breuken-keer.html"
   }
  },
  "columns": {
@@ -76,7 +81,8 @@
    "plusmin",
    "keerdelen",
    "decimalen",
-   "breuken"
+   "breuken",
+   "breukenkeer"
   ]
  }
 }
