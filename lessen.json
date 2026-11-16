@@ -54,6 +54,11 @@
    "title": "5.2 Recht, scherp en stomp",
    "note": "Hoofdstuk 5 Hoeken · oefenen en uitleg bij de opdrachten uit je boek",
    "url": "recht-scherp-stomp.html"
+  },
+  "kompas": {
+   "title": "5.3 De kompasroos",
+   "note": "Hoofdstuk 5 Hoeken · kompasroos, graden en uitleg bij de opdrachten uit je boek",
+   "url": "kompasroos.html"
   }
  },
  "columns": {
@@ -63,7 +68,8 @@
    "lab",
    "hoeken",
    "lijnen",
-   "rss"
+   "rss",
+   "kompas"
   ],
   "rekenen": [
    "getallen",
