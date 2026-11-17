@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rekenen: Breuken keer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff3e6;--ink:#3a2412;--soft:#7a5a40;--blue:#d9620b;--blue2:#a94a06;--orange:#2a6fdb;--good:#1d8a4a;--goodbg:#dff3e6;--oops:#c0392b;--oopsbg:#fde7e3;--card:#fff;--line:#f1d3b4;--yel:#ffc533;--p1:#7db7ff;--p2:#ffb866}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 18px/1.5 Lexend,"Segoe UI",system-ui,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:12px 16px 60px}
+header.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.who{display:flex;align-items:center;gap:10px;font-weight:600;flex:1;min-width:140px}.who svg{width:44px;height:44px}
+.chip{border:0;border-radius:999px;padding:8px 14px;font:600 14px Lexend,sans-serif;background:var(--blue);color:#fff;cursor:pointer;min-height:40px}
+.chip.pts{background:var(--yel);color:#4a3200;cursor:default}
+.prog{height:12px;border-radius:99px;background:#f1d3b4;overflow:hidden;margin:6px 0 14px}.prog i{display:block;height:100%;background:var(--good);width:0;transition:width .3s}
+.card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:18px 18px 20px;margin-bottom:14px}
+h1{font-size:1.7rem;line-height:1.2;margin:.2em 0 .4em}h2{font-size:1.4rem;margin:.2em 0 .5em}
+p{margin:.5em 0}.note{color:var(--soft);font-size:.9rem}.center{text-align:center}
+.btn{border:0;border-radius:14px;padding:12px 20px;font:600 1.05rem Lexend,sans-serif;background:var(--blue);color:#fff;cursor:pointer;min-height:50px;box-shadow:0 3px 0 var(--blue2)}
+.btn:active{transform:translateY(2px);box-shadow:none}.btn:disabled{opacity:.5;box-shadow:none;cursor:default}
+.btn.alt{background:#fff;color:var(--blue);border:2px solid var(--blue);box-shadow:none}.btn.small{min-height:40px;padding:6px 14px;font-size:.95rem}
+.btn.good{background:var(--good);box-shadow:0 3px 0 #146b37}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}.row.sp{justify-content:space-between}
+.qhead{display:flex;justify-content:space-between;color:var(--soft);font-size:.9rem;font-weight:600}
+.q{font-size:1.2rem;font-weight:600;margin:8px 0}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.opts.one{grid-template-columns:1fr}.opts.three{grid-template-columns:repeat(3,1fr)}
+.opt{border:2px solid var(--line);background:#fff;border-radius:14px;padding:10px 14px;font:600 1.15rem Lexend,sans-serif;color:var(--ink);cursor:pointer;text-align:center;min-height:58px}
+.opt:hover{border-color:var(--blue)}.opt.ok{background:var(--goodbg);border-color:var(--good)}.opt.no{background:var(--oopsbg);border-color:var(--oops);opacity:.8}
+.fb{border-radius:14px;padding:12px 14px;margin-top:12px;font-weight:600}.fb.ok{background:var(--goodbg);color:#0f5a2c}.fb.no{background:var(--oopsbg);color:#7a2118}.fb.tip{background:#fff6d9;color:#5a4300;font-weight:400}
+.say{background:#fff7ec;border-left:5px solid var(--blue);border-radius:10px;padding:10px 14px;margin:12px 0}
+.big{font-weight:700;font-size:1.3em}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.1;margin:0 .15em;font-weight:700}
+.fr i{font-style:normal;padding:0 .3em;min-width:1em;text-align:center}.fr i:first-child{border-bottom:2.5px solid currentColor}
+.fr.q i:first-child{color:var(--orange)}
+.fig{display:block;width:100%;margin:6px auto;touch-action:manipulation}
+.fig.pie{max-width:210px}.fig.bar{max-width:420px}
+.part{fill:#fff;stroke:var(--ink);stroke-width:2.5;stroke-linejoin:round}
+.part.on{fill:var(--p1)}.part.b2{fill:var(--p2)}.part.cx{fill:#f4d3cf}.part.tp{cursor:pointer}.part.tp:hover{fill:#e5f0ff}.part.tp.on:hover{fill:var(--p1)}
+.xx{stroke:var(--oops);stroke-width:4;stroke-linecap:round;fill:none}
+.brow{display:flex;align-items:center;gap:12px;max-width:520px;margin:0 auto}.brow .fr{min-width:44px}.brow .fig{margin:4px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.c2{border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font:600 1rem Lexend,sans-serif;color:var(--ink);cursor:pointer;min-height:42px}
+.c2.sel{background:var(--blue);color:#fff;border-color:var(--blue)}
+.stp{display:inline-flex;align-items:center;gap:8px;margin:4px 10px}.stp button{width:42px;height:42px;border-radius:50%;border:2px solid var(--blue);background:#fff;color:var(--blue);font:700 1.3rem Lexend,sans-serif;cursor:pointer}
+.stp button:disabled{opacity:.35;cursor:default}.stp b{min-width:1.6em;text-align:center;font-size:1.3rem}
+.wd{background:#fffaf4;border:2px dashed var(--line);border-radius:16px;padding:12px;margin:12px 0}
+.fin{display:inline-flex;flex-direction:column;align-items:center;gap:6px;margin-top:12px}
+.fin input::placeholder{font-size:.8rem;font-weight:400}
+.fin input,.num input{font:700 1.5rem Lexend,sans-serif;width:120px;padding:8px;border:3px solid var(--line);border-radius:14px;text-align:center;color:var(--ink)}
+.fin hr{width:100%;border:0;border-top:3px solid var(--ink);margin:0}
+.num{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:1.2rem}
+.lv{display:grid;gap:10px;margin-top:10px}.lvb{display:flex;align-items:center;gap:12px;border:2px solid var(--line);background:#fff;border-radius:16px;padding:12px 14px;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.lvb:hover{border-color:var(--blue)}.lvb b{display:block}.lvb small{color:var(--soft)}.lvn{width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700;display:grid;place-items:center;flex:none}.lvb.done .lvn{background:var(--good)}
+.lvb .st{margin-left:auto;color:#e5a400;font-size:1.3rem;white-space:nowrap}
+.lg{border-collapse:collapse;width:100%;font-size:.9rem;margin-top:6px}.lg th,.lg td{text-align:left;padding:3px 8px 3px 0;border-bottom:1px solid var(--line)}
+.stars{font-size:2.4rem;text-align:center;letter-spacing:6px;color:#e5a400}
+input.nm{font:600 1.2rem Lexend,sans-serif;width:100%;padding:12px;border:3px solid var(--line);border-radius:14px;color:var(--ink)}
+.dg{fill:#fffaf4;stroke:#e0c9ad;stroke-width:2}.dg.on{fill:#ffe9d2;stroke:var(--blue)}
+.dt{fill:#e6d3be;stroke:#b8997a;stroke-width:1.5}.dt.on{fill:var(--blue);stroke:var(--blue2)}.dt.tp{cursor:pointer}
+.fig.dots,.fig.bar2{max-width:360px}
+.nav{display:flex;gap:8px;margin-top:12px;position:sticky;bottom:0;background:#fff;padding:10px 0 2px;z-index:5}
+.nav .btn{flex:1 1 0;padding:10px 6px;min-width:0;white-space:nowrap;font-size:1rem}.nav #bMain{flex:1.5 1 0}
+.opt.pick{border-color:var(--blue);background:#fff3e6}
+.nb{background:#fff;border:2px solid var(--line);border-radius:12px;min-width:46px;min-height:46px;font:700 1.4rem Lexend,sans-serif;color:var(--ink);cursor:pointer;padding:0 8px}
+.nb.on{background:#ffe9d2;border-color:var(--blue)}
+.nb.on.tt{background:#dbe8ff;border-color:#1f5fc9;color:#1f5fc9}.nb.on.nn{background:#ffe3cf;border-color:#c2540a;color:#c2540a}
+.g1{fill:#fff;stroke:#3a2412;stroke-width:3}.g1.c{fill:#cfe0ff}.g2{fill:none;stroke:#3a2412;stroke-width:1.2}.g2.on{fill:#1f5fc9;fill-opacity:.85}
+.qhead{gap:10px}.qhead span:last-child{white-space:nowrap}
+.tt{color:#1f5fc9}.nn{color:#c2540a}
+.fr i.tt{color:#1f5fc9;border-bottom-color:var(--ink)}.fr i.nn{color:#c2540a}
+.calc{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;font-size:1.3rem;font-weight:700;margin:10px 0}
+.clines p{margin:.25em 0;font-weight:600}
+.trow{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0;flex-wrap:wrap}.trow span{font-weight:600}
+.trow input{width:110px;font:700 1.4rem Lexend,sans-serif;padding:8px;border:3px solid var(--line);border-radius:14px;text-align:center;color:var(--ink)}
+.mtch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.mcol{display:flex;flex-direction:column;gap:10px}
+.mt{border:2px solid var(--line);background:#fff;border-radius:14px;padding:8px 10px;font:600 1.1rem Lexend,sans-serif;color:var(--ink);cursor:pointer;min-height:58px}
+.mt.sel{border-color:var(--blue);background:#fff3e6}.mt.ok{background:var(--goodbg);border-color:var(--good)}.mt.no{background:var(--oopsbg);border-color:var(--oops)}
+@keyframes pop{0%{transform:scale(.8)}60%{transform:scale(1.08)}100%{transform:scale(1)}}.pop{animation:pop .35s}
+</style></head><body><a href="index.html" id="back" style="display:inline-block;margin:10px 14px 0;color:#d9620b;font:700 15px/1.2 system-ui,sans-serif;text-decoration:none">← Alle lessen</a>
+<div class="wrap">
+<header class="bar" id="bar" hidden>
+ <div class="who"><span id="av"></span><span id="nm"></span></div>
+ <button class="chip" id="tp" type="button">🗣 Stem kiezen</button><button class="chip" id="tv" type="button" hidden></button><button class="chip" id="ts" type="button"></button><span class="chip pts" id="pt">0 punten</span>
+</header>
+<div id="vmsg" class="fb tip" hidden></div><div class="card" id="vp" hidden></div>
+<div class="prog" id="pg" hidden><i></i></div>
+<main id="stage"></main>
+</div>
+<script src="resultaten.js"></script>
+<script>
+'use strict';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const KEY='rekenles-breuken-keer-v2';
+let DB={name:'',lv:{},voice:true,sound:true};
+try{const r=localStorage.getItem(KEY);if(r)DB=Object.assign(DB,JSON.parse(r))}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}}
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=ri(0,i);[a[i],a[j]]=[a[j],a[i]]}return a}
+/* ---------- geluid en stem ---------- */
+let AC=null;
+function tone(f,t,d,type,g){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),v=AC.createGain();o.type=type||'sine';o.frequency.value=f;v.gain.setValueAtTime(0.0001,AC.currentTime+t);v.gain.exponentialRampToValueAtTime(g||.12,AC.currentTime+t+.02);v.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+t+d);o.connect(v);v.connect(AC.destination);o.start(AC.currentTime+t);o.stop(AC.currentTime+t+d+.05)}catch(e){}}
+function sfx(k){if(!DB.sound)return;
+  if(k==='ok'){[523,659,784].forEach((f,i)=>tone(f,i*.1,.25))}
+  else if(k==='no'){tone(300,0,.18,'triangle',.08);tone(260,.14,.22,'triangle',.08)}
+  else if(k==='tap')tone(620,0,.07,'sine',.07);
+  else if(k==='win'){[523,659,784,1047,784,1047].forEach((f,i)=>tone(f,i*.12,.3))}}
+let VOICES=[];
+function loadVoices(){try{VOICES=speechSynthesis.getVoices().filter(v=>/^nl([-_]|$)/i.test(v.lang))}catch(e){VOICES=[]}}
+try{loadVoices();speechSynthesis.addEventListener('voiceschanged',loadVoices)}catch(e){}
+function vScore(v){let n=0;if(/nl[-_]NL/i.test(v.lang))n+=3;if(/natural|online|neural|premium|enhanced|siri/i.test(v.name))n+=5;if(/colette|fenna|claire|ellen|google nederlands|female|vrouw|dena/i.test(v.name))n+=3;if(/maarten|xander|frank|ruben|arnaud/i.test(v.name))n-=2;if(v.localService)n+=1;return n}
+function bestVoice(){loadVoices();if(!VOICES.length)return null;if(DB.voiceName){const m=VOICES.find(v=>v.name===DB.voiceName);if(m)return m}return VOICES.slice().sort((a,b)=>vScore(b)-vScore(a))[0]}
+function stopSpeech(){try{speechSynthesis.cancel()}catch(e){}}
+let vmT=0;
+function noVoiceMsg(){const m=$('#vmsg');m.textContent='Op dit apparaat is geen Nederlandse stem gevonden. Daarom lees ik niet voor. Installeer een Nederlandse stem in de instellingen van je apparaat (bij Spraak), of gebruik Microsoft Edge of Google Chrome.';m.hidden=false;clearTimeout(vmT);vmT=setTimeout(()=>{m.hidden=true},9000)}
+function speak(t,force){if(!t||(!DB.voice&&!force))return;try{const v=bestVoice();if(!v){noVoiceMsg();return}stopSpeech();const u=new SpeechSynthesisUtterance(t);u.voice=v;u.lang=v.lang;u.rate=DB.rate||.9;u.pitch=1.05;speechSynthesis.speak(u)}catch(e){}}
+function listenBtn(t){const b=document.createElement('button');b.type='button';b.className='btn alt small';b.textContent='\u{1F50A} Lees voor';b.onclick=()=>speak(t,true);return b}
+/* ---------- breuken in tekst ---------- */
+const NUMW=['nul','een','twee','drie','vier','vijf','zes','zeven','acht','negen','tien','elf','twaalf'];
+const ORD={2:'half',3:'derde',4:'vierde',5:'vijfde',6:'zesde',7:'zevende',8:'achtste',9:'negende',10:'tiende',11:'elfde',12:'twaalfde'};
+const fr=(a,b,c)=>'<span class="fr'+(c?' '+c:'')+'"><i>'+a+'</i><i>'+b+'</i></span>';
+const TOK=/\{([\d?]+)\/([\d?]+)\}/g;
+const fmt=s=>s.replace(TOK,(m,a,b)=>fr(a,b,a==='?'?'q':''));
+function spokenFr(a,b){if(a!=='?'&&+a===+b)return 'een heel';const n=a==='?'?'hoeveel':(NUMW[+a]||a);return n+' '+(ORD[+b]||b)}
+function say(s){return s.replace(TOK,(m,a,b)=>spokenFr(a,b)).replace(/<[^>]+>/g,'').replace(/ \+ /g,' plus ').replace(/ × /g,' keer ').replace(/ ÷ /g,' gedeeld door ').replace(/ − /g,' min ').replace(/ = /g,' is ').replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim()}
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+const same=(a,b,c,d)=>a*d===b*c;
+/* ---------- figuren ---------- */
+function pieSvg(n,k,o){o=o||{};const R=72,C=80;let s='';
+  for(let i=0;i<n;i++){const a0=-Math.PI/2+2*Math.PI*i/n,a1=-Math.PI/2+2*Math.PI*(i+1)/n;
+    const x0=C+R*Math.cos(a0),y0=C+R*Math.sin(a0),x1=C+R*Math.cos(a1),y1=C+R*Math.sin(a1);
+    s+='<path class="part'+(o.paint?' tp':'')+(i<k?' on':'')+'" data-i="'+i+'" d="M'+C+','+C+' L'+x0.toFixed(1)+','+y0.toFixed(1)+' A'+R+','+R+' 0 '+(a1-a0>Math.PI?1:0)+' 1 '+x1.toFixed(1)+','+y1.toFixed(1)+' Z"/>'}
+  return '<svg class="fig pie" viewBox="0 0 160 160" role="img" aria-label="Cirkel in '+n+' gelijke delen, '+k+' gekleurd">'+s+'</svg>'}
+function barSvg(n,k,o){o=o||{};const W=320,H=52,pw=W/n;let s='';
+  for(let i=0;i<n;i++){const x=i*pw+1,w=pw-2;let c='part';if(o.paint)c+=' tp';const cx=o.cx&&i>=k-o.cx&&i<k;
+    if(cx)c+=' cx';else if(i<k)c+=' on';else if(o.k2&&i<k+o.k2)c+=' b2';
+    s+='<rect class="'+c+'" data-i="'+i+'" x="'+x.toFixed(1)+'" y="2" width="'+w.toFixed(1)+'" height="'+(H-4)+'" rx="6"/>';
+    if(cx)s+='<path class="xx" d="M'+(x+8)+',12 L'+(x+w-8)+','+(H-12)+' M'+(x+w-8)+',12 L'+(x+8)+','+(H-12)+'"/>'}
+  return '<svg class="fig bar" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Balk in '+n+' gelijke delen">'+s+'</svg>'}
+const brow=(a,b,svg)=>'<div class="brow">'+fr(a,b)+svg+'</div>';
+const shape=(sh,n,k,o)=>sh==='pie'?pieSvg(n,k,o):barSvg(n,k,o);
+/* ---------- opties ---------- */
+function fracOptions(k,n){const c=[[k+1,n],[k-1,n],[k,n+1],[k,n-1],[n-k,n],[k+2,n],[k,n+2]].filter(p=>p[0]>=1&&p[1]>=2&&p[0]<=p[1]&&!same(p[0],p[1],k,n));
+  const seen={},out=[];shuffle(c).forEach(p=>{const s=p.join('/');if(!seen[s]&&out.length<3){seen[s]=1;out.push(s)}});return shuffle([k+'/'+n].concat(out))}
+function numOptions(ans,lo,hi){const s=new Set([ans]);let t=0;while(s.size<4&&t<60){t++;const v=ans+pick([-2,-1,1,2,3]);if(v>=lo&&v<=hi)s.add(v)}for(let v=lo;s.size<4&&v<=hi;v++)s.add(v);return shuffle([...s])}
+function twoOpts(a,b){const s=new Set([a,b]);let t=0;while(s.size<4&&t<80){t++;s.add(ri(1,10))}return shuffle([...s])}
+const optHtml=o=>/^\d+\/\d+$/.test(o)?fr(...o.split('/')):/\{/.test(o)?fmt(o):esc(o);
+/* ---------- vragen maken ---------- */
+function build(plan,make){const seen=new Set(),out=[];let t=0;plan=shuffle(plan);
+  while(out.length<plan.length&&t<600){t++;const q=make(plan[out.length]);if(!q||seen.has(q.key))continue;seen.add(q.key);out.push(q)}
+  return out}
+const eqStr=(n,d)=>n+'/'+d;
+const f1=n=>(+n).toFixed(1);
+const frc=(a,b)=>'<span class="fr"><i class="tt">'+a+'</i><i class="nn">'+b+'</i></span>';
+const exFig=(a,b,c,d,ex)=>'<div class="calc center">'+frc(a,b)+' × '+frc(c,d)+' = '+frc(a+' × '+c,b+' × '+d)+' = '+frc(a*c,b*d)+(ex||'')+'</div><p class="center tt"><b>Boven (teller)</b> keer boven (teller): '+a+' × '+c+' = '+a*c+'</p><p class="center nn"><b>Beneden (noemer)</b> keer beneden (noemer): '+b+' × '+d+' = '+b*d+'</p>';
+const nbSum=(a,b,c,d)=>'<div class="calc center"><span class="fr"><i><button type="button" class="nb" data-p="t">'+a+'</button></i><i><button type="button" class="nb" data-p="n">'+b+'</button></i></span> × <span class="fr"><i><button type="button" class="nb" data-p="t">'+c+'</button></i><i><button type="button" class="nb" data-p="n">'+d+'</button></i></span></div>';
+function bar2(a,b,c,d,st){const W=320,H=54,gw=W/d,pw=gw/b;let s='';
+  for(let g=0;g<d;g++){const col=st>=1&&g<c;s+='<rect class="g1'+(col?' c':'')+'" x="'+f1(g*gw)+'" y="2" width="'+f1(gw)+'" height="'+(H-4)+'"/>';
+    if(st>=2)for(let j=0;j<b;j++){const on=st>=3&&col&&j<a;s+='<rect class="g2'+(on?' on':'')+'" x="'+f1(g*gw+j*pw)+'" y="2" width="'+f1(pw)+'" height="'+(H-4)+'"/>'}}
+  return '<svg class="fig bar2" viewBox="-2 0 324 '+H+'" role="img" aria-label="Reep in '+d+' groepen">'+s+'</svg>'}
+const exN=(N,a,b)=>'<div class="calc center"><b>'+N+'</b> × '+frc(a,b)+' = '+frc(N,1)+' × '+frc(a,b)+' = '+frc(N+' × '+a,'1 × '+b)+' = '+frc(N*a,b)+'</div><p class="center tt">Boven (teller) keer boven (teller): '+N+' × '+a+' = '+N*a+'</p><p class="center nn">Beneden (noemer) keer beneden (noemer): 1 × '+b+' = '+b+'</p>';
+const exPm=(a,c,n,op)=>{const X=op==='+'?a+c:a-c;return '<div class="calc center">'+frc(a,n)+' '+op+' '+frc(c,n)+' = '+frc(a+' '+op+' '+c,n)+' = '+frc(X,n)+'</div><p class="center tt">Boven (teller): '+a+' '+op+' '+c+' = '+X+'</p><p class="center nn">Beneden (noemer): blijft '+n+'</p>'};
+/* ---------- koppelspel ---------- */
+function matchHtml(q){return '<div class="mtch"><div class="mcol">'+q.left.map((s,i)=>'<button type="button" class="mt" data-l="'+i+'">'+fmt(s)+'</button>').join('')+'</div><div class="mcol">'+q.right.map((s,j)=>'<button type="button" class="mt" data-r="'+j+'">'+optHtml(s)+'</button>').join('')+'</div></div>'}
+function matchWire(q){let sel=null,done=0;const L=$$('.mt[data-l]'),R=$$('.mt[data-r]');
+  L.forEach(b=>b.onclick=()=>{if(S.locked||b.classList.contains('ok'))return;sfx('tap');L.forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel=+b.dataset.l});
+  R.forEach(b=>b.onclick=()=>{if(S.locked||b.classList.contains('ok'))return;if(sel===null){fb('tip','Tik eerst links op een som.');return}
+    if(q.map[sel]===+b.dataset.r){sfx('tap');const l=L[sel];l.classList.remove('sel');l.classList.add('ok');b.classList.add('ok');sel=null;done++;if(done===q.left.length)judge(true)}
+    else{b.classList.add('no');setTimeout(()=>b.classList.remove('no'),600);judge(false)}})}
+function matchReveal(){$$('.mt').forEach(b=>{b.classList.remove('sel');b.classList.add('ok');b.disabled=true})}
+/* ---------- vragen ---------- */
+const FL1=[[1,2],[1,3],[2,3],[1,4],[3,4],[1,5],[2,5],[3,5],[4,5]];
+const FL2=FL1.concat([[1,6],[5,6],[1,7],[3,7],[1,8],[3,8],[5,8],[2,9],[4,9],[7,10]]);
+function pairs(L,maxP,red){let x,y,t=0;do{x=pick(L);y=pick(L);t++}while(t<400&&(x[1]*y[1]>maxP||(x[0]===y[0]&&x[1]===y[1])||(red&&gcd(x[0]*y[0],x[1]*y[1])===1)));return [x,y]}
+function bp(){const n=ri(2,5),a=ri(1,2);if(n*a>9)return null;return{n,a,b:ri(Math.max(n*a,3),10)}}
+const SK=[(n,a,b)=>'Een glas bevat {'+a+'/'+b+'} liter. Je drinkt '+n+' glazen. Hoeveel liter is dat?',(n,a,b)=>'Een plank is {'+a+'/'+b+'} meter lang. Je legt '+n+' planken achter elkaar. Hoe lang is dat samen, in meter?',(n,a,b)=>'Een pakje boter weegt {'+a+'/'+b+'} kilo. Je koopt '+n+' pakjes. Hoeveel kilo is dat samen?'];
+/* plus en min: zelfde noemer */
+const NP=[3,4,5,6,8,10];
+function pmp(op){const n=pick(NP);let a,c;if(op==='+'){a=ri(1,n-2);c=ri(1,n-1-a)}else{a=ri(2,n-1);c=ri(1,a-1)}return [n,a,c]}
+const PS=[(a,c,n)=>'Sam leest {'+a+'/'+n+'} van een boek op maandag. Op dinsdag leest hij {'+c+'/'+n+'} van het boek. Hoeveel van het boek heeft Sam samen gelezen?',(a,c,n)=>'Een tuin is voor {'+a+'/'+n+'} bedekt met gras en voor {'+c+'/'+n+'} met bloemen. Welk deel van de tuin is samen bedekt?',(a,c,n)=>'Je drinkt {'+a+'/'+n+'} liter water. Daarna drink je nog {'+c+'/'+n+'} liter. Hoeveel liter is dat samen?'];
+const MS=[(a,c,n)=>'Een fles bevat {'+a+'/'+n+'} liter sap. Je drinkt {'+c+'/'+n+'} liter. Hoeveel liter sap is er nog over?',(a,c,n)=>'Een plank is {'+a+'/'+n+'} meter lang. Je zaagt er {'+c+'/'+n+'} meter af. Hoeveel meter blijft er over?',(a,c,n)=>'Er is nog {'+a+'/'+n+'} van een taart over. Jij eet {'+c+'/'+n+'} van de hele taart. Hoeveel van de hele taart is er nog over?'];
+const TP=(a,c)=>'Tip: boven (teller) keer boven (teller): '+a+' × '+c+' = '+a*c+'. ';
+const stepTip=(a,b,c,d)=>'Tip: boven (teller) keer boven (teller): '+a+' × '+c+' = '+a*c+'. Beneden (noemer) keer beneden (noemer): '+b+' × '+d+' = '+b*d+'.';
+const Q={
+ /* onderdeel 1 */
+ t1:()=>{const [[a,b],[c,d]]=pairs(FL1,25);return{key:'t1'+a+b+c+d,type:'num',text:'Reken uit: {'+a+'/'+b+'} × {'+c+'/'+d+'}. Welk getal komt er <b class="tt">boven (teller)</b> in het antwoord?',say:'Reken uit: '+spokenFr(a,b)+' keer '+spokenFr(c,d)+'. Welk getal komt er boven (teller) in het antwoord?',ans:a*c,tip:'Tip: boven (teller) keer boven (teller). '+a+' × '+c+' = '+a*c+'.',show:String(a*c)}},
+ u1:()=>{const [[a,b],[c,d]]=pairs(FL1,25);return{key:'u1'+a+b+c+d,type:'num',text:'Reken uit: {'+a+'/'+b+'} × {'+c+'/'+d+'}. Welk getal komt er <b class="nn">beneden (noemer)</b> in het antwoord?',say:'Reken uit: '+spokenFr(a,b)+' keer '+spokenFr(c,d)+'. Welk getal komt er beneden (noemer) in het antwoord?',ans:b*d,tip:'Tip: beneden (noemer) keer beneden (noemer). '+b+' × '+d+' = '+b*d+'.',show:String(b*d)}},
+ tw1:()=>{const [[a,b],[c,d]]=pairs(FL1,25);return{key:'tw1'+a+b+c+d,type:'two',text:'Reken uit: {'+a+'/'+b+'} × {'+c+'/'+d+'}. Doe eerst boven (teller) en dan beneden (noemer).',say:'Reken uit: '+spokenFr(a,b)+' keer '+spokenFr(c,d)+'. Doe eerst boven (teller) en dan beneden (noemer).',l1:'<b class="tt">Boven (teller)</b> keer boven (teller): '+a+' × '+c+' =',l2:'<b class="nn">Beneden (noemer)</b> keer beneden (noemer): '+b+' × '+d+' =',a1:a*c,a2:b*d,tip:stepTip(a,b,c,d),show:fr(a*c,b*d)}},
+ tp1:()=>{const [[a,b],[c,d]]=pairs(FL1,25);return{key:'tpt'+a+b+c+d,type:'tapn',want:'t',fig:nbSum(a,b,c,d),text:'Tik op de twee getallen die <b class="tt">boven (teller)</b> staan.',say:'Tik op de twee getallen die boven (teller) staan.',tip:'Tip: boven (teller) staan '+a+' en '+c+'. Beneden (noemer) staan '+b+' en '+d+'.',show:a+' en '+c}},
+ tp2:()=>{const [[a,b],[c,d]]=pairs(FL1,25);return{key:'tpn'+a+b+c+d,type:'tapn',want:'n',fig:nbSum(a,b,c,d),text:'Tik op de twee getallen die <b class="nn">beneden (noemer)</b> staan.',say:'Tik op de twee getallen die beneden (noemer) staan.',tip:'Tip: boven (teller) staan '+a+' en '+c+'. Beneden (noemer) staan '+b+' en '+d+'.',show:b+' en '+d}},
+ f1n:()=>{const [[a,b],[c,d]]=pairs(FL1,25);return{key:'f1n'+a+b+c+d,type:'frac',text:'Reken uit: {'+a+'/'+b+'} × {'+c+'/'+d+'} = ?',ans:{n:a*c,d:b*d},tip:stepTip(a,b,c,d),show:fr(a*c,b*d)}},
+ rule1:()=>({key:'rule1',type:'mc',text:'Je rekent {1/2} × {3/4}. Wat doe je met de getallen <b class="tt">boven (teller)</b>?',say:'Je rekent een half keer drie vierde. Wat doe je met de getallen boven (teller)?',opts:shuffle(['Keer elkaar doen','Bij elkaar optellen','Van elkaar aftrekken','Laten staan']),ans:'Keer elkaar doen',tip:'Tip: boven (teller) keer boven (teller). Dus 1 × 3 = 3.',show:'Keer elkaar doen'}),
+ rule2:()=>({key:'rule2',type:'mc',text:'Je rekent {1/2} × {3/4}. Wat doe je met de getallen <b class="nn">beneden (noemer)</b>?',say:'Je rekent een half keer drie vierde. Wat doe je met de getallen beneden (noemer)?',opts:shuffle(['Keer elkaar doen','Bij elkaar optellen','Van elkaar aftrekken','Laten staan']),ans:'Keer elkaar doen',tip:'Tip: beneden (noemer) keer beneden (noemer). Dus 2 × 4 = 8.',show:'Keer elkaar doen'}),
+ /* onderdeel 2 */
+ f2:()=>{const [[a,b],[c,d]]=pairs(FL2,60);return{key:'f2'+a+b+c+d,type:'frac',text:'Reken uit: {'+a+'/'+b+'} × {'+c+'/'+d+'} = ?',ans:{n:a*c,d:b*d},tip:stepTip(a,b,c,d),show:fr(a*c,b*d)}},
+ tw:()=>{const [[a,b],[c,d]]=pairs(FL2,60);return{key:'tw'+a+b+c+d,type:'two',text:'Reken uit: {'+a+'/'+b+'} × {'+c+'/'+d+'}. Doe eerst boven (teller) en dan beneden (noemer).',say:'Reken uit: '+spokenFr(a,b)+' keer '+spokenFr(c,d)+'. Doe eerst boven (teller) en dan beneden (noemer).',l1:'<b class="tt">Boven (teller)</b> keer boven (teller): '+a+' × '+c+' =',l2:'<b class="nn">Beneden (noemer)</b> keer beneden (noemer): '+b+' × '+d+' =',a1:a*c,a2:b*d,tip:stepTip(a,b,c,d),show:fr(a*c,b*d)}},
+ find:()=>{const [[a,b],[c,d]]=pairs(FL1,25);const ty=pick(['A','B','C']),W={A:[a+c,b+d],B:[a*c,b],C:[a*c,b+d]}[ty];
+  const OP={A:'Boven (teller) en beneden (noemer): hij doet plus in plaats van keer',B:'Beneden (noemer): hij vergeet beneden (noemer) keer beneden (noemer) te doen',C:'Beneden (noemer): hij doet plus in plaats van keer'};
+  return{key:'fd'+ty+a+b+c+d,type:'mc',one:true,text:'Sam rekent: {'+a+'/'+b+'} × {'+c+'/'+d+'} = {'+W[0]+'/'+W[1]+'}. Wat doet Sam fout?',say:'Sam rekent: '+spokenFr(a,b)+' keer '+spokenFr(c,d)+' is '+spokenFr(W[0],W[1])+'. Wat doet Sam fout?',opts:shuffle([OP.A,OP.B,OP.C,'Er is geen fout']),ans:OP[ty],tip:'Tip: de regel is boven (teller) keer boven (teller) en beneden (noemer) keer beneden (noemer). Het goede antwoord is {'+a*c+'/'+b*d+'}.',show:OP[ty]}},
+ match:()=>{const L=[],used=[];let t=0;while(L.length<4&&t<400){t++;const [[a,b],[c,d]]=pairs(FL1,25),n=a*c,m=b*d;if(used.some(u=>same(u[0],u[1],n,m)))continue;used.push([n,m]);L.push({s:'{'+a+'/'+b+'} × {'+c+'/'+d+'}',r:n+'/'+m,k:''+a+b+c+d})}
+  if(L.length<4)return null;const right=shuffle(L.map(x=>x.r));return{key:'mt'+L.map(x=>x.k).sort().join('-'),type:'match',text:'Koppel elke som aan het goede antwoord. Tik links op een som en rechts op het antwoord.',left:L.map(x=>x.s),right,map:L.map(x=>right.indexOf(x.r)),tip:'Tip: doe bij elke som boven (teller) keer boven (teller) en beneden (noemer) keer beneden (noemer).',show:'alle sommen zijn gekoppeld'}},
+ s2:()=>{const [[a,b],[c,d]]=pairs(FL1,25);const st=pick(['Er is nog {'+a+'/'+b+'} van een pizza over. Jij eet {'+c+'/'+d+'} van die rest. Welk deel van de hele pizza eet jij?','Een fles is voor {'+a+'/'+b+'} gevuld met sap. Je drinkt {'+c+'/'+d+'} van het sap in de fles. Welk deel van de hele fles heb je gedronken?','Een tuin is voor {'+a+'/'+b+'} bedekt met gras. {'+c+'/'+d+'} van het gras is net gemaaid. Welk deel van de hele tuin is gemaaid?']);return{key:'s2'+st,type:'frac',text:st,ans:{n:a*c,d:b*d},tip:'Tip: "van" is keer. '+stepTip(a,b,c,d).slice(5),show:fr(a*c,b*d)}},
+ /* onderdeel 3 */
+ w1:()=>{const N=ri(2,12);return{key:'w1'+N,type:'frac',exact:true,note:'Zet het getal boven (teller) en een 1 beneden (noemer).',text:'Schrijf het getal '+N+' als breuk. Zet het getal boven (teller) en een 1 beneden (noemer).',say:'Schrijf het getal '+N+' als breuk. Zet het getal boven (teller) en een 1 beneden (noemer).',ans:{n:N,d:1},tip:'Tip: '+N+' = {'+N+'/1}. Het getal komt boven (teller), en beneden (noemer) komt een 1.',show:fr(N,1)}},
+ w2:()=>{const N=ri(2,12);return{key:'w2'+N,type:'num',text:'Vul in: '+N+' = {'+N+'/?}',say:'Vul in: '+N+' is hetzelfde als '+N+' gedeeld door hoeveel?',ans:1,tip:'Tip: een heel getal heeft beneden (noemer) een 1. '+N+' = {'+N+'/1}.',show:'1'}},
+ n1:()=>{const N=ri(2,6),[a,b]=pick(FL1);return{key:'n1'+N+a+b,type:'frac',text:'Reken uit: '+N+' × {'+a+'/'+b+'} = ?',say:'Reken uit: '+N+' keer '+spokenFr(a,b)+'.',ans:{n:N*a,d:b},tip:'Tip: '+N+' = {'+N+'/1}. Boven (teller) keer boven (teller): '+N+' × '+a+' = '+N*a+'. Beneden (noemer) keer beneden (noemer): 1 × '+b+' = '+b+'.',show:fr(N*a,b)}},
+ n2:()=>{const N=ri(2,6),[a,b]=pick(FL1);return{key:'n2'+N+a+b,type:'two',text:'Reken uit: '+N+' × {'+a+'/'+b+'} = {'+N+'/1} × {'+a+'/'+b+'}',say:'Reken uit: '+N+' keer '+spokenFr(a,b)+'. Je schrijft '+N+' als '+N+' gedeeld door 1.',l1:'<b class="tt">Boven (teller)</b> keer boven (teller): '+N+' × '+a+' =',l2:'<b class="nn">Beneden (noemer)</b> keer beneden (noemer): 1 × '+b+' =',a1:N*a,a2:b,tip:'Tip: boven (teller) keer boven (teller): '+N+' × '+a+' = '+N*a+'. Beneden (noemer) keer beneden (noemer): 1 × '+b+' = '+b+'.',show:fr(N*a,b)}},
+ nb:()=>{const p=bp();if(!p)return null;const {n,a,b}=p;return{key:'nb'+n+a+b,type:'paint',paint:{sh:'bar',n:b,k:n*a},text:'Kleur '+n+' × {'+a+'/'+b+'}. Tik op de stukken.',say:'Kleur '+n+' keer '+spokenFr(a,b)+'. Tik op de stukken.',tip:'Tip: boven (teller) keer boven (teller): '+n+' × '+a+' = '+n*a+'. Beneden (noemer) keer beneden (noemer): 1 × '+b+' = '+b+'. Kleur dus '+n*a+' stukken van de '+b+'.',show:fr(n*a,b)}},
+ nmc:()=>{const N=ri(2,6),[a,b]=pick(FL1),good=N*a+'/'+b;const c=shuffle([N*a+'/'+N*b,(N+a)+'/'+b,a+'/'+N*b,N*a+'/'+(b+1),(N*a+1)+'/'+b]).filter((x,i,r)=>x!==good&&r.indexOf(x)===i).slice(0,3);if(c.length<3)return null;return{key:'nm'+N+a+b,type:'mc',text:'Reken uit: '+N+' × {'+a+'/'+b+'} = ?',say:'Reken uit: '+N+' keer '+spokenFr(a,b)+'.',opts:shuffle([good].concat(c)),ans:good,tip:'Tip: '+N+' = {'+N+'/1}. Boven (teller) keer boven (teller): '+N+' × '+a+' = '+N*a+'. Beneden (noemer) keer beneden (noemer): 1 × '+b+' = '+b+'.',show:fr(N*a,b)}},
+ nm:()=>{const N=ri(2,6),[a,b]=pick(FL1);return{key:'nx'+N+a+b,type:'num',text:'Vul in: '+N+' × {'+a+'/'+b+'} = {?/'+b+'}',say:'Vul in: '+N+' keer '+spokenFr(a,b)+' is hoeveel '+(ORD[b]||b)+'.',ans:N*a,tip:'Tip: boven (teller) keer boven (teller): '+N+' × '+a+' = '+N*a+'.',show:String(N*a)}},
+ ns:()=>{const N=ri(2,6),[a,b]=pick(FL1),st=pick(SK)(N,a,b);return{key:'ns'+st,type:'frac',text:st,ans:{n:N*a,d:b},tip:'Tip: '+N+' = {'+N+'/1}. Boven (teller) keer boven (teller): '+N+' × '+a+' = '+N*a+'. Beneden (noemer) keer beneden (noemer): 1 × '+b+' = '+b+'.',show:fr(N*a,b)}},
+
+ /* onderdeel 5: keer, plus en min */
+ pl:()=>{const [n,a,c]=pmp('+');return{key:'pl'+a+c+n,type:'frac',text:'Reken uit: {'+a+'/'+n+'} + {'+c+'/'+n+'} = ?',ans:{n:a+c,d:n},tip:'Tip: bij plus blijft beneden (noemer) hetzelfde: '+n+'. Tel alleen boven (teller) op: '+a+' + '+c+' = '+(a+c)+'.',show:fr(a+c,n)}},
+ mi:()=>{const [n,a,c]=pmp('−');return{key:'mi'+a+c+n,type:'frac',text:'Reken uit: {'+a+'/'+n+'} − {'+c+'/'+n+'} = ?',ans:{n:a-c,d:n},tip:'Tip: bij min blijft beneden (noemer) hetzelfde: '+n+'. Trek alleen boven (teller) af: '+a+' − '+c+' = '+(a-c)+'.',show:fr(a-c,n)}},
+ pls:()=>{const [n,a,c]=pmp('+'),st=pick(PS)(a,c,n);return{key:'pls'+st,type:'frac',text:st,ans:{n:a+c,d:n},tip:'Tip: "samen" is plus. Beneden (noemer) blijft '+n+'. Boven (teller): '+a+' + '+c+' = '+(a+c)+'.',show:fr(a+c,n)}},
+ mis:()=>{const [n,a,c]=pmp('−'),st=pick(MS)(a,c,n);return{key:'mis'+st,type:'frac',text:st,ans:{n:a-c,d:n},tip:'Tip: "over" is min. Beneden (noemer) blijft '+n+'. Boven (teller): '+a+' − '+c+' = '+(a-c)+'.',show:fr(a-c,n)}},
+ which1:()=>{const [[a,b],[c,d]]=pairs(FL1,25),[n,x,y]=pmp('+'),[m,u,v]=pmp('−'),good='{'+a+'/'+b+'} × {'+c+'/'+d+'}',o2='{'+x+'/'+n+'} + {'+y+'/'+n+'}',o3='{'+u+'/'+m+'} − {'+v+'/'+m+'}';
+  return{key:'wh1'+a+b+c+d+x+y+n+u+v+m,type:'mc',one:true,text:'Bij welke som doe je <b class="tt">boven (teller) keer boven (teller)</b> en <b class="nn">beneden (noemer) keer beneden (noemer)</b>?',say:'Bij welke som doe je boven (teller) keer boven (teller) en beneden keer beneden?',opts:shuffle([good,o2,o3]),ans:good,tip:'Tip: boven (teller) keer boven (teller) en beneden (noemer) keer beneden (noemer) doe je alleen bij een keer-som. Dat is de som met ×.',show:fmt(good)}},
+ which2:()=>{const op=pick(['+','−']),[n,a,c]=pmp(op),X=op==='+'?a+c:a-c,good=X+'/'+n;const bad=shuffle([X+'/'+2*n,a*c+'/'+n*n,X+'/'+n*n,a*c+'/'+n]).filter((s,i,r)=>s!==good&&r.indexOf(s)===i&&!same(+s.split('/')[0],+s.split('/')[1],X,n)).slice(0,3);if(bad.length<3)return null;
+  return{key:'wh2'+op+a+c+n,type:'mc',text:'Reken uit: {'+a+'/'+n+'} '+op+' {'+c+'/'+n+'}. Welk antwoord klopt?',say:'Reken uit: '+spokenFr(a,n)+(op==='+'?' plus ':' min ')+spokenFr(c,n)+'. Welk antwoord klopt?',opts:shuffle([good].concat(bad)),ans:good,tip:'Tip: bij '+(op==='+'?'plus':'min')+' blijft beneden (noemer) hetzelfde: '+n+'. Boven (teller): '+a+' '+op+' '+c+' = '+X+'.',show:fr(X,n)}},
+ find2:()=>{const op=pick(['+','−']),ty=pick(['A','B']),[n,a,c]=pmp(op),X=op==='+'?a+c:a-c,W={A:[X,2*n],B:[a*c,n*n]}[ty];
+  const OP={A:'Hij doet ook iets met de getallen beneden (noemer). Dat hoeft niet.',B:'Hij doet boven (teller) keer boven (teller) en beneden (noemer) keer beneden (noemer)'};
+  return{key:'fd2'+ty+op+a+c+n,type:'mc',one:true,text:'Sam rekent: {'+a+'/'+n+'} '+op+' {'+c+'/'+n+'} = {'+W[0]+'/'+W[1]+'}. Wat doet Sam fout?',say:'Sam rekent: '+spokenFr(a,n)+(op==='+'?' plus ':' min ')+spokenFr(c,n)+' is '+spokenFr(W[0],W[1])+'. Wat doet Sam fout?',opts:shuffle([OP.A,OP.B,'Er is geen fout']),ans:OP[ty],tip:'Tip: bij '+(op==='+'?'plus':'min')+' blijft beneden (noemer) hetzelfde. Het goede antwoord is {'+X+'/'+n+'}.',show:OP[ty]}},
+ match2:()=>{const L=[],used=[];let t0=0;const ops=shuffle(['×','+','−',pick(['×','+','−'])]);
+  while(L.length<4&&t0<600){t0++;const op=ops[L.length];let s,n,m,k;
+    if(op==='×'){const [[a,b],[c,d]]=pairs(FL1,25);s='{'+a+'/'+b+'} × {'+c+'/'+d+'}';n=a*c;m=b*d;k='x'+a+b+c+d}
+    else{const [dd,a,c]=pmp(op);s='{'+a+'/'+dd+'} '+op+' {'+c+'/'+dd+'}';n=op==='+'?a+c:a-c;m=dd;k=op+a+c+dd}
+    if(used.some(u=>same(u[0],u[1],n,m)))continue;used.push([n,m]);L.push({s,r:n+'/'+m,k})}
+  if(L.length<4)return null;const right=shuffle(L.map(x=>x.r));
+  return{key:'mt2'+L.map(x=>x.k).sort().join('-'),type:'match',text:'Koppel elke som aan het goede antwoord. Tik links op een som en rechts op het antwoord.',left:L.map(x=>x.s),right,map:L.map(x=>right.indexOf(x.r)),tip:'Tip: bij × doe je boven (teller) keer boven (teller) en beneden (noemer) keer beneden (noemer). Bij + en − blijft beneden (noemer) hetzelfde.',show:'alle sommen zijn gekoppeld'}}
+};
+const gen=plan=>{const f=()=>build(plan,t=>Q[t]());f.n=plan.length;return f};
+/* ---------- widgets voor de uitleg ---------- */
+function stepper(id,val,min,max){return '<span class="stp"><button type="button" data-st="'+id+'" data-d="-1" aria-label="min"'+(val<=min?' disabled':'')+'>−</button><b>'+val+'</b><button type="button" data-st="'+id+'" data-d="1" aria-label="plus"'+(val>=max?' disabled':'')+'>+</button></span>'}
+function chips(list,cur,attr,fn){return '<div class="chips">'+list.map(x=>'<button type="button" class="c2'+(String(x)===String(cur)?' sel':'')+'" data-'+attr+'="'+x+'">'+(fn?fn(x):x)+'</button>').join('')+'</div>'}
+function wire(box,fn){$$('[data-st]',box).forEach(b=>b.onclick=()=>{sfx('tap');fn('st',b.dataset.st,+b.dataset.d)});['n','b','m','e','o'].forEach(a=>$$('[data-'+a+']',box).forEach(b=>b.onclick=()=>{sfx('tap');fn(a,b.dataset[a])}))}
+function wRegel(box,whole){const L=['1/2','1/3','2/3','1/4','3/4','2/5','3/5','4/5'];let n=3,fa=[1,2],fb=[2,3],st=0;
+  (function draw(){const a=whole?n:fa[0],b=whole?1:fa[1],c=fb[0],d=fb[1],X=a*c,Y=b*d;
+    const steps=whole?['Zet een 1 beneden (noemer)','Boven (teller) keer boven (teller)','Beneden (noemer) keer beneden (noemer)']:['Boven (teller) keer boven (teller)','Beneden (noemer) keer beneden (noemer)'];
+    const o=whole?1:0,topOn=st>o,botOn=st>o+1,done=st>=steps.length;
+    let h=whole?'<div class="center">Getal '+stepper('n',n,2,9)+'</div>':'<p class="center note" style="margin:0">Eerste breuk</p>'+chips(L,fa.join('/'),'m',x=>fr(...x.split('/')));
+    h+='<p class="center note" style="margin:0">'+(whole?'Breuk':'Tweede breuk')+'</p>'+chips(L,fb.join('/'),'e',x=>fr(...x.split('/')));
+    h+='<div class="calc center">'+(whole&&st===0?'<b>'+n+'</b>':frc(a,b))+' × '+frc(c,d)+' = '+frc(topOn?X:'?',botOn?Y:'?')+'</div>';
+    h+='<div class="clines">'+(whole&&st>=1?'<p class="center">Het getal '+n+' is hetzelfde als '+frc(n,1)+'.</p>':'')+(topOn?'<p class="center tt">Boven (teller) keer boven (teller): '+a+' × '+c+' = <b>'+X+'</b></p>':'')+(botOn?'<p class="center nn">Beneden (noemer) keer beneden (noemer): '+b+' × '+d+' = <b>'+Y+'</b></p>':'')+'</div>';
+    h+='<div class="center"><button class="btn" id="stp" type="button">'+(done?'Nog een keer':'Stap '+(st+1)+': '+steps[st])+'</button></div>';
+    box.innerHTML=h;$('#stp',box).onclick=()=>{sfx('tap');st=done?0:st+1;draw()};
+    wire(box,(t,v,dd)=>{st=0;if(t==='m')fa=v.split('/').map(Number);else if(t==='e')fb=v.split('/').map(Number);else n=Math.max(2,Math.min(9,n+dd));draw()})})()}
+function wKeer(box,def){let b=def?def[2]:4,n=def?def[0]:3,a=def?def[1]:1;(function draw(){const tot=n*a,rows=Math.ceil(tot/b);let bars='';for(let i=0;i<rows;i++)bars+=barSvg(b,Math.min(b,tot-i*b));
+  box.innerHTML=chips([2,3,4,5,6,8],b,'b',x=>'noemer '+x)+'<div class="center">Keer '+stepper('n',n,1,8)+'</div><div class="center">Teller '+stepper('a',a,1,Math.max(1,b-1))+'</div>'+bars+'<p class="center big">'+n+' × '+fr(a,b)+' = '+fr(tot,b)+(tot%b===0?' = '+(tot/b):(tot>b?' = '+Math.floor(tot/b)+' en '+fr(tot%b,b):''))+'</p><p class="center tt">Boven (teller) keer boven (teller): '+n+' × '+a+' = '+tot+'</p><p class="center nn">Beneden (noemer) keer beneden (noemer): 1 × '+b+' = '+b+'</p>';
+  wire(box,(t,v,d)=>{if(t==='b'){b=+v;a=Math.min(a,Math.max(1,b-1))}else if(v==='n')n+=d;else a+=d;draw()})})()}
+function wBalk(box){const L=['1/2','1/3','2/3','1/4','3/4','2/5','3/5'];let fa=[1,2],fb=[2,3],st=0;
+  (function draw(){const [a,b]=fa,[c,d]=fb,X=a*c,Y=b*d,lab=['Stap 1: kleur '+c+' van de '+d+' groepen','Stap 2: verdeel elke groep in '+b+' stukjes','Stap 3: kleur in elke gekleurde groep '+a+' stukje'+(a>1?'s':'')],done=st>=3;
+    let h='<p class="center note" style="margin:0">Eerste breuk</p>'+chips(L,fa.join('/'),'m',x=>fr(...x.split('/')))+'<p class="center note" style="margin:0">Tweede breuk</p>'+chips(L,fb.join('/'),'e',x=>fr(...x.split('/')));
+    h+='<div class="calc center">'+frc(a,b)+' × '+frc(c,d)+' = '+frc(st>=3?X:'?',st>=2?Y:'?')+'</div>'+bar2(a,b,c,d,st);
+    h+='<div class="clines"><p class="center">De reep is verdeeld in '+d+' gelijke groepen.</p>'+(st>=1?'<p class="center tt">Stap 1: je kleurt '+c+' van de '+d+' groepen.</p>':'')+(st>=2?'<p class="center nn">Stap 2: elke groep is nu '+b+' stukjes. Beneden (noemer) keer beneden (noemer): '+b+' × '+d+' = <b>'+Y+'</b> stukjes.</p>':'')+(st>=3?'<p class="center tt">Stap 3: je kleurt '+a+' stukje'+(a>1?'s':'')+' in '+c+' groep'+(c>1?'en':'')+'. Boven (teller) keer boven (teller): '+a+' × '+c+' = <b>'+X+'</b> gekleurd.</p><p class="center"><b>Antwoord: '+X+' van de '+Y+' stukjes = '+fr(X,Y)+'</b></p>':'')+'</div>';
+    h+='<div class="center"><button class="btn" id="stp" type="button">'+(done?'Nog een keer':lab[st])+'</button></div>';
+    box.innerHTML=h;$('#stp',box).onclick=()=>{sfx('tap');st=done?0:st+1;draw()};
+    wire(box,(t,v)=>{st=0;if(t==='m')fa=v.split('/').map(Number);else fb=v.split('/').map(Number);draw()})})()}
+function wTik(box){const L=['1/2','1/3','2/3','1/4','3/4','2/5','3/5','4/5'];let fa=[1,2],fb=[2,3],ph=0,on=[],msg='';
+  (function draw(){const [a,b]=fa,[c,d]=fb,X=a*c,Y=b*d;
+    const nb=(p,i,v)=>{const lit=(p==='t'&&(ph>=1||on.includes(p+i)))||(p==='n'&&(ph>=2||on.includes(p+i)));return '<button type="button" class="nb'+(lit?' on '+(p==='t'?'tt':'nn'):'')+'" data-q="'+p+i+'">'+v+'</button>'};
+    let h='<p class="center note" style="margin:0">Eerste breuk</p>'+chips(L,fa.join('/'),'m',x=>fr(...x.split('/')))+'<p class="center note" style="margin:0">Tweede breuk</p>'+chips(L,fb.join('/'),'e',x=>fr(...x.split('/')));
+    h+='<div class="calc center"><span class="fr"><i>'+nb('t',0,a)+'</i><i>'+nb('n',0,b)+'</i></span> × <span class="fr"><i>'+nb('t',1,c)+'</i><i>'+nb('n',1,d)+'</i></span> = '+frc(ph>=1?X:'?',ph>=2?Y:'?')+'</div>';
+    h+='<div class="clines"><p class="center">'+(ph===0?'Tik op de twee getallen die <b class="tt">boven (teller)</b> staan.':ph===1?'Goed! <span class="tt"><b>Boven (teller) keer boven (teller)</b>: '+a+' × '+c+' = <b>'+X+'</b>.</span> Tik nu op de twee getallen die <b class="nn">beneden (noemer)</b> staan.':'Super! <span class="nn"><b>Beneden (noemer) keer beneden (noemer)</b>: '+b+' × '+d+' = <b>'+Y+'</b>.</span> Het antwoord is '+fr(X,Y)+'. Kies andere breuken en probeer nog een keer.')+'</p>'+(msg?'<p class="center" style="color:var(--oops)"><b>'+msg+'</b></p>':'')+'</div>';
+    box.innerHTML=h;
+    $$('[data-q]',box).forEach(bt=>bt.onclick=()=>{const p=bt.dataset.q[0];msg='';if(ph>=2){draw();return}
+      if((ph===0&&p==='t')||(ph===1&&p==='n')){sfx('tap');if(!on.includes(bt.dataset.q))on.push(bt.dataset.q);if(on.length===2){ph++;on=[]}}
+      else{sfx('no');msg=ph===0?'Dat getal staat beneden (noemer). Tik op de getallen boven (teller).':'Dat getal staat boven (teller). Tik op de getallen beneden (noemer).'}
+      draw()});
+    wire(box,(t,v)=>{ph=0;on=[];msg='';if(t==='m')fa=v.split('/').map(Number);else fb=v.split('/').map(Number);draw()})})()}
+function wMix(box){const L=['1/2','1/3','2/3','1/4','3/4','2/5','3/5','4/5'],OPS=['×','+','−'];let op='×',fa=[1,2],fb=[2,3],n=5,a=2,c=1,st=0;
+  (function draw(){const mul=op==='×';
+    if(!mul){if(op==='−'){a=Math.max(2,Math.min(a,n-1));c=Math.max(1,Math.min(c,a-1))}else{a=Math.max(1,Math.min(a,n-1));c=Math.max(1,Math.min(c,n-1))}}
+    const A=mul?fa[0]:a,B=mul?fa[1]:n,C=mul?fb[0]:c,D=mul?fb[1]:n,X=mul?A*C:op==='+'?A+C:A-C,Y=mul?B*D:n;
+    const steps=mul?['Boven (teller) keer boven (teller)','Beneden (noemer) keer beneden (noemer)']:[op==='+'?'Boven (teller) bij elkaar optellen':'Boven (teller) van elkaar aftrekken','Beneden (noemer) blijft hetzelfde'];
+    const topOn=st>0,botOn=st>1,done=st>=2;
+    let h='<p class="center note" style="margin:0">Kies een rekenteken</p>'+chips(OPS,op,'o');
+    if(mul)h+='<p class="center note" style="margin:0">Eerste breuk</p>'+chips(L,fa.join('/'),'m',x=>fr(...x.split('/')))+'<p class="center note" style="margin:0">Tweede breuk</p>'+chips(L,fb.join('/'),'e',x=>fr(...x.split('/')));
+    else h+='<p class="center note" style="margin:0">Beneden (noemer) van allebei</p>'+chips([3,4,5,6,8,10],n,'b')+'<div class="center">Eerste breuk, boven (teller) '+stepper('a',a,op==='−'?2:1,n-1)+'</div><div class="center">Tweede breuk, boven (teller) '+stepper('c',c,1,op==='−'?a-1:n-1)+'</div>';
+    h+='<div class="calc center">'+frc(A,B)+' '+op+' '+frc(C,D)+' = '+frc(topOn?X:'?',botOn?Y:'?')+'</div>';
+    h+='<div class="clines">'+(topOn?'<p class="center tt">'+(mul?'Boven (teller) keer boven (teller): '+A+' × '+C:'Boven (teller): '+A+' '+op+' '+C)+' = <b>'+X+'</b></p>':'')+(botOn?'<p class="center nn">'+(mul?'Beneden (noemer) keer beneden (noemer): '+B+' × '+D+' = <b>'+Y+'</b>':'Beneden (noemer) blijft hetzelfde: <b>'+Y+'</b>')+'</p>':'')+'</div>';
+    h+='<div class="center"><button class="btn" id="stp" type="button">'+(done?'Nog een keer':'Stap '+(st+1)+': '+steps[st])+'</button></div>';
+    box.innerHTML=h;$('#stp',box).onclick=()=>{sfx('tap');st=done?0:st+1;draw()};
+    wire(box,(t,v,dd)=>{st=0;if(t==='o')op=v;else if(t==='m')fa=v.split('/').map(Number);else if(t==='e')fb=v.split('/').map(Number);else if(t==='b')n=+v;else if(v==='a')a+=dd;else c+=dd;draw()})})()}
+const WID={regel:b=>wRegel(b,false),regelN:b=>wRegel(b,true),balk:wBalk,tik:wTik,keer:b=>wKeer(b),mix:wMix};
+/* ---------- niveaus ---------- */
+const LV=[
+ {t:'De regel',sub:'Boven (teller) keer boven, beneden (noemer) keer beneden',gen:gen(Array(15).fill('f1n')),steps:[
+  {h:'Twee breuken keer elkaar',txt:'Je hebt twee breuken en je moet keer doen. Dan doe je twee dingen.\n1. <b class="tt">Boven (teller) keer boven (teller)</b>.\n2. <b class="nn">Beneden (noemer) keer beneden (noemer)</b>.\nKijk naar het voorbeeld.',fig:()=>exFig(2,3,4,5)},
+  {h:'Probeer het zelf',txt:'Kies twee breuken. Tik dan op de knop en kijk wat er gebeurt. Doe dit een paar keer met andere breuken. Daarna maak je 15 sommen.',w:'regel'}]},
+ {t:'Boven (teller) en beneden',sub:'Plaatjes en tikken',gen:gen(['tp1','tp2','tp1','tp2','rule1','rule2','t1','u1','tw1','tw1']),steps:[
+  {h:'Kijk naar het plaatje',txt:'Hier zie je waarom de regel werkt. Tik op de knop en doe de stappen een voor een.\nHet aantal gekleurde stukjes is boven (teller) keer boven (teller). Het aantal stukjes in totaal is beneden (noemer) keer beneden (noemer).',w:'balk'},
+  {h:'Tik op de goede getallen',txt:'Welke getallen staan boven (teller) en welke staan beneden (noemer)? Probeer het zelf. Tik eerst op de getallen boven (teller). Tik daarna op de getallen beneden (noemer).',w:'tik'}]},
+ {t:'Oefenen met de regel',sub:'Breuk keer breuk',gen:gen(['f2','f2','tw','tw','tw','find','find','match','s2','f2']),steps:[
+  {h:'Nog een voorbeeld',txt:'Schrijf eerst de twee stappen op. Dan weet je het antwoord.',fig:()=>exFig(3,4,2,5)},
+  {h:'Probeer het zelf',txt:'Kies breuken en kijk naar de stappen. Doe elke stap eerst in je hoofd. Tik daarna op de knop om te kijken of je gelijk had.',w:'regel'}]},
+ {t:'Een heel getal',sub:'Bijvoorbeeld 3 × 1/4',gen:gen(['w1','w2','n2','n2','n1','n1','nb','nmc','nm','ns']),steps:[
+  {h:'Een heel getal is ook een breuk',txt:'Je kunt een heel getal ook als breuk schrijven. Zet het getal boven (teller) en een 1 beneden (noemer).\n3 = {3/1}  en  5 = {5/1}  en  12 = {12/1}.\nWant 3 ÷ 1 = 3. Het getal verandert niet.'},
+  {h:'Getal keer breuk',txt:'Wil je 3 × {1/4} doen? Schrijf 3 als breuk: {3/1}. Dan heb je twee breuken. Gebruik de regel: boven (teller) keer boven (teller), beneden (noemer) keer beneden (noemer).',w:'regelN'},
+  {h:'Kijk naar de balken',txt:'3 × {1/4} is drie stukjes van een vierde. Zo zie je het ook. Boven (teller) is het aantal stukjes, beneden (noemer) is de grootte van een stukje.',w:'keer'},
+  {h:'Onthoud',txt:'1. Schrijf het getal als breuk: zet een 1 beneden (noemer).\n2. <b class="tt">Boven (teller) keer boven (teller).</b>\n3. <b class="nn">Beneden (noemer) keer beneden (noemer).</b>\nHet antwoord mag groter zijn dan 1. Je hoeft het niet korter te maken. Bijvoorbeeld 3 × {3/4} = {9/4}.'}]},
+ {t:'Alles door elkaar',sub:'Keer, plus en min door elkaar',gen:gen(['f2','pl','mi','n1','which1','tw','pls','which2','mi','find','mis','pl','find2','match2','s2']),steps:[
+  {h:'Breuk keer breuk',txt:'Je hebt twee breuken en je moet keer doen. Dan gebruik je de regel.\n<b class="tt">Boven (teller) keer boven (teller)</b>.\n<b class="nn">Beneden (noemer) keer beneden (noemer)</b>.',fig:()=>exFig(2,3,4,5)},
+  {h:'Getal keer breuk',txt:'Zie je een heel getal keer een breuk? Schrijf het getal als breuk: zet een 1 beneden (noemer). Gebruik daarna dezelfde regel.',fig:()=>exN(3,2,5)},
+  {h:'Plus en min',txt:'Bij plus en min is het anders. Beneden (noemer) blijft hetzelfde. Je doet alleen iets met de getallen boven (teller).\nPlus: boven (teller) bij elkaar optellen.\nMin: boven (teller) van elkaar aftrekken.\nJe hoeft je antwoord niet korter te maken.',fig:()=>exPm(2,1,5,'+')+exPm(4,3,5,'−')},
+  {h:'Probeer het zelf',txt:'Kies keer, plus of min. Kies de breuken. Doe elke stap eerst in je hoofd. Tik daarna op de knop om te kijken of je gelijk had. Daarna maak je 15 vragen door elkaar.',w:'mix'}]}
+];
+/* ---------- scherm ---------- */
+const stage=$('#stage');let S={lv:null,i:0,tries:0,pts:0,qs:[],locked:false,log:[],mode:'',t0:0};
+const mascot=()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="#fff" stroke="#3a2412" stroke-width="4"/><path d="M50 50 L50 6 A44 44 0 0 1 94 50 Z" fill="#ffc533" stroke="#3a2412" stroke-width="4"/><circle cx="36" cy="58" r="5" fill="#3a2412"/><circle cx="62" cy="64" r="5" fill="#3a2412"/><path d="M38 76q12 8 24 0" fill="none" stroke="#3a2412" stroke-width="4" stroke-linecap="round"/></svg>';
+function totalPts(){return Object.values(DB.lv).reduce((a,v)=>a+(v.pts||0),0)}
+function topbar(show){$('#bar').hidden=!show;if(!show)return;$('#av').innerHTML=mascot();$('#nm').textContent=DB.name;$('#pt').textContent=S.mode==='quiz'?('Punten: '+S.pts+' van '+S.qs.length):(totalPts()+' van '+TOT+' punten');
+  $('#tv').textContent=DB.voice?'\u{1F50A} Stem aan':'\u{1F507} Stem uit';$('#ts').textContent=DB.sound?'\u{1F3B5} Geluid aan':'\u{1F515} Geluid uit'}
+$('#tv').onclick=()=>{DB.voice=!DB.voice;if(!DB.voice)stopSpeech();save();topbar(true)};
+function renderVP(){const box=$('#vp');loadVoices();const cur=bestVoice();let h='<h2>Kies een stem</h2>';
+  if(!VOICES.length)h+='<div class="say">Op dit apparaat is geen Nederlandse stem gevonden. Daarom wordt er niet voorgelezen. Installeer een Nederlandse stem in de instellingen van je apparaat (bij Spraak), of gebruik Microsoft Edge of Google Chrome.</div>';
+  else{h+='<p class="note">Tik op een stem om hem te horen. De stem die je kiest blijft bewaard.</p><div class="opts one">'+VOICES.slice().sort((a,b)=>vScore(b)-vScore(a)).map((v,i)=>'<button class="opt'+(cur&&cur.name===v.name?' ok':'')+'" type="button" data-vn="'+esc(v.name)+'">'+esc(v.name)+' ('+esc(v.lang)+')'+(i===0?' · aanbevolen':'')+'</button>').join('')+'</div><p><b>Snelheid</b></p><div class="chips">'+[['Langzaam',.75],['Normaal',.9],['Snel',1.05]].map(x=>'<button type="button" class="c2'+((DB.rate||.9)===x[1]?' sel':'')+'" data-rt="'+x[1]+'">'+x[0]+'</button>').join('')+'</div>'}
+  h+='<div class="row"><button class="btn alt small" id="vc" type="button">Sluiten</button></div>';box.innerHTML=h;
+  $$('[data-vn]',box).forEach(b=>b.onclick=()=>{DB.voiceName=b.dataset.vn;save();speak('Hallo '+DB.name+'. Een vierde van twaalf is drie.',true);renderVP()});
+  $$('[data-rt]',box).forEach(b=>b.onclick=()=>{DB.rate=+b.dataset.rt;save();speak('Dit is de snelheid die je kiest.',true);renderVP()});
+  $('#vc').onclick=()=>{box.hidden=true}}
+$('#tp').onclick=()=>{const v=$('#vp');v.hidden=!v.hidden;if(!v.hidden)renderVP()};
+$('#ts').onclick=()=>{DB.sound=!DB.sound;save();topbar(true)};
+function setProg(p){const g=$('#pg');g.hidden=p==null;if(p!=null)$('i',g).style.width=p+'%'}
+const fmtT=t=>Math.floor(t/60)+':'+String(t%60).padStart(2,'0')+' min';
+const starsOf=(p,n)=>{const r=p/(n||10);return r>=.9?3:r>=.7?2:r>=.5?1:0};
+const TOT=LV.reduce((a,l)=>a+l.gen.n,0);
+const starTxt=n=>'★'.repeat(n)+'☆'.repeat(3-n);
+function nameScreen(){topbar(false);setProg(null);
+  stage.innerHTML='<div class="card"><h1>Breuken keer</h1><p>In deze les leer je één regel: boven (teller) keer boven (teller) en beneden (noemer) keer beneden (noemer). Je speelt spelletjes en maakt 60 vragen.</p><label for="nmi"><b>Schrijf hier je naam</b></label><div class="row"><input class="nm" id="nmi" maxlength="30" autocomplete="off"></div><div class="row"><button class="btn" id="go" type="button">Beginnen</button></div><p class="note" id="er" hidden>Schrijf eerst je naam.</p></div>';
+  const go=()=>{const v=$('#nmi').value.trim();if(v.length<2){$('#er').hidden=false;return}DB.name=v;save();menu()};
+  $('#go').onclick=go;$('#nmi').onkeydown=e=>{if(e.key==='Enter')go()}}
+function menu(){S.lv=null;S.mode='';S.keep=false;stopSpeech();topbar(true);setProg(null);
+  const done=LV.every((_,i)=>DB.lv[i]&&DB.lv[i].done);
+  let h='<div class="card"><h1>Hoi '+esc(DB.name)+'!</h1><p>Kies een onderdeel. Je begint met de uitleg en daarna maak je de vragen.</p>'+(done?'<div class="fb ok">Je hebt alles gedaan! Totaal: '+totalPts()+' van '+TOT+' punten.</div>':'')+'<div class="lv">';
+  LV.forEach((l,i)=>{const r=DB.lv[i];h+='<button class="lvb'+(r&&r.done?' done':'')+'" data-i="'+i+'" type="button"><span class="lvn">'+(i+1)+'</span><span><b>'+l.t+'</b><small>'+l.sub+(r&&r.done?' · '+r.pts+' van '+l.gen.n+(r.time?' · '+fmtT(r.time):''):'')+'</small></span><span class="st">'+(r&&r.done?starTxt(starsOf(r.pts)):'')+'</span></button>'});
+  h+='</div><div class="row"><button class="btn alt small" id="rs" type="button">Opnieuw beginnen</button><span class="note" id="rsn"></span></div></div>';
+  stage.innerHTML=h;$$('.lvb').forEach(b=>b.onclick=()=>explain(+b.dataset.i,0));
+  let armed=0;$('#rs').onclick=function(){if(!armed){armed=1;$('#rsn').textContent='Zeker weten? Tik nog een keer. Je punten en je naam worden gewist.';setTimeout(()=>{armed=0;$('#rsn').textContent=''},4000)}else{DB={name:'',lv:{},voice:DB.voice,sound:DB.sound};save();nameScreen()}}}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+/* ---------- uniforme onderkant: Menu, Vorige, Controleer / Volgende ---------- */
+function navHtml(){return '<div class="nav"><button class="btn alt" id="bMenu" type="button">Menu</button><button class="btn alt" id="bPrev" type="button">← Vorige</button><button class="btn" id="bMain" type="button">Volgende →</button></div>'}
+function setMain(label,fn,off,good){const x=$('#bMain');x.textContent=label;x.disabled=!!off;x.className='btn'+(good?' good':'');x.onclick=fn}
+function wireNav(prev,ask){const m=$('#bMenu'),p=$('#bPrev');p.disabled=!prev;p.onclick=prev?()=>{sfx('tap');prev()}:null;
+  m.onclick=()=>{if(ask&&ask()&&!m.dataset.arm){m.dataset.arm='1';m.textContent='Zeker weten?';setTimeout(()=>{if(m.isConnected){delete m.dataset.arm;m.textContent='Menu'}},3500);return}menu()}}
+const askMenu=()=>S.mode==='quiz'&&S.log.length>0&&!S.fin;
+function leaveQ(){if(S.mode==='quiz'&&S.locked&&S.snap&&$('#ans')){$$('#ans input').forEach(x=>x.setAttribute('value',x.value));$$('.opt.pick').forEach(x=>x.classList.remove('pick'));S.snap[S.i]=stage.innerHTML}}
+function qNext(){leaveQ();S.i<S.qs.length-1?(S.i++,showQ()):finish()}
+function qPrev(){leaveQ();if(S.i>0){S.i--;showQ()}else explain(S.lv,LV[S.lv].steps.length-1)}
+function explain(i,k){S.lv=i;S.mode='';stopSpeech();topbar(true);setProg(null);const L=LV[i],st=L.steps[k];
+  const paras=st.txt.split('\n').map(p=>'<div class="say">'+fmt(p)+'</div>').join('');
+  stage.innerHTML='<div class="card"><div class="qhead"><span>Uitleg · onderdeel '+(i+1)+': '+L.t+'</span><span>'+(k+1)+' van '+L.steps.length+'</span></div><h2>'+st.h+'</h2>'+paras+(st.fig?'<div>'+st.fig()+'</div>':'')+(st.w?'<div class="wd" id="wd"></div>':'')+'<div class="row"><span id="lis"></span></div>'+navHtml()+'</div>';
+  if(st.w)WID[st.w]($('#wd'));
+  $('#lis').appendChild(listenBtn(say(st.h+'. '+st.txt.replace(/\n/g,' '))));
+  wireNav(k?()=>explain(i,k-1):null,null);
+  setMain('Volgende →',()=>{if(k<L.steps.length-1)explain(i,k+1);else if(S.keep&&S.lv===i&&!S.fin){showQ()}else startQuiz(i)});
+  window.scrollTo(0,0)}
+function startQuiz(i){S={lv:i,i:0,tries:0,pts:0,qs:LV[i].gen(),locked:false,log:[],mode:'quiz',t0:0,snap:[],keep:true,saved:false,fin:false};showQ()}
+function showQ(){stopSpeech();window.scrollTo(0,0);S.mode='quiz';S.fin=false;topbar(true);const L=LV[S.lv],q=S.qs[S.i],n=S.qs.length;setProg(S.i/n*100);
+  const lastLab=S.i===n-1?'Klaar ▶':'Volgende →';
+  if(S.snap[S.i]){stage.innerHTML=S.snap[S.i];S.locked=true;$('#lis').innerHTML='';$('#lis').appendChild(listenBtn(q.say||say(q.text)));wireNav(qPrev,askMenu);setMain(lastLab,qNext,false,true);return}
+  S.t0=Date.now();S.tries=0;S.locked=false;
+  let h='<div class="card"><div class="qhead"><span>'+L.t+'</span><span>Vraag '+(S.i+1)+' van '+n+'</span></div>';
+  if(q.fig)h+=q.fig;
+  if(q.type==='paint')h+='<div id="pt1">'+shape(q.paint.sh,q.paint.n,0,{paint:true})+'</div>';
+  h+='<div class="q">'+fmt(q.text)+'</div><div id="ans">';
+  if(q.type==='mc')h+='<div class="opts'+(q.one?' one':q.three?' three':'')+'">'+q.opts.map(o=>'<button class="opt" type="button" data-v="'+esc(o)+'">'+optHtml(o)+'</button>').join('')+'</div>';
+  else if(q.type==='frac')h+='<div class="center"><div class="fin"><input id="ft" inputmode="numeric" maxlength="3" aria-label="Teller" placeholder="teller"><hr><input id="fd" inputmode="numeric" maxlength="3" aria-label="Noemer" placeholder="noemer"></div></div><p class="note center">'+(q.note||'Je hoeft je antwoord niet korter te maken.')+'</p>';
+  else if(q.type==='num')h+='<div class="num"><span>Antwoord:</span><input id="nu" inputmode="numeric" maxlength="3" aria-label="Antwoord"></div>';
+  else if(q.type==='two')h+='<div class="two"><div class="trow"><span>'+q.l1+'</span><input id="t1" inputmode="numeric" maxlength="3" aria-label="Boven (teller)"></div><div class="trow"><span>'+q.l2+'</span><input id="t2" inputmode="numeric" maxlength="3" aria-label="Beneden (noemer)"></div></div>';
+  else if(q.type==='match')h+=matchHtml(q)+'<p class="note center">Je ziet meteen of een koppel goed is.</p>';
+  h+='</div><div id="fbk" role="status" aria-live="polite"></div><div class="row"><span id="lis"></span></div>'+navHtml()+'</div>';
+  stage.innerHTML=h;
+  $('#lis').appendChild(listenBtn(q.say||say(q.text)));
+  let check=()=>{};
+  if(q.type==='mc'){$$('.opt').forEach(o=>o.onclick=()=>{if(S.locked||o.disabled)return;sfx('tap');$$('.opt').forEach(x=>x.classList.remove('pick'));o.classList.add('pick')});check=()=>{const b=$('.opt.pick');if(!b){fb('tip','Kies eerst een antwoord.');return}b.classList.remove('pick');judge(b.dataset.v===q.ans,b)}}
+  else if(q.type==='paint'){$$('#pt1 .part').forEach(p=>p.onclick=()=>{sfx('tap');if(S.locked)return;p.classList.toggle('on')});check=()=>judge($$('#pt1 .part.on').length===q.paint.k)}
+  else if(q.type==='tapn'){$$('.nb').forEach(b=>b.onclick=()=>{sfx('tap');if(S.locked)return;b.classList.toggle('on')});check=()=>judge($$('.nb').every(b=>b.classList.contains('on')===(b.dataset.p===q.want)))}
+  else if(q.type==='match'){matchWire(q)}
+  else{const inputs=$$('#ans input');inputs[0].focus();inputs.forEach(x=>x.onkeydown=e=>{if(e.key==='Enter')$('#bMain').click()});
+    check=()=>{if(q.type==='frac'){const t=parseInt($('#ft').value,10),d=parseInt($('#fd').value,10);if(isNaN(t)||isNaN(d)){fb('tip','Vul de teller en de noemer allebei in.');return}const eq=d>0&&same(t,d,q.ans.n,q.ans.d),ex=t===q.ans.n&&d===q.ans.d;judge(q.exact?ex:eq,undefined,(q.exact&&eq&&!ex)?'Bijna! Zet het getal boven (teller) en een 1 beneden (noemer).':undefined)}
+      else if(q.type==='two'){const v1=parseInt($('#t1').value,10),v2=parseInt($('#t2').value,10);if(isNaN(v1)||isNaN(v2)){fb('tip','Vul boven (teller) en beneden (noemer) allebei in.');return}const o1=v1===q.a1,o2=v2===q.a2;judge(o1&&o2,undefined,(!o1&&o2)?'Het getal boven (teller) klopt nog niet. Doe boven (teller) keer boven (teller).':(o1&&!o2)?'Het getal beneden (noemer) klopt nog niet. Doe beneden (noemer) keer beneden (noemer).':undefined)}
+      else{const v=parseInt($('#nu').value,10);if(isNaN(v)){fb('tip','Vul een getal in.');return}judge(v===q.ans)}}}
+  wireNav(qPrev,askMenu);setMain('Controleer',check,q.type==='match')}
+function fb(k,t){$('#fbk').innerHTML='<div class="fb '+k+'">'+t+'</div>'}
+function judge(ok,btn,msg){if(S.locked)return;const q=S.qs[S.i];
+  if(ok){S.locked=true;sfx('ok');const aw=S.tries===0?1:0,sec=Math.round((Date.now()-S.t0)/1000);S.pts+=aw;S.log.push({pts:aw,sec});topbar(true);if(btn)btn.classList.add('ok');fb('ok',pick(['Goed zo!','Super!','Knap gedaan!','Helemaal goed!'])+' '+(aw?'+1 punt':'Geen punt, want het was niet de eerste keer goed.')+' · '+sec+' sec');endQ()}
+  else{S.tries++;sfx('no');if(btn){btn.classList.add('no');btn.disabled=true}
+    if(S.tries===1)fb('no',msg||'Nog niet goed. Probeer het nog een keer.');
+    else if(S.tries===2)$('#fbk').innerHTML='<div class="fb no">'+(msg||'Nog niet goed.')+'</div><div class="fb tip">'+fmt(q.tip)+'</div>';
+    else{S.locked=true;const sec3=Math.round((Date.now()-S.t0)/1000);S.log.push({pts:0,sec:sec3});$$('.opt.pick').forEach(x=>x.classList.remove('pick'));if(q.type==='mc')$$('.opt').forEach(b=>{if(b.dataset.v===q.ans)b.classList.add('ok')});
+      if(q.type==='paint'){$('#pt1').innerHTML=shape(q.paint.sh,q.paint.n,q.paint.k)}
+      if(q.type==='tapn')$$('.nb').forEach(b=>b.classList.toggle('on',b.dataset.p===q.want));
+      if(q.type==='two'){$('#t1').value=q.a1;$('#t2').value=q.a2}
+      if(q.type==='match')matchReveal();
+      $('#fbk').innerHTML='<div class="fb no">Het goede antwoord is: '+q.show+' · 0 punten · '+sec3+' sec</div><div class="fb tip">'+fmt(q.tip)+'</div>';endQ()}}}
+function endQ(){$$('.opt').forEach(b=>b.disabled=true);$$('#ans input').forEach(x=>x.disabled=true);setMain(S.i===S.qs.length-1?'Klaar ▶':'Volgende →',qNext,false,true);$('#bMain').focus()}
+function finish(){setProg(100);window.scrollTo(0,0);const i=S.lv,p=S.pts,n=S.qs.length,old=DB.lv[i]||{};
+  const tot=S.log.reduce((a,x)=>a+x.sec,0);
+  if(!S.saved){S.saved=true;DB.lv[i]={done:true,pts:Math.max(old.pts||0,p),last:p,time:tot,n:(old.n||0)+1};save()}
+  S.mode='';S.fin=true;topbar(true);sfx('win');
+  const all=LV.every((_,j)=>DB.lv[j]&&DB.lv[j].done),s=starsOf(p,n),r=p/n;
+  let h='<div class="card center"><h1>Onderdeel '+(i+1)+' klaar!</h1><div class="stars">'+starTxt(s)+'</div><p class="big">'+p+' van '+n+' meteen goed</p><p>Tijd: '+fmtT(tot)+' · gemiddeld '+Math.round(tot/Math.max(1,S.log.length))+' sec per vraag</p><details style="text-align:left"><summary>Bekijk elke vraag</summary><table class="lg"><tr><th>Vraag</th><th>Punten</th><th>Tijd</th></tr>'+S.log.map((x,j)=>'<tr><td>'+(j+1)+'</td><td>'+x.pts+'</td><td>'+x.sec+' sec</td></tr>').join('')+'</table></details><p>'+(r>=.9?'Fantastisch!':r>=.7?'Heel goed gedaan!':r>=.5?'Goed bezig. Oefen nog een keer voor meer sterren.':'Blijf oefenen, dan wordt het steeds makkelijker.')+'</p>';
+  if(all)h+='<div class="fb ok">Je hebt alle '+LV.length+' onderdelen gedaan! Totaal: '+totalPts()+' van '+TOT+' punten.</div>';
+  h+='<div class="row" style="justify-content:center"><button class="btn alt" id="ag" type="button">Nog een keer</button></div>'+navHtml()+'</div>';
+  stage.innerHTML=h;$('#ag').onclick=()=>startQuiz(i);
+  wireNav(()=>{S.i=n-1;showQ()},null);
+  if(i<LV.length-1)setMain('Volgende →',()=>explain(i+1,0));else setMain('Volgende →',()=>{},true)}
+window.BR={S:()=>S,LV};
+if(DB.name)menu();else nameScreen();
+</script></body></html>
