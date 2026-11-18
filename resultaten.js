@@ -4,8 +4,8 @@
 (function(){
   var SHEET_URL='';
   if(!SHEET_URL)return;
-  var NAMEN={'wiskunde-recht-scherp-stomp-v1':'5.2 Recht, scherp en stomp','wiskunde-kompasroos-v1':'5.3 De kompasroos','wiskunde-hoeken-meten-v1':'5.4 Hoeken meten','wiskunde-hoeken-51-v2':'5.1 Hoeken','rekenles-breuken-v1':'Breuken','rekenles-breuken-keer-v2':'Breuken keer','wiskunde-hoeken51-v1':'Hoeken','wiskunde-hoeken-v1':'Lijnen en hoeken','rekenles-getallen-v1':'Getallen / Plus en min / Keer en delen'};
-  var SZ={'wiskunde-hoeken-meten-v1':[10,10,10,10,10],'wiskunde-hoeken-51-v2':[6,6,6],'rekenles-breuken-keer-v2':[15,10,10,10,15]};
+  var NAMEN={'wiskunde-recht-scherp-stomp-v2':'5.2 Recht, scherp en stomp','wiskunde-kompasroos-v2':'5.3 De kompasroos','wiskunde-hoeken-meten-v2':'5.4 Hoeken meten','wiskunde-hoeken-51-v2':'5.1 Hoeken','rekenles-breuken-v1':'Breuken','rekenles-breuken-keer-v2':'Breuken keer','wiskunde-hoeken51-v1':'Hoeken','wiskunde-hoeken-v1':'Lijnen en hoeken','rekenles-getallen-v1':'Getallen / Plus en min / Keer en delen'};
+  var SZ={'wiskunde-recht-scherp-stomp-v2':[5,5,5,5],'wiskunde-kompasroos-v2':[5,5,5,5],'wiskunde-hoeken-meten-v2':[5,5,5,5],'wiskunde-hoeken-51-v2':[6,6,6],'rekenles-breuken-keer-v2':[15,10,10,10,15]};
   var REK={1:'Getallen en getalgevoel',2:'Plus en min',3:'Keer en delen'};
   function get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
   function dev(){var d;try{d=localStorage.getItem('apparaat-id');if(!d){d=Math.random().toString(36).slice(2,10);localStorage.setItem('apparaat-id',d)}}catch(e){d='onbekend'}return d}

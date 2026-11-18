@@ -13,11 +13,18 @@ Doelgroep: vmbo basis klas 1. Weinig motivatie, weinig zin in lange teksten. Mee
 8. **Snelle toets** aan het eind: 10 vragen door elkaar uit alle onderdelen, 1 kans per vraag, geen tip. Aan het eind groot het **percentage** ("Je weet 70% van deze les") en welke onderdelen nog geoefend moeten worden. Het resultaat staat ook op de startpagina.
 9. Alle lessen werken op een telefoon (320 px breed) zonder zijwaarts scrollen.
 10. Eerst privé laten zien (Artifact). Pas na het woord "publiceer" op de website zetten. De link van de website verandert nooit.
+11. **Dyslexie-knop op elke pagina.** `dyslexie.js` (in de hoofdmap) staat met `<script src="dyslexie.js"></script>` in de kop van elke pagina en doet de hele website anders: andere letter, grotere letters, meer ruimte, rustige achtergrond. De keuze wordt onthouden (`dyslexie-stand`). `base.html` bevat de regel al. Nieuwe losse pagina's moeten hem ook krijgen.
+12. **Hoeken en vormen: wees duidelijk.** Vraag nooit "is dit 90°?" bij een plaatje waar je dat niet kunt zien. Gebruik de **papieren hoek als vergelijking** ("past een hoek van papier precies?") en ruime marges bij hoeken (bijv. 90° ± 12° is niet recht). Teken vormen met duidelijke hoeken.
+13. **Uitslagen zonder namen.** `resultaten.js` stuurt alleen aantallen per les (gedaan, goed, keer, toets, apparaat) naar het Google Sheet, nooit een naam. Elke nieuwe les heeft een regel in `NAMEN` en `SZ` (aantal vragen per onderdeel).
+14. De voortgangsregel op de startpagina voor een les in dit model: `lvk('SLEUTEL',[5,5,5,5])` (aantal vragen per onderdeel).
 
 ## Bestanden (map `bouwen/` in de repo, niet bedoeld voor leerlingen)
 - `model/base.html`: kop, kleuren, geluid, stem, opslag.
 - `model/ui.js`, `model/lib.js`, `model/engine.js`: de motor (menu, uitleg, vragen, boek, toets).
 - `model/extra.css`: extra opmaak.
+- `model/strip.py`: maakt van een gebouwde les een privé-versie voor het tonen (haalt terugknop en uitslagen eruit).
+- `model/lessons/_old/`: oude vraagtypes (kiezen, tekenen, enz.) die les 5.2 en 5.3 nog gebruiken.
+- `test_model2.js BESTAND KEREN BREEDTE`: speelt een hele les door en zoekt fouten (met `DYS=1` ook met dyslexie-stand). `test_dyslexie.js`: test de knop op alle pagina's. `uitslagen.gs` + `test_gs.js`: het Google-Sheet-script en zijn test.
 - `model/build.py LES-MAP UIT.html`: bouwt één les.
 - Per les een map met `lesson.json` (titel, opslagsleutel, bestanden), `geo.js` (tekeningen), `widgets.js` (knoppen om mee te spelen), `quiz.js` (vragen), `content.js` (onderdelen, toets, boekopdrachten).
 

@@ -71,7 +71,22 @@ img.bk{display:block;width:100%;border-radius:12px;border:2px solid var(--line);
 .opt.sel{border-color:var(--blue);background:#eef5ff}.opt .nb{margin-left:8px;background:var(--blue);color:#fff;border-radius:50%;width:26px;height:26px;display:inline-grid;place-items:center;font-weight:700}
 .vt:hover circle{fill:#ffe9b0}
 .qhead span:last-child{white-space:nowrap}
-</style></head><body><a href="index.html" id="back" style="display:inline-block;margin:10px 14px 0;color:#2a6fdb;font:700 15px/1.2 system-ui,sans-serif;text-decoration:none">← Alle lessen</a>
+.nav{position:sticky;bottom:0;z-index:5;display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px;padding:10px 0 4px;margin-top:14px;background:linear-gradient(to top,#fff 78%,rgba(255,255,255,0))}
+.nav .btn{padding:10px 6px;font-size:1rem;min-height:52px}
+.opt.sel{border-color:var(--blue);background:#eef5ff}.opt .nb{margin-left:8px;background:var(--blue);color:#fff;border-radius:50%;width:26px;height:26px;display:inline-grid;place-items:center;font-weight:700}
+.qhead span:last-child{white-space:nowrap}
+.stp{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.stp.done{background:var(--goodbg)}.stp.done .n{background:var(--good)}
+.pct{font:700 4.6rem/1.1 Lexend,sans-serif;margin:6px 0}.pct.good{color:var(--good)}.pct.mid{color:var(--orange)}.pct.low{color:var(--oops)}
+.lvb.tt .lvn{background:var(--yel);color:var(--ink)}
+.bub{font:700 14px Lexend,sans-serif;fill:#b35f00;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.vt:hover circle{fill:#ffe9b0}
+.opts.c3{grid-template-columns:repeat(3,minmax(0,1fr))}.opts.c3 .opt{min-width:0;overflow:hidden}.opts.c3 .opt{padding:6px;position:relative}.opts.c3 .opt .nb{position:absolute;top:4px;right:4px;margin:0}
+.lvb .st{text-align:center;line-height:1.2}.lvb .st small{display:block;font-size:.8rem}
+
+.angpair{display:flex;align-items:center;justify-content:center;gap:10px}.angpair .fig{margin:0}.angpair .pap{flex:0 0 76px;max-width:76px}.angpair .ang:not(.pap){flex:1 1 0;min-width:0;max-width:220px}
+.angpair .poly{flex:1 1 0;min-width:0;max-width:240px}
+</style><script src="dyslexie.js"></script></head><body><a href="index.html" id="back" style="display:inline-block;margin:10px 14px 0;color:#2a6fdb;font:700 15px/1.2 system-ui,sans-serif;text-decoration:none">← Alle lessen</a>
 <div class="wrap">
 <header class="bar" id="bar" hidden>
  <div class="who"><span id="av"></span><span id="nm"></span></div>
@@ -85,7 +100,7 @@ img.bk{display:block;width:100%;border-radius:12px;border:2px solid var(--line);
 <script>
 'use strict';
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
-const KEY='wiskunde-hoeken-meten-v1';
+const KEY='wiskunde-hoeken-meten-v2';
 let DB={name:'',lv:{},book:{},voice:true,sound:true};
 try{const r=localStorage.getItem(KEY);if(r)DB=Object.assign(DB,JSON.parse(r))}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}}
@@ -113,6 +128,15 @@ function listenBtn(t){const b=document.createElement('button');b.type='button';b
 const say=s=>String(s).replace(/<[^>]+>/g,' ').replace(/∠/g,'hoek ').replace(/°/g,' graden').replace(/₁/g,' 1').replace(/₂/g,' 2').replace(/[∟┐]/g,'hoekje').replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim();
 
 let S={lv:null,i:0,tries:0,pts:0,qs:[],locked:false,log:[],mode:'',t0:0,seq:[],snap:[],keep:false,saved:false,fin:false};const stage=$('#stage');
+
+/* ---------- gedeelde hulpjes ---------- */
+const O=(v,h)=>({v,h:h==null?v:h});
+const chipsH=(list,sel,att,f)=>'<div class="chips">'+list.map(x=>'<button type="button" class="c2'+(String(sel)===String(x)?' sel':'')+'" '+att+'="'+x+'">'+(f?f(x):x)+'</button>').join('')+'</div>';
+function build(plan,make){const seen=new Set(),out=[];let t=0;plan=shuffle(plan);
+  while(out.length<plan.length&&t<800){t++;const q=make(plan[out.length]);if(!q||seen.has(q.key))continue;seen.add(q.key);out.push(q)}
+  return out}
+const IMGB=(f,t)=>()=>'<img class="bk" src="boek/'+f+'" alt="'+t+'"><p class="note center">'+t+'</p>';
+
 /* ---------- meetkunde: kompasroos en hoeken ---------- */
 const rad=d=>d*Math.PI/180;
 const f1=n=>(+n).toFixed(1);
@@ -121,11 +145,7 @@ const RC=[130,130],RR=100;
 const PB=(C,b,r)=>[C[0]+r*Math.sin(rad(b)),C[1]-r*Math.cos(rad(b))];
 const cls=d=>Math.abs(d-90)<.5?'recht':d<90?'scherp':'stomp';
 const ADJ={recht:'rechte',scherp:'scherpe',stomp:'stompe'};
-const O=(v,h)=>({v,h:h==null?v:h});
 const O3=()=>[O('recht','Recht'),O('scherp','Scherp'),O('stomp','Stomp')];
-function build(plan,make){const seen=new Set(),out=[];let t=0;plan=shuffle(plan);
-  while(out.length<plan.length&&t<800){t++;const q=make(plan[out.length]);if(!q||seen.has(q.key))continue;seen.add(q.key);out.push(q)}
-  return out}
 function roseInner(){const C=RC,R=RR;let s='<circle cx="130" cy="130" r="100" fill="rgba(238,246,255,.55)" stroke="#17324d" stroke-width="2"/><circle cx="130" cy="130" r="72" fill="rgba(255,255,255,.35)" stroke="#9fbbd6" stroke-width="1"/>';
   s+='<line x1="130" y1="58" x2="130" y2="202" stroke="#c4dcf2" stroke-width="1"/><line x1="58" y1="130" x2="202" y2="130" stroke="#c4dcf2" stroke-width="1"/>';
   for(let a=0;a<360;a+=5){const L=a%30===0?14:a%10===0?9:5,p=PB(C,a,R),q=PB(C,a,R-L);s+='<line x1="'+f1(p[0])+'" y1="'+f1(p[1])+'" x2="'+f1(q[0])+'" y2="'+f1(q[1])+'" stroke="#17324d" stroke-width="'+(a%10===0?1.4:.8)+'"/>'}
@@ -176,7 +196,6 @@ function polySvg(P,letters,o){o=o||{};let s='<svg class="fig poly" viewBox="-16 
   return s+'</svg>'}
 
 /* ---------- knoppen om mee te spelen ---------- */
-const chipsH=(list,sel,att,f)=>'<div class="chips">'+list.map(x=>'<button type="button" class="c2'+(String(sel)===String(x)?' sel':'')+'" '+att+'="'+x+'">'+(f?f(x):x)+'</button>').join('')+'</div>';
 function bearingOf(svg,e){const r=svg.getBoundingClientRect(),x=e.clientX-(r.left+r.width/2),y=e.clientY-(r.top+r.height/2);return N360(Math.round(Math.atan2(x,-y)*180/Math.PI/5)*5)}
 /* 1. getal bij de lijn */
 function wLees(box,o){o=o||{};let b=o.start==null?50:o.start;
@@ -305,239 +324,222 @@ const M={
 };
 const mk=plan=>()=>build(plan,t=>M[t]());
 
-/* ---------- onderdelen ---------- */
-const IMGB=(f,t)=>()=>'<img class="bk" src="boek/'+f+'" alt="'+t+'"><p class="note center">'+t+'</p>';
-const LV=[
- {t:'De kompasroos lezen',sub:'Graden aflezen',gen:mk(['rd','rd','rd','rd','rd2','rd2','top','dirq','cls1','cls1']),steps:[
-  {h:'Een kompasroos meet hoeken',txt:'Met een kompasroos kun je hoeken meten.\nRondom staan getallen van 0 tot 360. Dat zijn graden. Een graad schrijf je zo: 1°.\nBovenaan staat 0° (noord). Sleep de blauwe lijn en kijk welk getal erbij staat.',w:'lees'},
-  {h:'Met de klok mee',txt:'Je telt de graden met de klok mee. Dat is de richting van de wijzers van de klok.\nVan 0° ga je naar rechts: 30°, 60°, 90° ...\nTik op de knop en kijk hoe de lijn met de klok mee draait.',w:'klok'},
-  {h:'Tel de streepjes',txt:'Tussen twee getallen staan streepjes. Een klein streepje is 5°. Een iets langer streepje is 10°.\nZoek het laatste getal vóór de blauwe lijn. Tel dan de streepjes.\nSleep de blauwe lijn en kijk hoe je het getal vindt.',w:'lees',o:{tick:true,start:40}}]},
- {t:'Een hoek meten',sub:'De 4 stappen',gen:mk(['ms','ms','ms','ms','leg','leg','leg','stp','stp1','stp1']),steps:[
-  {h:'Hoe meet je een hoek?',txt:'Een hoek meet je in 4 stappen.\nTik steeds op de knop en kijk wat er gebeurt.',w:'stap'},
-  {h:'Kies het goede been',txt:'Je meet altijd met de klok mee.\nLeg de lijn van 0° dus op het been waar je met de klok mee naar het andere been draait.\nTik op het been waar jij de 0° op legt.',w:'been'},
-  {h:'Zo staat het in je boek',txt:'Zo staan de stappen in je boek.\n∠A is een scherpe hoek, dus tussen 0° en 90°. Aflezen geeft: ∠A = 52°.',fig:IMGB('p24-theorie.png','Zo staat het in je boek (bladzijde 24).')}]},
- {t:'Eerst schatten, dan meten',sub:'Scherp, recht of stomp?',gen:mk(['sch','sch','sch','kz','kz','kz','nm','nm','nm','bet']),steps:[
-  {h:'Kijk eerst naar de hoek',txt:'Voor je meet, kijk je eerst: is de hoek scherp, recht of stomp?\nScherp: tussen 0° en 90°. Recht: precies 90°. Stomp: tussen 90° en 180°.\nSchuif en kijk wat er gebeurt.',w:'soort'},
-  {h:'Klopt het getal?',txt:'Na het meten kijk je: past het getal bij je eerste antwoord?\nKies eerst scherp, recht of stomp. Dan zie je hoeveel graden de hoek is. Klopt het?',w:'klopt'}]},
- {t:'Meer hoeken',sub:'Benen verlengen en optellen',gen:mk(['vl','vl2','ver3','tri','tri','tri','polyQ','polyQ','som','som2']),steps:[
-  {h:'Verleng de benen',txt:'Zijn de benen van de hoek te kort? Dan komen ze niet bij de getallen van de kompasroos.\nMaak de benen langer met je liniaal. De hoek zelf wordt niet groter of kleiner.',w:'verleng'},
-  {h:'Hoeken in een figuur',txt:'Een driehoek heeft 3 hoeken. Een vierhoek heeft 4 hoeken. Elke hoek heeft een letter.\nMeet elke hoek één voor één. Tik op een letter en kijk hoe groot de hoek is.',w:'fig'},
-  {h:'Twee hoeken samen',txt:'Soms is één hoek verdeeld in twee hoeken, zoals ∠E₁ en ∠E₂.\nDan tel je de twee getallen bij elkaar op: ∠E₁ + ∠E₂ = ∠E.\nSchuif en kijk.',w:'som'}]},
- {t:'Alles door elkaar',sub:'Oefen alle stappen',gen:mk(['rd','ms','leg','stp1','sch','kz','tri','som2','vl','nm']),steps:[
-  {h:'Je kunt hoeken meten!',txt:'Je weet nu hoe je een hoek meet met de kompasroos.\nOefen de 4 stappen nog een keer met een nieuwe hoek. Daarna maak je 10 vragen door elkaar.',w:'stap'}]}
-];
-const NQ=LV.length*10;
-/* ---------- opdrachten uit het boek ---------- */
+/* ---------- de les ---------- */
+const META={title:'5.4 Hoeken meten',intro:'Meet hoeken met de kompasroos. Speel eerst met de knoppen. Maak daarna de opdrachten uit je boek stap voor stap. Aan het eind doe je een snelle toets.'};
 const PAD='Hoofdstuk 5 Hoeken · 5.4 Hoeken meten';
-const KLMN=[[15,110],[141,109],[52,8],[18,38]];
-const Q=(lab,text,opts,why,fig)=>({lab,text,opts:opts.map((t,i)=>({t,ok:i===0})),why,fig});
-const FROOS=(d,nm)=>()=>FIGC(roseSvg({legs:[{b:0,col:'#8aa3bd',w:3},{b:d}],hl:[{b:d,t:'?'}],arc:[0,d],name:nm?'∠'+nm:'',aria:'Kompasroos met een hoek'}));
-const FANG=(b1,d,nm)=>()=>FIGANG(b1,d,'∠'+nm);
-const FPOLY=(P,L)=>()=>FIGC(polySvg(P,L,{aria:'Een figuur met hoeken'}));
+const LV=[
+ {t:'De kompasroos lezen',sub:'Graden aflezen',n:5,gen:mk(['rd','rd','rd2','dirq','cls1']),steps:[
+  {h:'Een kompasroos meet hoeken',txt:'Een kompasroos meet hoeken in graden. Een graad schrijf je zo: 1°.\nBovenaan staat 0°.\nSleep de blauwe lijn en kijk.',w:'lees'},
+  {h:'Met de klok mee',txt:'Je telt met de klok mee.\nVan 0° ga je naar rechts: 30°, 60°, 90°.\nTik op de knop en kijk.',w:'klok'},
+  {h:'Tel de streepjes',txt:'Een klein streepje is 5°. Een langer streepje is 10°.\nTel de streepjes na het laatste getal.\nSleep de blauwe lijn.',w:'lees',o:{tick:true,start:40}}]},
+ {t:'Een hoek meten',sub:'De 4 stappen',n:5,gen:mk(['ms','ms','leg','stp','stp1']),steps:[
+  {h:'Hoe meet je een hoek?',txt:'Een hoek meet je in 4 stappen.\nTik steeds op de knop en kijk.',w:'stap'},
+  {h:'Kies het goede been',txt:'Je meet met de klok mee.\nLeg 0° op het been waar je met de klok mee naar het andere been draait.\nTik op het goede been.',w:'been'},
+  {h:'Zo staat het in je boek',txt:'Zo staan de stappen in je boek. Je weet het al!',fig:IMGB('p24-theorie.png','Zo staat het in je boek (bladzijde 24).')}]},
+ {t:'Eerst schatten, dan meten',sub:'Scherp, recht of stomp?',n:5,gen:mk(['sch','kz','nm','nm','bet']),steps:[
+  {h:'Kijk eerst naar de hoek',txt:'Scherp: kleiner dan 90°. Recht: precies 90°. Stomp: groter dan 90°.\nSchuif en kijk.',w:'soort'},
+  {h:'Past het getal?',txt:'Kies eerst scherp, recht of stomp.\nDan zie je de graden. Past het getal bij je keuze?',w:'klopt'}]},
+ {t:'Meer hoeken',sub:'Benen verlengen en optellen',n:5,gen:mk(['vl2','tri','polyQ','som','som2']),steps:[
+  {h:'Verleng de benen',txt:'Zijn de benen te kort? Verleng ze met je liniaal.\nDe hoek zelf blijft even groot.',w:'verleng'},
+  {h:'Hoeken in een figuur',txt:'Een driehoek heeft 3 hoeken. Een vierhoek heeft 4 hoeken.\nTik op een letter en kijk.',w:'fig'},
+  {h:'Twee hoeken samen',txt:'Soms is één hoek verdeeld in ∠E₁ en ∠E₂.\nTel de twee getallen op: ∠E₁ + ∠E₂ = ∠E.\nSchuif en kijk.',w:'som'}]}
+];
+const NQ=LV.reduce((a,l)=>a+(l.n||5),0);
+/* snelle toets: 10 vragen door elkaar uit alle onderdelen */
+const TPLAN=[[0,'rd'],[0,'cls1'],[1,'ms'],[1,'leg'],[1,'stp1'],[2,'sch'],[2,'nm'],[2,'kz'],[3,'tri'],[3,'som2']];
+const TOETS=()=>build(TPLAN,e=>{const q=M[e[1]]();if(q)q.part=e[0];return q});
+/* ---------- opdrachten uit het boek: alleen stappen ---------- */
 const BOOK=[
- {id:'20',page:24,nr:'20',title:'Hoeken aflezen op de kompasroos',about:'Je ziet drie kompasrozen. Bij elke kompasroos staat een hoek: ∠P, ∠Q en ∠R. Je kijkt of de hoek scherp, recht of stomp is. En je leest af welk getal bij het rechter been staat.',
-  steps:['Pak je boek. Sla open bladzijde 24. Zoek opdracht 20.','Kijk naar kompasroos 1. Een lijn wijst naar boven. Dat is 0°. De andere lijn is het rechter been.','a. Is het rechter been bij een getal kleiner dan 90°? Dan is de hoek scherp. Is het getal groter dan 90°? Dan is de hoek stomp. Schrijf het op.','b. Kijk waar het rechter been het getal raakt. Schrijf dat getal op.','c en d. Doe hetzelfde bij kompasroos 2 (∠Q) en kompasroos 3 (∠R).'],
-  w:[{t:'roos',items:[{n:'P',d:50},{n:'Q',d:130},{n:'R',d:70}]}],
-  qs:[Q('a','Is ∠P een rechte, scherpe of stompe hoek?',['Een scherpe hoek','Een rechte hoek','Een stompe hoek'],'Het rechter been wijst naar ongeveer 50°. Dat is kleiner dan 90°. Dus een scherpe hoek.',FROOS(50,'P')),
-   Q('b','Welk getal staat bij het rechter been van ∠P?',['ongeveer 50°','ongeveer 130°','ongeveer 310°'],'Het been wijst naar ongeveer 50°. Een paar graden meer of minder is ook goed, want meten is nooit helemaal precies.',FROOS(50,'P')),
-   Q('c','∠Q is een ... hoek.',['stompe','scherpe','rechte'],'Het rechter been van ∠Q wijst naar ongeveer 130°. Dat is groter dan 90°. Dus een stompe hoek.',FROOS(130,'Q')),
-   Q('c','Welk getal staat bij het rechter been van ∠Q?',['ongeveer 130°','ongeveer 50°','ongeveer 230°'],'Je telt met de klok mee vanaf 0°. Dan kom je bij ongeveer 130°.',FROOS(130,'Q')),
-   Q('d','∠R is een ... hoek.',['scherpe','stompe','rechte'],'Het rechter been van ∠R wijst naar ongeveer 70°. Dat is kleiner dan 90°. Dus een scherpe hoek.',FROOS(70,'R')),
-   Q('d','Welk getal staat bij het rechter been van ∠R?',['ongeveer 70°','ongeveer 110°','ongeveer 290°'],'Je telt met de klok mee vanaf 0°. Dan kom je bij ongeveer 70°.',FROOS(70,'R'))]},
- {id:'21',page:25,nr:'21',title:'Hoek B meten',about:'Je meet ∠B met je kompasroos. Eerst kijk je of de hoek scherp, recht of stomp is. Dan meet je. Daarna kijk je of het getal klopt met je eerste antwoord.',
-  steps:['Pak je boek. Sla open bladzijde 25. Zoek opdracht 21.','a. Kijk naar ∠B. Is de hoek recht, scherp of stomp? Schrijf het op.','b. Leg het midden van je kompasroos precies op hoekpunt B.','Leg de lijn van 0° (noord) goed neer op één been. Kies het been zo, dat je met de klok mee naar het andere been kunt meten.','c. Lees bij het andere been het aantal graden af. Schrijf het getal op.','d. Klopt het getal met je antwoord bij a? Scherp is kleiner dan 90°. Stomp is groter dan 90°.'],
-  w:[{t:'stap',items:[{n:'B',b1:270,d:65}]}],
-  qs:[Q('a','Is ∠B een rechte, scherpe of stompe hoek?',['Een scherpe hoek','Een rechte hoek','Een stompe hoek'],'∠B is kleiner dan een rechte hoek. Dus een scherpe hoek.',FANG(270,65,'B')),
-   Q('b','Op welk been leg je de lijn van 0° (noord)?',['Op het been dat naar links loopt','Op het been dat schuin omhoog loopt'],'Je meet met de klok mee. Van het been naar links draai je met de klok mee omhoog naar het andere been. Dus 0° ligt op het been naar links.',FANG(270,65,'B')),
-   Q('c','Hoeveel graden is ∠B?',['ongeveer 65°','ongeveer 115°','ongeveer 295°'],'Je leest ongeveer 65° af. Leg je de 0° op het verkeerde been, dan lees je 295° af. Dat is niet de hoek.',FANG(270,65,'B')),
-   Q('d','Bij a zei je: ∠B is scherp. Bij c lees je 65° af. Klopt dat?',['Ja, 65° is kleiner dan 90°','Nee, 65° is groter dan 90°'],'65° is kleiner dan 90°. Dat is een scherpe hoek. Het klopt dus.',FANG(270,65,'B'))]},
- {id:'22',page:25,nr:'22',title:'Drie hoeken meten',about:'Je ziet drie hoeken: ∠A, ∠B en ∠C. Je meet ze alle drie met je kompasroos en schrijft het aantal graden op de stippellijn.',
-  steps:['Pak je boek. Sla open bladzijde 25. Zoek opdracht 22.','Begin met ∠A. Kijk eerst: is de hoek scherp, recht of stomp?','Leg het midden van je kompasroos op het hoekpunt. Leg de lijn van 0° op één been. Meet met de klok mee.','Lees het getal af. Schrijf het op de stippellijn: ∠A is ... °','Doe hetzelfde bij ∠B en ∠C.'],
-  w:[{t:'stap',items:[{n:'A',b1:50,d:40},{n:'B',b1:0,d:90},{n:'C',b1:343,d:75}]}],
-  qs:[Q('∠A','Hoeveel graden is ∠A?',['ongeveer 40°','ongeveer 140°','ongeveer 320°'],'∠A is een scherpe hoek van ongeveer 40°.',FANG(50,40,'A')),
-   Q('∠B','∠B is een ... hoek. Hoeveel graden is hij?',['Een rechte hoek van 90°','Een scherpe hoek van 45°','Een stompe hoek van 135°'],'∠B heeft een vierkantje. Het is een rechte hoek van 90°.',FANG(0,90,'B')),
-   Q('∠C','Hoeveel graden is ∠C?',['ongeveer 75°','ongeveer 105°','ongeveer 285°'],'∠C is een scherpe hoek van ongeveer 75°.',FANG(343,75,'C')),
-   Q('a–c','Welke van de drie hoeken is de grootste?',['∠B','∠A','∠C'],'∠A is ongeveer 40°, ∠C is ongeveer 75° en ∠B is 90°. ∠B is de grootste.')]},
- {id:'23',page:25,nr:'23',title:'De benen verlengen en een driehoek meten',about:'Eerst leg je uit waarom je de benen verlengt. Daarna meet je de drie hoeken van driehoek ABC. Je maakt eerst de benen langer.',
-  steps:['Pak je boek. Sla open bladzijde 25. Zoek opdracht 23.','a. Zijn de benen te kort, dan komen ze niet bij de getallen van de kompasroos. Daarom verleng je de benen.','b. Verleng de benen van ∠A, ∠B en ∠C met je liniaal.','Meet elke hoek met de 4 stappen: kijken, midden op het hoekpunt, 0° op één been, aflezen.','Schrijf het aantal graden in de hoek.'],
-  w:[{t:'verleng',H:{b1:40,d:50}},{t:'stap',items:[{n:'A',b1:40,d:50},{n:'B',b1:270,d:50},{n:'C',b1:140,d:80}]}],
-  qs:[Q('a','Waarom is het handig om de benen te verlengen?',['Dan kun je het getal op de kompasroos zien','Dan wordt de hoek groter','Dan wordt de hoek kleiner'],'Met korte benen kom je niet bij de getallen. Met langere benen zie je het getal. De hoek zelf verandert niet.',FPOLY(triPts(50,50,80),'ABC')),
-   Q('b','Hoeveel graden is ∠A?',['ongeveer 50°','ongeveer 130°','ongeveer 80°'],'∠A is een scherpe hoek van ongeveer 50°.',FPOLY(triPts(50,50,80),'ABC')),
-   Q('b','Hoeveel graden is ∠C?',['ongeveer 80°','ongeveer 100°','ongeveer 50°'],'∠C is een scherpe hoek van ongeveer 80°.',FPOLY(triPts(50,50,80),'ABC')),
-   Q('b','Welke twee hoeken zijn even groot?',['∠A en ∠B','∠B en ∠C','∠A en ∠C'],'∠A en ∠B zijn allebei ongeveer 50°.',FPOLY(triPts(50,50,80),'ABC'))]},
- {id:'24',page:25,nr:'24',title:'Een vierhoek meten',about:'Je kijkt eerst of elke hoek van vierhoek ABCD scherp, recht of stomp is. Daarna meet je elke hoek.',
-  steps:['Pak je boek. Sla open bladzijde 25. Zoek opdracht 24.','a. Kijk naar elke hoek: ∠A, ∠B, ∠C en ∠D. Is de hoek scherp, recht of stomp? Schrijf het op.','b. Meet elke hoek met de 4 stappen. Maak de benen eventueel langer.','Schrijf het aantal graden in de hoek.'],
-  w:[{t:'fig'}],
-  qs:[Q('a','∠A is een ... hoek.',['scherpe','stompe','rechte'],'∠A is kleiner dan 90°. Dus scherp.',FPOLY(QUAD,'ABCD')),
-   Q('a','∠B is een ... hoek.',['stompe','scherpe','rechte'],'∠B is groter dan 90°. Dus stomp.',FPOLY(QUAD,'ABCD')),
-   Q('a','∠C is een ... hoek.',['scherpe','stompe','rechte'],'∠C is kleiner dan 90°. Dus scherp.',FPOLY(QUAD,'ABCD')),
-   Q('a','∠D is een ... hoek.',['rechte','scherpe','stompe'],'Bij ∠D past precies een rechte hoek. Dus recht (90°).',FPOLY(QUAD,'ABCD')),
-   Q('b','Hoeveel graden is ∠B ongeveer?',['ongeveer 145°','ongeveer 35°','ongeveer 215°'],'∠B is een stompe hoek van ongeveer 145°.',FPOLY(QUAD,'ABCD')),
-   Q('b','Hoeveel graden is ∠D?',['90°','ongeveer 50°','ongeveer 130°'],'∠D is een rechte hoek. Dat is 90°.',FPOLY(QUAD,'ABCD'))]},
- {id:'25',page:26,nr:'25',title:'Hoeken in bouwkranen',about:'Op de foto’s staan twee bouwkranen. Bij de rode boogjes staan letters: A, B, C, D en E. Jij meet elke hoek en schrijft de grootte op.',
-  steps:['Pak je boek. Sla open bladzijde 26. Zoek opdracht 25.','Zoek de letters bij de rode boogjes: A, B, C, D en E. Elke letter is een hoek.','Kies één hoek. Leg het midden van je kompasroos op het hoekpunt. Dat is de plek waar de twee delen van de kraan elkaar raken.','Leg de lijn van 0° op één been. Meet met de klok mee naar het andere been.','Lees het getal af. Schrijf op: ∠A = ...°','Doe hetzelfde bij de andere hoeken.'],
-  w:[{t:'stap'}],
-  qs:[Q('1','Waar leg je het midden van je kompasroos?',['Op het hoekpunt, bij de letter van de hoek','Op het midden van de kraan','Naast de kraan'],'Het midden van de kompasroos ligt altijd precies op het hoekpunt.'),
-   Q('2','Hoeveel hoeken meet je bij opdracht 25?',['Alle hoeken met een letter: A, B, C, D en E','Alleen ∠A','Alleen de hoeken van de eerste kraan'],'Bij elk rood boogje staat een letter. Je meet alle hoeken met een letter.'),
-   Q('3','Je leest 120° af. Is de hoek scherp, recht of stomp?',['Stomp','Scherp','Recht'],'120° is groter dan 90°. Dus een stompe hoek.'),
-   Q('4','Wat schrijf je op?',['De letter van de hoek en het aantal graden, bijvoorbeeld ∠A = 40°','Alleen de letter','Alleen een getal zonder °'],'Je schrijft de letter van de hoek en het aantal graden. Bijvoorbeeld ∠A = 40°.')]},
- {id:'26',page:26,nr:'26',title:'Hoek E is verdeeld in twee hoeken',about:'Hoek E is verdeeld in ∠E₁ en ∠E₂. Je kijkt of elke hoek scherp, recht of stomp is. Je meet ze. Daarna reken je uit hoe groot ze samen zijn.',
-  steps:['Pak je boek. Sla open bladzijde 26. Zoek opdracht 26.','a. Kijk naar ∠E₁ en ∠E₂. Is elke hoek recht, scherp of stomp? Schrijf het op.','b. Meet ∠E₁ met de 4 stappen. Schrijf het getal op. Meet daarna ∠E₂.','c. Tel de twee getallen bij elkaar op. Zo weet je hoe groot ∠E₁ en ∠E₂ samen zijn.'],
-  w:[{t:'som'}],
-  qs:[Q('c','Hoe reken je uit hoe groot ∠E₁ en ∠E₂ samen zijn?',['Je telt de twee getallen bij elkaar op','Je trekt de twee getallen van elkaar af','Je meet nog een keer'],'∠E₁ en ∠E₂ samen zijn samen ∠E. Je telt de twee getallen op.'),
-   Q('c','Stel: ∠E₁ is 40° en ∠E₂ is 50°. Hoe groot zijn ze samen?',['90°','10°','45°'],'40 + 50 = 90. Samen is het 90°.'),
-   Q('a','Stel: ∠E₁ is 70°. Is die hoek scherp, recht of stomp?',['Scherp','Recht','Stomp'],'70° is kleiner dan 90°. Dus scherp.')]},
- {id:'L27',page:26,nr:'L27',title:'Vierhoek KLMN meten (leerdoelen)',about:'Hier laat je zien dat je het kunt. Je meet de vier hoeken van vierhoek KLMN en schrijft de grootte op.',
-  steps:['Pak je boek. Sla open bladzijde 26. Zoek opdracht L27.','Meet de vier hoeken: ∠K, ∠L, ∠M en ∠N. Eén voor één.','Doe voor elke hoek de 4 stappen: kijken, midden op het hoekpunt, 0° op één been, aflezen.','Zijn de benen te kort? Maak ze langer met je liniaal.','Schrijf de getallen op de stippellijn.','Kijk of je het goed hebt. Nog niet goed? Dan ga je naar opdracht E8.'],
-  w:[{t:'stap',items:[{n:'K',b1:3,d:85},{n:'L',b1:270,d:50},{n:'M',b1:138,d:85},{n:'N',b1:45,d:140}]}],
-  qs:[Q('1','Hoeveel scherpe hoeken heeft vierhoek KLMN?',['3','1','2'],'∠K, ∠L en ∠M zijn kleiner dan 90°. Alleen ∠N is stomp.',FPOLY(KLMN,'KLMN')),
-   Q('2','Welke hoek van vierhoek KLMN is stomp?',['∠N','∠K','∠L','∠M'],'∠N is groter dan 90° (ongeveer 140°). Dat is een stompe hoek.',FPOLY(KLMN,'KLMN')),
-   Q('3','Hoeveel graden is ∠L ongeveer?',['ongeveer 50°','ongeveer 130°','ongeveer 310°'],'∠L is een scherpe hoek van ongeveer 50°.',FPOLY(KLMN,'KLMN')),
-   Q('4','Hoeveel graden is ∠N ongeveer?',['ongeveer 140°','ongeveer 40°','ongeveer 220°'],'∠N is een stompe hoek van ongeveer 140°.',FPOLY(KLMN,'KLMN'))]},
- {id:'O22',page:27,nr:'O22',title:'Hoeken meten (extra hulp)',about:'Dit is een extra opdracht met hulp. Bij ∠M staat de kompasroos al op de hoek. Je leest het getal af. Daarna meet je ∠N en ∠O zelf.',
-  steps:['Pak je boek. Sla open bladzijde 27. Zoek opdracht O22.','a. Bij ∠M staat de kompasroos al op de hoek. Lees het getal af bij het rechter been. Schrijf het op.','b. Meet ∠N met de 4 stappen: kijken, midden op het hoekpunt, 0° op één been, aflezen.','Meet daarna ∠O op dezelfde manier.','Maak de benen eventueel langer. Schrijf de getallen op de stippellijn.'],
-  w:[{t:'roos',items:[{n:'M',d:60}]},{t:'stap',items:[{n:'N',b1:13,d:110},{n:'O',b1:133,d:40}]}],
-  qs:[Q('a','Hoeveel graden is ∠M?',['ongeveer 60°','ongeveer 120°','ongeveer 300°'],'Het rechter been van ∠M wijst naar ongeveer 60°.',FROOS(60,'M')),
-   Q('b','∠N is een ... hoek.',['stompe','scherpe','rechte'],'∠N is ongeveer 110°. Dat is groter dan 90°. Dus stomp.',FANG(13,110,'N')),
-   Q('b','Hoeveel graden is ∠N?',['ongeveer 110°','ongeveer 70°','ongeveer 250°'],'∠N is een stompe hoek van ongeveer 110°.',FANG(13,110,'N')),
-   Q('b','Hoeveel graden is ∠O?',['ongeveer 40°','ongeveer 140°','ongeveer 320°'],'∠O is een scherpe hoek van ongeveer 40°.',FANG(133,40,'O'))]},
- {id:'O24',page:27,nr:'O24',title:'De hoeken van een huis (extra hulp)',about:'Op de tekening van een huis staan zes hoeken: ∠A tot en met ∠F. Jij vult de tabel in. Eerst recht, scherp of stomp. Daarna de grootte van de hoek.',
-  steps:['Pak je boek. Sla open bladzijde 27. Zoek opdracht O24.','a. Controleer met je geodriehoek: is elke hoek recht, scherp of stomp? Vul het antwoord in de tabel in.','b. Meet elke hoek met je kompasroos. Gebruik de 4 stappen.','Maak de benen eventueel langer.','Vul de grootte van de hoek in de tabel in.','Doe het zo bij ∠A, ∠B, ∠C, ∠D, ∠E en ∠F.'],
-  w:[{t:'stap'}],
-  qs:[Q('a','Waarmee controleer je bij a of een hoek recht, scherp of stomp is?',['Met je geodriehoek','Met je passer','Met je schaar'],'Bij a gebruik je je geodriehoek. De rechte hoek van je geodriehoek helpt je.'),
-   Q('b','Waarmee meet je bij b de grootte van de hoek?',['Met je kompasroos','Met je liniaal','Met je geodriehoek'],'Bij b meet je de grootte met je kompasroos.'),
-   Q('b','Wat doe je als de benen te kort zijn?',['Ik maak de benen langer','Ik gok het getal','Ik sla de hoek over'],'Maak de benen eventueel langer. Dan kun je het getal aflezen.'),
-   Q('tabel','Hoeveel hoeken moet je invullen in de tabel?',['6','4','3'],'Er staan zes hoeken in de tabel: ∠A, ∠B, ∠C, ∠D, ∠E en ∠F.')]}
+ {id:'20',page:24,nr:'20',title:'Hoeken aflezen op de kompasroos',steps:[
+  'a: Kijk naar ∠P. Is de hoek scherp, recht of stomp? Schrijf het op.',
+  'b: Kijk bij welk getal het rechter been staat. Schrijf dat getal op.',
+  'c en d: Doe hetzelfde bij ∠Q en ∠R.']},
+ {id:'21',page:25,nr:'21',title:'Hoek B meten',steps:[
+  'a: Kijk naar ∠B. Is de hoek recht, scherp of stomp? Schrijf het op.',
+  'b: Leg het midden van je kompasroos op hoekpunt B.',
+  'Leg de lijn van 0° op één been. Je meet met de klok mee naar het andere been.',
+  'c: Lees het getal af. Schrijf het op.',
+  'd: Past het getal bij je antwoord van a? Scherp is kleiner dan 90°. Stomp is groter dan 90°. Schrijf ja of nee.']},
+ {id:'22',page:25,nr:'22',title:'Drie hoeken meten',steps:[
+  'Begin bij ∠A. Is de hoek scherp, recht of stomp? Schrijf het op.',
+  'Leg het midden van je kompasroos op het hoekpunt.',
+  'Leg de lijn van 0° op één been. Meet met de klok mee.',
+  'Lees het getal af. Schrijf het op de stippellijn: ∠A is …°',
+  'Doe hetzelfde bij ∠B en ∠C.']},
+ {id:'23',page:25,nr:'23',title:'De benen verlengen',steps:[
+  'a: Zijn de benen te kort? Dan komen ze niet bij de getallen. Daarom verleng je ze.',
+  'b: Pak je liniaal. Verleng de benen van ∠A, ∠B en ∠C.',
+  'Meet ∠A: midden op het hoekpunt, 0° op één been, met de klok mee aflezen.',
+  'Schrijf het aantal graden op. Meet ook ∠B en ∠C.']},
+ {id:'24',page:25,nr:'24',title:'Een vierhoek meten',steps:[
+  'a: Kijk naar ∠A, ∠B, ∠C en ∠D. Is elke hoek scherp, recht of stomp? Schrijf het op.',
+  'b: Verleng de benen met je liniaal als ze te kort zijn.',
+  'Meet ∠A: midden op het hoekpunt, 0° op één been, met de klok mee aflezen.',
+  'Schrijf het aantal graden op. Meet ook ∠B, ∠C en ∠D.']},
+ {id:'25',page:26,nr:'25',title:'Hoeken in bouwkranen',steps:[
+  'Zoek de letters bij de rode boogjes: A, B, C, D en E.',
+  'Leg het midden van je kompasroos op het hoekpunt van ∠A.',
+  'Leg de lijn van 0° op één been. Meet met de klok mee.',
+  'Schrijf op: ∠A = …°',
+  'Doe hetzelfde bij ∠B, ∠C, ∠D en ∠E.']},
+ {id:'26',page:26,nr:'26',title:'Hoek E is verdeeld',steps:[
+  'a: Kijk naar ∠E₁ en ∠E₂. Is elke hoek recht, scherp of stomp? Schrijf het op.',
+  'b: Meet ∠E₁ met de 4 stappen. Schrijf het getal op.',
+  'Meet ook ∠E₂. Schrijf het getal op.',
+  'c: Tel de twee getallen op. Schrijf op hoe groot ∠E₁ en ∠E₂ samen zijn.']},
+ {id:'L27',page:26,nr:'L27',title:'Vierhoek KLMN meten',steps:[
+  'Meet ∠K: midden op het hoekpunt, 0° op één been, met de klok mee aflezen.',
+  'Zijn de benen te kort? Verleng ze met je liniaal.',
+  'Schrijf het getal op de stippellijn.',
+  'Meet ook ∠L, ∠M en ∠N.']},
+ {id:'O22',page:27,nr:'O22',title:'Hoeken meten (extra hulp)',steps:[
+  'a: Bij ∠M staat de kompasroos al op de hoek. Lees het getal af bij het rechter been. Schrijf het op.',
+  'b: Meet ∠N met de 4 stappen. Schrijf het getal op.',
+  'Meet ∠O op dezelfde manier. Verleng de benen als dat nodig is.']},
+ {id:'O24',page:27,nr:'O24',title:'De hoeken van een huis (extra hulp)',steps:[
+  'a: Pak je geodriehoek. Is ∠A recht, scherp of stomp? Vul het in de tabel in.',
+  'Doe hetzelfde bij ∠B, ∠C, ∠D, ∠E en ∠F.',
+  'b: Meet ∠A met je kompasroos. Verleng de benen als ze te kort zijn.',
+  'Vul de grootte van ∠A in de tabel in.',
+  'Meet ook ∠B tot en met ∠F en vul de tabel in.']}
 ];
 
 const mascot=()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="#ffc533" stroke="#c98f00" stroke-width="4"/><path d="M28 72 L28 30 L72 72 Z" fill="#fff" stroke="#17324d" stroke-width="4" stroke-linejoin="round"/><path d="M28 60 L40 60 L40 72" fill="none" stroke="#d6336c" stroke-width="3.5"/></svg>';
 function totalPts(){return Object.values(DB.lv).reduce((a,v)=>a+(v.pts||0),0)}
-function topbar(show){$('#bar').hidden=!show;if(!show)return;$('#av').innerHTML=mascot();$('#nm').textContent=DB.name;$('#pt').textContent=S.mode==='quiz'?('Punten: '+S.pts+' van 10'):(totalPts()+' van '+NQ+' punten');$('#ts').textContent=DB.sound?'\u{1F3B5} Geluid aan':'\u{1F515} Geluid uit'}
+function topbar(show){$('#bar').hidden=!show;if(!show)return;$('#av').innerHTML=mascot();$('#nm').textContent=DB.name;
+  $('#pt').textContent=S.mode==='toets'?('Toets: '+S.pts+' van '+S.qs.length):S.mode==='quiz'?('Punten: '+S.pts+' van '+S.qs.length):(totalPts()+' van '+NQ+' punten');
+  $('#ts').textContent=DB.sound?'\u{1F3B5} Geluid aan':'\u{1F515} Geluid uit'}
 function renderVP(){const box=$('#vp');loadVoices();const cur=bestVoice();let h='<h2>Kies een stem</h2>';
   if(!VOICES.length)h+='<div class="say">Op dit apparaat is geen Nederlandse stem gevonden. Daarom wordt er niet voorgelezen. Installeer een Nederlandse stem in de instellingen van je apparaat (bij Spraak), of gebruik Microsoft Edge of Google Chrome.</div>';
   else{h+='<p class="note">Tik op een stem om hem te horen. De stem die je kiest blijft bewaard.</p><div class="opts">'+VOICES.slice().sort((a,b)=>vScore(b)-vScore(a)).map((v,i)=>'<button class="opt'+(cur&&cur.name===v.name?' ok':'')+'" type="button" data-vn="'+esc(v.name)+'">'+esc(v.name)+' ('+esc(v.lang)+')'+(i===0?' · aanbevolen':'')+'</button>').join('')+'</div><p><b>Snelheid</b></p><div class="chips">'+[['Langzaam',.75],['Normaal',.9],['Snel',1.05]].map(x=>'<button type="button" class="c2'+((DB.rate||.9)===x[1]?' sel':'')+'" data-rt="'+x[1]+'">'+x[0]+'</button>').join('')+'</div>'}
   h+='<div class="row"><button class="btn alt small" id="vc" type="button">Sluiten</button></div>';box.innerHTML=h;
-  $$('[data-vn]',box).forEach(b=>b.onclick=()=>{DB.voiceName=b.dataset.vn;save();speak('Hallo '+DB.name+'. Een hoek meet je met de kompasroos.');renderVP()});
+  $$('[data-vn]',box).forEach(b=>b.onclick=()=>{DB.voiceName=b.dataset.vn;save();speak('Hallo '+DB.name+'. Dit is de stem die je kiest.');renderVP()});
   $$('[data-rt]',box).forEach(b=>b.onclick=()=>{DB.rate=+b.dataset.rt;save();speak('Dit is de snelheid die je kiest.');renderVP()});
   $('#vc').onclick=()=>{box.hidden=true}}
 $('#tp').onclick=()=>{const v=$('#vp');v.hidden=!v.hidden;if(!v.hidden)renderVP()};
 $('#ts').onclick=()=>{DB.sound=!DB.sound;save();topbar(true)};
 function setProg(p){const g=$('#pg');g.hidden=p==null;if(p!=null)$('i',g).style.width=p+'%'}
 const fmtT=t=>Math.floor(t/60)+':'+String(t%60).padStart(2,'0')+' min';
-const starsOf=p=>p>=9?3:p>=7?2:p>=5?1:0;
+const starsOf=(p,n)=>{const r=p/(n||5);return r>=.9?3:r>=.7?2:r>=.5?1:0};
 const starTxt=n=>'★'.repeat(n)+'☆'.repeat(3-n);
+
 
 /* ---------- onderkant: Menu, Vorige, Volgende ---------- */
 function navHtml(){return '<div class="nav"><button class="btn alt" id="bMenu" type="button">Menu</button><button class="btn alt" id="bPrev" type="button">← Vorige</button><button class="btn" id="bMain" type="button">Volgende →</button></div>'}
 function setMain(label,fn,off,good){const x=$('#bMain');x.textContent=label;x.disabled=!!off;x.className='btn'+(good?' good':'');x.onclick=off?null:fn}
 function wireNav(prev,ask){const m=$('#bMenu'),p=$('#bPrev');p.disabled=!prev;p.onclick=prev?()=>{sfx('tap');prev()}:null;
   m.onclick=()=>{if(ask&&ask()&&!m.dataset.arm){m.dataset.arm='1';m.textContent='Zeker weten?';setTimeout(()=>{if(m.isConnected){delete m.dataset.arm;m.textContent='Menu'}},3500);return}menu()}}
-const askMenu=()=>S.mode==='quiz'&&S.log.length>0&&!S.fin;
-function leaveQ(){if(S.mode==='quiz'&&S.locked&&S.snap&&$('#ans')){S.snap[S.i]=stage.innerHTML}}
-function qNext(){leaveQ();S.i<S.qs.length-1?(S.i++,showQ()):finish()}
-function qPrev(){leaveQ();if(S.i>0){S.i--;showQ()}else explain(S.lv,LV[S.lv].steps.length-1)}
+const inQ=()=>S.mode==='quiz'||S.mode==='toets';
+const askMenu=()=>inQ()&&S.log.length>0&&!S.fin;
+function leaveQ(){if(inQ()&&S.locked&&S.snap&&$('#ans')){S.snap[S.i]=stage.innerHTML}}
+function qNext(){leaveQ();S.i<S.qs.length-1?(S.i++,showQ()):(S.mode==='toets'?toetsDone():finish())}
+function qPrev(){leaveQ();if(S.i>0){S.i--;showQ()}else if(S.mode==='toets')toetsIntro();else explain(S.lv,LV[S.lv].steps.length-1)}
+const KNOP_OK=['Goed zo!','Super!','Knap gedaan!','Helemaal goed!'];
 /* ---------- schermen ---------- */
 function nameScreen(){topbar(false);setProg(null);
-  stage.innerHTML='<div class="card"><h1>5.4 Hoeken meten</h1><p>In deze les leer je hoe je een hoek meet met de kompasroos. Je speelt met knoppen en maakt 50 vragen. Daarna leer je stap voor stap hoe je de opdrachten uit je boek maakt.</p><label for="nmi"><b>Schrijf hier je naam</b></label><div class="row"><input class="nm" id="nmi" maxlength="30" autocomplete="off"></div><div class="row"><button class="btn" id="go" type="button">Beginnen</button></div><p class="note" id="er" hidden>Schrijf eerst je naam.</p></div>';
+  stage.innerHTML='<div class="card"><h1>'+META.title+'</h1><p>'+META.intro+'</p><label for="nmi"><b>Schrijf hier je naam</b></label><div class="row"><input class="nm" id="nmi" maxlength="30" autocomplete="off"></div><div class="row"><button class="btn" id="go" type="button">Beginnen</button></div><p class="note" id="er" hidden>Schrijf eerst je naam.</p></div>';
   const go=()=>{const v=$('#nmi').value.trim();if(v.length<2){$('#er').hidden=false;return}DB.name=v;save();menu()};
   $('#go').onclick=go;$('#nmi').onkeydown=e=>{if(e.key==='Enter')go()}}
 function menu(){S.lv=null;S.mode='';S.keep=false;S.fin=false;stopSpeech();topbar(true);setProg(null);window.scrollTo(0,0);
-  const done=LV.every((_,i)=>DB.lv[i]&&DB.lv[i].done);
-  let h='<div class="card"><h1>Hoi '+esc(DB.name)+'!</h1><p>Kies een onderdeel. Je begint met de uitleg en daarna maak je 10 vragen.</p>'+(done?'<div class="fb ok">Je hebt alle onderdelen gedaan! Totaal: '+totalPts()+' van '+NQ+' punten.</div>':'')+'<div class="lv">';
-  LV.forEach((l,i)=>{const r=DB.lv[i];h+='<button class="lvb'+(r&&r.done?' done':'')+'" data-i="'+i+'" type="button"><span class="lvn">'+(i+1)+'</span><span><b>'+l.t+'</b><small>'+l.sub+(r&&r.done?' · '+r.pts+' van 10'+(r.time?' · '+fmtT(r.time):''):'')+'</small></span><span class="st">'+(r&&r.done?starTxt(starsOf(r.pts)):'')+'</span></button>'});
+  const done=LV.every((_,i)=>DB.lv[i]&&DB.lv[i].done),T=DB.toets;
+  let h='<div class="card"><h1>Hoi '+esc(DB.name)+'!</h1><p>Kies een onderdeel. Eerst speel je met de uitleg. Dan maak je vragen.</p>'+(done?'<div class="fb ok">Alle onderdelen klaar! '+totalPts()+' van '+NQ+' punten.</div>':'')+'<div class="lv">';
+  LV.forEach((l,i)=>{const r=DB.lv[i];h+='<button class="lvb'+(r&&r.done?' done':'')+'" data-i="'+i+'" type="button"><span class="lvn">'+(i+1)+'</span><span><b>'+l.t+'</b><small>'+l.sub+'</small></span><span class="st">'+(r&&r.done?starTxt(starsOf(r.pts,l.n||5))+'<small>'+r.pts+' van '+(l.n||5)+'</small>':'')+'</span></button>'});
   const nb=Object.keys(DB.book).length;
-  h+='<button class="lvb bk" id="bk" type="button"><span class="lvn">\u{1F4D6}</span><span><b>Extra: opdrachten uit je boek</b><small>Stap voor stap uitleg bij elke opdracht van 5.4 · '+nb+' van '+BOOK.length+' bekeken</small></span></button></div>';
+  h+='<button class="lvb bk" id="bk" type="button"><span class="lvn">\u{1F4D6}</span><span><b>Opdrachten uit je boek</b><small>Stap voor stap · '+nb+' van '+BOOK.length+' klaar</small></span></button>';
+  h+='<button class="lvb tt'+(T?' done':'')+'" id="tt" type="button"><span class="lvn">\u{26A1}</span><span><b>Snelle toets</b><small>Hoeveel procent weet jij?'+(T?' · laatste: '+T.last+'%':'')+'</small></span><span class="st">'+(T?T.best+'%':'')+'</span></button></div>';
   h+='<div class="row"><button class="btn alt small" id="rs" type="button">Opnieuw beginnen</button><span class="note" id="rsn"></span></div></div>';
-  stage.innerHTML=h;$$('.lvb[data-i]').forEach(b=>b.onclick=()=>explain(+b.dataset.i,0));$('#bk').onclick=bookMenu;
-  let armed=0;$('#rs').onclick=function(){if(!armed){armed=1;$('#rsn').textContent='Zeker weten? Tik nog een keer. Je punten en je naam worden gewist.';setTimeout(()=>{armed=0;$('#rsn').textContent=''},4000)}else{DB={name:'',lv:{},book:{},voice:DB.voice,sound:DB.sound,rate:DB.rate,voiceName:DB.voiceName};save();nameScreen()}}}
+  stage.innerHTML=h;$$('.lvb[data-i]').forEach(b=>b.onclick=()=>explain(+b.dataset.i,0));$('#bk').onclick=bookMenu;$('#tt').onclick=toetsIntro;
+  let armed=0;$('#rs').onclick=function(){if(!armed){armed=1;$('#rsn').textContent='Zeker weten? Tik nog een keer. Je punten en je naam worden gewist.';setTimeout(()=>{armed=0;$('#rsn').textContent=''},4000)}else{DB={name:'',lv:{},book:{},toets:null,voice:DB.voice,sound:DB.sound,rate:DB.rate,voiceName:DB.voiceName};save();nameScreen()}}}
 function explain(i,k){S.lv=i;S.mode='';stopSpeech();topbar(true);setProg(null);const L=LV[i],st=L.steps[k];
   const paras=st.txt.split('\n').map(p=>'<div class="say">'+p+'</div>').join('');
-  stage.innerHTML='<div class="card"><div class="qhead"><span>Uitleg · onderdeel '+(i+1)+': '+L.t+'</span><span>'+(k+1)+' van '+L.steps.length+'</span></div><h2>'+st.h+'</h2>'+paras+(st.fig?'<div>'+st.fig()+'</div>':'')+(st.w?'<div class="wd" id="wd"></div>':'')+'<div class="row"><span id="lis"></span></div>'+navHtml()+'</div>';
+  stage.innerHTML='<div class="card"><div class="qhead"><span>Onderdeel '+(i+1)+': '+L.t+'</span><span>'+(k+1)+' van '+L.steps.length+'</span></div><h2>'+st.h+'</h2>'+paras+(st.fig?'<div>'+st.fig()+'</div>':'')+(st.w?'<div class="wd" id="wd"></div>':'')+'<div class="row"><span id="lis"></span></div>'+navHtml()+'</div>';
   if(st.w)WID[st.w]($('#wd'),st.o);
   $('#lis').appendChild(listenBtn(say(st.h+'. '+st.txt.replace(/\n/g,' '))));
   wireNav(k?()=>explain(i,k-1):null,null);
-  setMain('Volgende →',()=>{if(k<L.steps.length-1)explain(i,k+1);else if(S.keep&&S.lv===i&&!S.fin){showQ()}else startQuiz(i)});
+  setMain(k<L.steps.length-1?'Volgende →':'Naar de vragen →',()=>{if(k<L.steps.length-1)explain(i,k+1);else if(S.keep&&S.lv===i&&!S.fin){showQ()}else startQuiz(i)});
   window.scrollTo(0,0)}
 /* ----- vragen ----- */
-function startQuiz(i){S={lv:i,i:0,tries:0,pts:0,qs:LV[i].gen(),locked:false,log:[],mode:'quiz',t0:0,seq:[],snap:[],keep:true,saved:false,fin:false};showQ()}
+function startQuiz(i){S={lv:i,i:0,tries:0,pts:0,qs:LV[i].gen(),locked:false,log:[],mode:'quiz',t0:0,seq:[],snap:[],keep:true,saved:false,fin:false,one:false};showQ()}
 function progress(){const L=S.qs.length;let h='';for(let i=0;i<L;i++){h+='<i style="display:inline-block;width:20px;height:20px;margin:0 2px;border-radius:50%;border:3px solid '+(i<S.log.length?(S.log[i].pts?'#4aa83a':'#e8883a'):(i===S.i?'#2a6fdb':'#c4dcf2'))+';background:'+(i<S.log.length?(S.log[i].pts?'#7ed36a':'#ffb066'):'#fff')+'"></i>'}return '<div class="center" style="margin:4px 0 10px">'+h+'</div>'}
-function showQ(){stopSpeech();window.scrollTo(0,0);S.mode='quiz';S.fin=false;topbar(true);const L=LV[S.lv],q=S.qs[S.i],n=S.qs.length;setProg(S.i/n*100);
+function showQ(){stopSpeech();window.scrollTo(0,0);S.fin=false;topbar(true);const q=S.qs[S.i],n=S.qs.length,tt=S.mode==='toets';setProg(S.i/n*100);
   const lastLab=S.i===n-1?'Klaar ▶':'Volgende →';
   if(S.snap[S.i]){stage.innerHTML=S.snap[S.i];S.locked=true;$('#lis').innerHTML='';$('#lis').appendChild(listenBtn(q.say||say(q.text)));wireNav(qPrev,askMenu);setMain(lastLab,qNext,false,true);return}
   S.t0=Date.now();S.tries=0;S.locked=false;S.seq=[];
-  let h='<div class="card"><div class="qhead"><span>'+L.t+'</span><span>Vraag '+(S.i+1)+' van '+n+'</span></div>'+progress();
+  let h='<div class="card"><div class="qhead"><span>'+(tt?'⚡ Snelle toets':LV[S.lv].t)+'</span><span>Vraag '+(S.i+1)+' van '+n+'</span></div>'+progress();
   if(q.fig)h+=q.fig;
   h+='<div class="q">'+q.text+'</div><div id="ans">';
-  if(q.type==='mc')h+='<div class="opts'+(q.two?' two':'')+'">'+q.opts.map(o=>'<button class="opt" type="button" data-v="'+esc(o.v)+'">'+o.h+'</button>').join('')+'</div>';
-  else if(q.type==='order'){const cs=shuffle(q.cards.map((c,i)=>i));h+='<div class="opts" id="ord">'+cs.map(i=>'<button class="opt" type="button" data-v="'+i+'">'+q.cards[i].h+'<span class="nb" hidden></span></button>').join('')+'</div>'}
+  if(q.type==='mc')h+='<div class="opts'+(q.two?' two':'')+(q.four?' four':'')+'">'+q.opts.map(o=>'<button class="opt" type="button" data-v="'+esc(o.v)+'">'+o.h+'</button>').join('')+'</div>';
+  else if(q.type==='order'){const cs=shuffle(q.cards.map((c,i)=>i));h+='<div class="opts'+(q.cols?' c3':'')+'" id="ord">'+cs.map(i=>'<button class="opt" type="button" data-v="'+i+'">'+q.cards[i].h+'<span class="nb" hidden></span></button>').join('')+'</div>'}
+  else if(q.type==='custom')h+='<div id="cq"></div>';
   h+='</div><div id="fbk" role="status" aria-live="polite"></div><div class="row"><span id="lis"></span></div>'+navHtml()+'</div>';
   stage.innerHTML=h;$('#lis').appendChild(listenBtn(q.say||say(q.text)));
   wireNav(qPrev,askMenu);setMain(lastLab,qNext,true);
   if(q.type==='mc')$$('.opt').forEach(b=>b.onclick=()=>judge(b.dataset.v===q.ans,b));
+  else if(q.type==='custom')q.mount($('#cq'),(ok,msg)=>judge(ok,null,msg));
   else if(q.type==='order')$$('#ord > button').forEach(b=>b.onclick=()=>{if(S.locked||S.seq.includes(+b.dataset.v))return;sfx('tap');S.seq.push(+b.dataset.v);const nb=$('.nb',b);nb.hidden=false;nb.textContent=S.seq.length;b.classList.add('sel');
-    if(S.seq.length===q.cards.length){const ok=S.seq.every((v,i)=>q.cards[v].r===i);if(ok)judge(true);else{judge(false,null,'Nog niet goed. De volgorde klopt niet. Begin opnieuw.');if(!S.locked){S.seq=[];$$('#ord > button').forEach(x=>{x.classList.remove('sel');$('.nb',x).hidden=true})}}}})}
+    if(S.seq.length===q.cards.length){const ok=S.seq.every((v,i)=>q.cards[v].r===i);if(ok)judge(true);else{judge(false,null,'Nog niet goed. De volgorde klopt niet.'+(S.one?'':' Begin opnieuw.'));if(!S.locked){S.seq=[];$$('#ord > button').forEach(x=>{x.classList.remove('sel');$('.nb',x).hidden=true})}}}})}
 function fb(k,t){$('#fbk').innerHTML='<div class="fb '+k+'">'+t+'</div>'}
 function judge(ok,btn,msg){if(S.locked)return;const q=S.qs[S.i];
-  if(ok){S.locked=true;sfx('ok');const aw=S.tries===0?1:0,sec=Math.round((Date.now()-S.t0)/1000);S.pts+=aw;S.log.push({pts:aw,sec});topbar(true);if(btn)btn.classList.add('ok');fb('ok',pick(['Goed zo!','Super!','Knap gedaan!','Helemaal goed!'])+' '+(aw?'+1 punt':'Geen punt, want het was niet de eerste keer goed.')+' · '+sec+' sec');endQ()}
-  else{S.tries++;sfx('no');if(btn){btn.classList.add('no');btn.disabled=true}
+  if(ok){S.locked=true;sfx('ok');const aw=S.tries===0?1:0,sec=Math.round((Date.now()-S.t0)/1000);S.pts+=aw;S.log.push({pts:aw,sec,part:q.part});topbar(true);if(btn)btn.classList.add('ok');
+    fb('ok',pick(KNOP_OK)+(S.one?'':' '+(aw?'+1 punt':'Geen punt, want het was niet de eerste keer goed.')));endQ()}
+  else{if(S.one)S.tries=2;S.tries++;sfx('no');if(btn){btn.classList.add('no');btn.disabled=true}
     if(S.tries===1)fb('no',msg||'Nog niet goed. Probeer het nog een keer.');
     else if(S.tries===2)$('#fbk').innerHTML='<div class="fb no">'+(msg||'Nog niet goed.')+'</div><div class="fb tip">'+q.tip+'</div>';
-    else{S.locked=true;const sec=Math.round((Date.now()-S.t0)/1000);S.log.push({pts:0,sec});
+    else{S.locked=true;const sec=Math.round((Date.now()-S.t0)/1000);S.log.push({pts:0,sec,part:q.part});
       if(q.type==='mc')$$('.opt').forEach(b=>{if(b.dataset.v===q.ans)b.classList.add('ok')});
       if(q.type==='order'){const o=q.cards.map((c,i)=>i).sort((a,b)=>q.cards[a].r-q.cards[b].r);$$('#ord > button').forEach(b=>{const nb=$('.nb',b);nb.hidden=false;nb.textContent=o.indexOf(+b.dataset.v)+1})}
-      $('#fbk').innerHTML='<div class="fb no">Het goede antwoord is: '+q.show+' · 0 punten · '+sec+' sec</div><div class="fb tip">'+q.tip+'</div>';endQ()}}}
+      if(q.reveal)q.reveal($('#cq'));
+      $('#fbk').innerHTML='<div class="fb no">Het goede antwoord is: '+q.show+'</div>'+(S.one?'':'<div class="fb tip">'+q.tip+'</div>');endQ()}}}
 function endQ(){$$('.opt').forEach(b=>b.disabled=true);setMain(S.i===S.qs.length-1?'Klaar ▶':'Volgende →',qNext,false,true);$('#bMain').focus()}
 function finish(){setProg(100);window.scrollTo(0,0);const i=S.lv,p=S.pts,n=S.qs.length,old=DB.lv[i]||{};
   const tot=S.log.reduce((a,x)=>a+x.sec,0);
   if(!S.saved){S.saved=true;DB.lv[i]={done:true,pts:Math.max(old.pts||0,p),last:p,time:tot,n:(old.n||0)+1};save()}
   S.mode='';S.fin=true;topbar(true);sfx('win');
-  const all=LV.every((_,j)=>DB.lv[j]&&DB.lv[j].done),s=starsOf(p),r=p/n;
-  let h='<div class="card center"><h1>Onderdeel '+(i+1)+' klaar!</h1><div class="stars">'+starTxt(s)+'</div><p class="big">'+p+' van '+n+' meteen goed</p><p>Tijd: '+fmtT(tot)+' · gemiddeld '+Math.round(tot/Math.max(1,S.log.length))+' sec per vraag</p><details style="text-align:left"><summary>Bekijk elke vraag</summary><table class="lg"><tr><th>Vraag</th><th>Punten</th><th>Tijd</th></tr>'+S.log.map((x,j)=>'<tr><td>'+(j+1)+'</td><td>'+x.pts+'</td><td>'+x.sec+' sec</td></tr>').join('')+'</table></details><p>'+(r>=.9?'Fantastisch!':r>=.7?'Heel goed gedaan!':r>=.5?'Goed bezig. Oefen nog een keer voor meer sterren.':'Blijf oefenen, dan wordt het steeds makkelijker.')+'</p>';
-  if(all)h+='<div class="fb ok">Je hebt alle '+LV.length+' onderdelen gedaan! Totaal: '+totalPts()+' van '+NQ+' punten.</div>';
+  const s=starsOf(p,n),r=p/n,all=LV.every((_,j)=>DB.lv[j]&&DB.lv[j].done);
+  let h='<div class="card center"><h1>Onderdeel '+(i+1)+' klaar!</h1><div class="stars">'+starTxt(s)+'</div><p class="big">'+p+' van '+n+' meteen goed</p><p>'+(r>=.9?'Fantastisch!':r>=.7?'Heel goed gedaan!':r>=.5?'Goed bezig. Probeer nog een keer voor meer sterren.':'Blijf oefenen, dan wordt het steeds makkelijker.')+'</p>';
+  if(all)h+='<div class="fb ok">Alle '+LV.length+' onderdelen klaar! '+totalPts()+' van '+NQ+' punten.</div>';
   h+='<div class="row" style="justify-content:center"><button class="btn alt" id="ag" type="button">Nog een keer</button></div>'+navHtml()+'</div>';
   stage.innerHTML=h;$('#ag').onclick=()=>startQuiz(i);
-  wireNav(()=>{S.i=n-1;showQ()},null);
+  wireNav(()=>{S.i=n-1;S.mode='quiz';showQ()},null);
   if(i<LV.length-1)setMain('Volgende →',()=>explain(i+1,0));else setMain('Naar het boek ▶',bookMenu)}
-/* ----- opdrachten uit het boek ----- */
+/* ----- opdrachten uit het boek: alleen stappen ----- */
 function bookMenu(){S.mode='';S.keep=false;S.fin=false;stopSpeech();topbar(true);setProg(null);window.scrollTo(0,0);
   const pages=[...new Set(BOOK.map(b=>b.page))];
-  let h='<div class="card"><h1>Opdrachten uit je boek</h1><div class="where">Pak je boek. Zoek <b>'+PAD+'</b>. Kies hieronder de opdracht waar je mee bezig bent. Je krijgt kleine stappen: wat moet je doen?</div>';
+  let h='<div class="card"><h1>Opdrachten uit je boek</h1><div class="where">Pak je boek. Zoek <b>'+PAD+'</b>. Kies de opdracht waar je mee bezig bent.</div>';
   pages.forEach(pg=>{h+='<h3>Bladzijde '+pg+'</h3><div class="lv">'+BOOK.filter(b=>b.page===pg).map(b=>'<button class="lvb bk" data-id="'+b.id+'" type="button"><span class="lvn" style="font-size:.95rem">'+b.nr+'</span><span><b>Opdracht '+b.nr+'</b><small>'+b.title+'</small></span><span class="st">'+(DB.book[b.id]?'✓':'')+'</span></button>').join('')+'</div>'});
   h+=navHtml()+'</div>';
   stage.innerHTML=h;$$('.lvb[data-id]').forEach(b=>b.onclick=()=>bookEx(b.dataset.id));
-  wireNav(null,null);setMain('Eerste opdracht →',()=>bookEx(BOOK[0].id))}
-function bookEx(id){stopSpeech();topbar(true);setProg(null);S.mode='';const B=BOOK.find(x=>x.id===id),ix=BOOK.indexOf(B);let qi=0,good=0;const R=[];
-  const IMG='<a href="boek/p'+B.page+'-opdracht-'+B.nr+'.png" target="_blank" rel="noopener"><img class="bk" src="boek/p'+B.page+'-opdracht-'+B.nr+'.png" alt="Opdracht '+B.nr+' uit je boek, bladzijde '+B.page+'"></a><p class="note center" style="margin:0">Tik op de afbeelding om groter te zien.</p>';
-  stage.innerHTML='<div class="card"><div class="badges"><span class="badge">Bladzijde '+B.page+'</span><span class="badge o">Opdracht '+B.nr+'</span></div><p class="note" style="margin-top:0">'+PAD+'</p><h2>'+B.title+'</h2>'
+  wireNav(()=>{S.lv=LV.length-1;explain(LV.length-1,LV[LV.length-1].steps.length-1)},null);setMain('Eerste opdracht →',()=>bookEx(BOOK[0].id))}
+function bookEx(id){stopSpeech();topbar(true);setProg(null);S.mode='';const B=BOOK.find(x=>x.id===id),ix=BOOK.indexOf(B),isL=ix===BOOK.length-1,file='boek/p'+B.page+'-opdracht-'+B.nr+'.png';
+  stage.innerHTML='<div class="card"><div class="badges"><span class="badge">Bladzijde '+B.page+'</span><span class="badge o">Opdracht '+B.nr+'</span></div><h2>'+B.title+'</h2>'
    +'<div class="where">Pak je boek. Sla open <b>bladzijde '+B.page+'</b> en zoek <b>opdracht '+B.nr+'</b>.</div>'
-   +'<h3>Waar gaat het over?</h3><div class="say">'+B.about+'</div>'
-   +'<h3>De opdracht uit je boek</h3>'+IMG+'<p class="note center">Zo staat de opdracht in je boek. Het antwoord staat er niet bij.</p>'
-   +'<h3>Wat moet je doen? Stap voor stap</h3>'+B.steps.map((t,i)=>'<div class="stp"><span class="n">'+(i+1)+'</span><span>'+t+'</span></div>').join('')
-   +'<div class="row"><span id="lis"></span></div>'
-   +(B.w?'<h3>Probeer het hier met de kompasroos</h3>'+B.w.map((w,i)=>'<div class="wd" id="bw'+i+'"></div>').join(''):'')
-   +'<h3>Nu jij</h3><div id="qz"></div>'+navHtml()+'</div>';
-  $('#lis').appendChild(listenBtn(say(B.title+'. '+B.about+' Wat moet je doen? '+B.steps.join(' '))));
-  if(B.w)B.w.forEach((w,i)=>WID[w.t]($('#bw'+i),w));
-  const qz=$('#qz');
-  function nextOpdr(){ix<BOOK.length-1?bookEx(BOOK[ix+1].id):menu()}
-  function prevOpdr(){ix>0?bookEx(BOOK[ix-1].id):bookMenu()}
-  function nav(){const last=qi>=B.qs.length;
-    wireNav(()=>{if(qi>0){qi--;showQ()}else prevOpdr()},null);
-    if(last)setMain(ix<BOOK.length-1?'Volgende opdracht →':'Naar het menu ▶',nextOpdr,false,true);
-    else setMain('Volgende vraag →',()=>{qi++;qi<B.qs.length?showQ():done()},!R[qi],true)}
-  function showQ(){const q=B.qs[qi],r=R[qi];
-    qz.innerHTML='<div class="qhead"><span>Opdracht '+B.nr+' · vraag '+q.lab+'</span><span>Stap '+(qi+1)+' van '+B.qs.length+'</span></div>'+(q.fig?'<div>'+q.fig()+'</div>':'')+'<div class="q">'+q.text+'</div><div class="opts" id="bo">'+(r?r.order:shuffle(q.opts.map((o,i)=>i))).map(i=>'<button class="opt" type="button" data-i="'+i+'" data-ok="'+(q.opts[i].ok?1:0)+'">'+q.opts[i].t+'</button>').join('')+'</div><div id="bf"></div><div class="row"><span id="bl2"></span></div>';
-    $('#bl2').appendChild(listenBtn(say(q.text)));
-    const order=$$('#bo .opt').map(x=>+x.dataset.i);
-    const show=(b,ok)=>{$$('#bo .opt').forEach(x=>{x.disabled=true;if(x.dataset.ok==='1')x.classList.add('ok')});if(!ok)b.classList.add('no');
-      const right=q.opts.filter(o=>o.ok).map(o=>o.t).join(', ');
-      $('#bf').innerHTML='<div class="fb '+(ok?'ok':'no')+'">'+(ok?'Goed zo!':'Niet goed. Het goede antwoord is: '+right)+'</div><div class="ans"><b>Waarom?</b> '+q.why+'</div>'};
-    if(r){show($('#bo .opt[data-i="'+r.i+'"]'),r.ok)}
-    else $$('#bo .opt').forEach(b=>b.onclick=()=>{const ok=b.dataset.ok==='1';sfx(ok?'ok':'no');if(ok)good++;R[qi]={i:+b.dataset.i,ok,order};show(b,ok);nav();$('#bMain').focus()});
-    nav()}
-  function done(){DB.book[B.id]=1;save();sfx('win');qz.innerHTML='<div class="fb ok">Opdracht '+B.nr+' klaar! Je had '+good+' van '+B.qs.length+' meteen goed.</div><p>Maak nu de opdracht ook in je boek. Je weet hoe je het moet aanpakken.</p>';nav();window.scrollTo({top:$('#qz').offsetTop-200,behavior:'smooth'})}
-  showQ();window.scrollTo(0,0)}
-window.BR={S:()=>S,LV,BOOK,M,WID};
+   +'<a href="'+file+'" target="_blank" rel="noopener"><img class="bk" src="'+file+'" alt="Opdracht '+B.nr+' uit je boek, bladzijde '+B.page+'"></a><p class="note center" style="margin:0">Tik op de afbeelding om groter te zien.</p>'
+   +'<h3>Wat moet je doen?</h3><p class="note" style="margin:0 0 6px">Tik een stap aan als je hem gedaan hebt.</p><div id="sts">'+B.steps.map((t,i)=>'<div class="stp" role="button" tabindex="0" data-k="'+i+'"><span class="n">'+(i+1)+'</span><span>'+t+'</span></div>').join('')+'</div><div id="sd"></div>'
+   +'<div class="row"><span id="lis"></span></div>'+navHtml()+'</div>';
+  $('#lis').appendChild(listenBtn(say('Opdracht '+B.nr+'. '+B.title+'. Wat moet je doen? '+B.steps.map((t,i)=>'Stap '+(i+1)+'. '+t).join(' '))));
+  const upd=()=>{const n=$$('#sts .stp.done').length;$('#sd').innerHTML=n===B.steps.length?'<div class="fb ok">Opdracht '+B.nr+' klaar! Goed gedaan.</div>':'';if(n===B.steps.length&&!DB.book[B.id]){DB.book[B.id]=1;save();sfx('win')}};
+  $$('#sts .stp').forEach(el=>{const tg=()=>{sfx('tap');el.classList.toggle('done');const sp=$('.n',el);sp.textContent=el.classList.contains('done')?'✓':(+el.dataset.k+1);upd()};el.onclick=tg;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tg()}}});
+  wireNav(()=>ix>0?bookEx(BOOK[ix-1].id):bookMenu(),null);
+  setMain(isL?'Naar de toets ▶':'Volgende opdracht →',()=>{if(!DB.book[B.id]){DB.book[B.id]=1;save()}isL?toetsIntro():bookEx(BOOK[ix+1].id)},false,isL);
+  window.scrollTo(0,0)}
+/* ----- snelle toets ----- */
+function toetsIntro(){S.mode='';S.keep=false;S.fin=false;stopSpeech();topbar(true);setProg(null);window.scrollTo(0,0);const T=DB.toets;
+  stage.innerHTML='<div class="card center"><h1>⚡ Snelle toets</h1><p class="big">10 vragen</p><p>Je hebt 1 kans per vraag. Aan het eind zie je hoeveel procent je weet van deze les.</p>'+(T?'<div class="fb ok">Laatste keer: <b>'+T.last+'%</b> · Beste: <b>'+T.best+'%</b></div>':'')+navHtml()+'</div>';
+  wireNav(()=>bookEx(BOOK[BOOK.length-1].id),null);setMain(T?'Toets opnieuw ▶':'Start de toets ▶',startToets,false,true)}
+function startToets(){S={lv:null,i:0,tries:0,pts:0,qs:TOETS(),locked:false,log:[],mode:'toets',t0:0,seq:[],snap:[],keep:false,saved:false,fin:false,one:true};showQ()}
+function toetsDone(){setProg(100);window.scrollTo(0,0);const n=S.qs.length,p=S.pts,pct=Math.round(p/n*100),old=DB.toets||{};
+  if(!S.saved){S.saved=true;DB.toets={last:pct,best:Math.max(old.best||0,pct),n:(old.n||0)+1};save()}
+  S.mode='';S.fin=true;topbar(true);sfx('win');
+  const kl=pct>=90?'good':pct>=60?'mid':'low',msg=pct>=90?'Wauw! Je weet bijna alles van deze les.':pct>=70?'Goed! Je weet de meeste dingen.':pct>=50?'Je bent op weg. Oefen de onderdelen hieronder nog een keer.':'Nog even oefenen. Doe de onderdelen hieronder nog een keer.';
+  const miss={};S.log.forEach(x=>{if(x.part!=null&&!x.pts)miss[x.part]=(miss[x.part]||0)+1});
+  const weak=Object.keys(miss).map(Number).sort((a,b)=>a-b);
+  let h='<div class="card center"><h1>Jouw resultaat</h1><div class="pct '+kl+'">'+pct+'%</div><p class="big">'+p+' van '+n+' goed</p><p>'+msg+'</p>';
+  if(weak.length)h+='<div style="text-align:left"><h3>Oefen nog een keer</h3><div class="lv">'+weak.map(j=>'<button class="lvb" data-w="'+j+'" type="button"><span class="lvn">'+(j+1)+'</span><span><b>'+LV[j].t+'</b><small>'+miss[j]+' fout</small></span></button>').join('')+'</div></div>';
+  else h+='<div class="fb ok">Alles goed! Je hoeft niets meer te oefenen.</div>';
+  h+='<div class="row" style="justify-content:center"><button class="btn alt" id="ag" type="button">Toets opnieuw</button></div>'+navHtml()+'</div>';
+  stage.innerHTML=h;$('#ag').onclick=startToets;$$('[data-w]').forEach(b=>b.onclick=()=>explain(+b.dataset.w,0));
+  wireNav(()=>{S.i=n-1;S.mode='toets';showQ()},null);setMain('Naar het menu ▶',menu,false,true)}
+window.BR={S:()=>S,LV,BOOK,M,WID,TOETS};
 if(DB.name)menu();else nameScreen();
 
 </script></body></html>

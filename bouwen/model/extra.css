@@ -10,3 +10,6 @@
 .vt:hover circle{fill:#ffe9b0}
 .opts.c3{grid-template-columns:repeat(3,minmax(0,1fr))}.opts.c3 .opt{min-width:0;overflow:hidden}.opts.c3 .opt{padding:6px;position:relative}.opts.c3 .opt .nb{position:absolute;top:4px;right:4px;margin:0}
 .lvb .st{text-align:center;line-height:1.2}.lvb .st small{display:block;font-size:.8rem}
+
+.angpair{display:flex;align-items:center;justify-content:center;gap:10px}.angpair .fig{margin:0}.angpair .pap{flex:0 0 76px;max-width:76px}.angpair .ang:not(.pap){flex:1 1 0;min-width:0;max-width:220px}
+.angpair .poly{flex:1 1 0;min-width:0;max-width:240px}
