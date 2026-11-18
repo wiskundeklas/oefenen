@@ -84,17 +84,25 @@ function bookMenu(){S.mode='';S.keep=false;S.fin=false;stopSpeech();topbar(true)
   h+=navHtml()+'</div>';
   stage.innerHTML=h;$$('.lvb[data-id]').forEach(b=>b.onclick=()=>bookEx(b.dataset.id));
   wireNav(()=>{S.lv=LV.length-1;explain(LV.length-1,LV[LV.length-1].steps.length-1)},null);setMain('Eerste opdracht →',()=>bookEx(BOOK[0].id))}
-function bookEx(id){stopSpeech();topbar(true);setProg(null);S.mode='';const B=BOOK.find(x=>x.id===id),ix=BOOK.indexOf(B),isL=ix===BOOK.length-1,file='boek/p'+B.page+'-opdracht-'+B.nr+'.png';
+const NEED={geodriehoek:'\u{1F4D0} geodriehoek',kompasroos:'\u{1F9ED} kompasroos',potlood:'\u270F\uFE0F potlood',liniaal:'\u{1F4CF} liniaal',overtrekpapier:'\u{1F4C4} overtrekpapier',rood:'\u{1F58D}\uFE0F rood potlood',schrift:'\u{1F4D3} je schrift'};
+const stOf=s=>typeof s==='string'?{t:s}:s;
+function stepHtml(s,i){const z=s.z?'<div class="zo"><b>Zo doe je dat:</b> '+s.z+'</div>':'',w=s.s?'<div class="sch"><b>Schrijf op:</b> '+s.s+'</div>':'',p=s.p&&HP[s.p]?'<button class="btn alt small show" type="button" data-p="'+s.p+'">\u{1F440} Laat zien</button><div class="pic" hidden></div>':'';
+  return '<div class="bstp" data-k="'+i+'"><div class="sh" role="button" tabindex="0" aria-pressed="false"><span class="n">'+(i+1)+'</span><b class="st">'+s.t+'</b></div>'+((z||w||p)?'<div class="bd">'+z+w+p+'</div>':'')+'</div>'}
+function bookEx(id){stopSpeech();topbar(true);setProg(null);S.mode='';const B=BOOK.find(x=>x.id===id),ix=BOOK.indexOf(B),isL=ix===BOOK.length-1,file='boek/p'+B.page+'-opdracht-'+B.nr+'.png',ST=B.steps.map(stOf);
   stage.innerHTML='<div class="card"><div class="badges"><span class="badge">Bladzijde '+B.page+'</span><span class="badge o">Opdracht '+B.nr+'</span></div><h2>'+B.title+'</h2>'
    +'<div class="where">Pak je boek. Sla open <b>bladzijde '+B.page+'</b> en zoek <b>opdracht '+B.nr+'</b>.</div>'
    +'<a href="'+file+'" target="_blank" rel="noopener"><img class="bk" src="'+file+'" alt="Opdracht '+B.nr+' uit je boek, bladzijde '+B.page+'"></a><p class="note center" style="margin:0">Tik op de afbeelding om groter te zien.</p>'
-   +'<h3>Wat moet je doen?</h3><p class="note" style="margin:0 0 6px">Tik een stap aan als je hem gedaan hebt.</p><div id="sts">'+B.steps.map((t,i)=>'<div class="stp" role="button" tabindex="0" data-k="'+i+'"><span class="n">'+(i+1)+'</span><span>'+t+'</span></div>').join('')+'</div><div id="sd"></div>'
+   +'<h3>Wat moet je doen?</h3>'+(B.doel?'<p class="doel">'+B.doel+'</p>':'')
+   +(B.need?'<div class="need"><b>Pak:</b> '+B.need.map(n=>'<span class="nd">'+(NEED[n]||n)+'</span>').join('')+'</div>':'')
+   +'<h3>Stap voor stap</h3><p class="note" style="margin:0 0 6px">Tik op het rondje als je een stap gedaan hebt.</p><div id="sts">'+ST.map(stepHtml).join('')+'</div><div id="sd"></div>'
    +'<div class="row"><span id="lis"></span></div>'+navHtml()+'</div>';
-  $('#lis').appendChild(listenBtn(say('Opdracht '+B.nr+'. '+B.title+'. Wat moet je doen? '+B.steps.map((t,i)=>'Stap '+(i+1)+'. '+t).join(' '))));
-  const upd=()=>{const n=$$('#sts .stp.done').length;$('#sd').innerHTML=n===B.steps.length?'<div class="fb ok">Opdracht '+B.nr+' klaar! Goed gedaan.</div>':'';if(n===B.steps.length&&!DB.book[B.id]){DB.book[B.id]=1;save();sfx('win')}};
-  $$('#sts .stp').forEach(el=>{const tg=()=>{sfx('tap');el.classList.toggle('done');const sp=$('.n',el);sp.textContent=el.classList.contains('done')?'✓':(+el.dataset.k+1);upd()};el.onclick=tg;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tg()}}});
+  $('#lis').appendChild(listenBtn(say('Opdracht '+B.nr+'. '+B.title+'. '+(B.doel||'')+' '+ST.map((s,i)=>'Stap '+(i+1)+'. '+s.t+'. '+(s.z?'Zo doe je dat. '+s.z+' ':'')+(s.s?'Schrijf op. '+s.s:'')).join(' '))));
+  const upd=()=>{const n=$$('#sts .bstp.done').length;$('#sd').innerHTML=n===ST.length?'<div class="fb ok">Opdracht '+B.nr+' klaar! Goed gedaan.</div>':'';if(n===ST.length&&!DB.book[B.id]){DB.book[B.id]=1;save();sfx('win')}};
+  $$('#sts .bstp').forEach(el=>{const sh=$('.sh',el),tg=()=>{sfx('tap');const d=el.classList.toggle('done');sh.setAttribute('aria-pressed',d?'true':'false');$('.n',sh).textContent=d?'\u2713':(+el.dataset.k+1);upd()};
+    sh.onclick=tg;sh.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tg()}};
+    const b=$('.show',el);if(b){const pc=$('.pic',el);b.onclick=()=>{sfx('tap');if(pc.hidden){if(!pc.innerHTML)pc.innerHTML=HP[b.dataset.p]();pc.hidden=false;b.textContent='\u{1F648} Verberg plaatje'}else{pc.hidden=true;b.textContent='\u{1F440} Laat zien'}}}});
   wireNav(()=>ix>0?bookEx(BOOK[ix-1].id):bookMenu(),null);
-  setMain(isL?'Naar de toets ▶':'Volgende opdracht →',()=>{if(!DB.book[B.id]){DB.book[B.id]=1;save()}isL?toetsIntro():bookEx(BOOK[ix+1].id)},false,isL);
+  setMain(isL?'Naar de toets \u25B6':'Volgende opdracht \u2192',()=>{if(!DB.book[B.id]){DB.book[B.id]=1;save()}isL?toetsIntro():bookEx(BOOK[ix+1].id)},false,isL);
   window.scrollTo(0,0)}
 /* ----- snelle toets ----- */
 function toetsIntro(){S.mode='';S.keep=false;S.fin=false;stopSpeech();topbar(true);setProg(null);window.scrollTo(0,0);const T=DB.toets;

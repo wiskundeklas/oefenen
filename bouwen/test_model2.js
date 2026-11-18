@@ -1,4 +1,5 @@
 const {chromium}=require('playwright');
+const T=process.env.SHOTDIR||require('path').join(require('os').tmpdir(),'oefenen-t');require('fs').mkdirSync(T,{recursive:true});
 const FILE=process.argv[2],W=+(process.argv[4]||360),RUNS=+(process.argv[3]||2),SHOTS=process.argv[5]||'',PFX=process.argv[6]||'m';
 (async()=>{const b=await chromium.launch();const bad=[];
 for(let run=0;run<RUNS;run++){
@@ -6,12 +7,16 @@ for(let run=0;run<RUNS;run++){
  p.on('pageerror',e=>bad.push('PAGEERR '+e.message));p.on('console',m=>{if(m.type()==='error'&&!/fonts|ERR_|Failed to load|net::/.test(m.text()))bad.push('CONSOLE '+m.text())});
  await p.addInitScript(()=>{window.speechSynthesis={getVoices:()=>[],addEventListener(){},cancel(){},speak(){}}});
  if(process.env.DYS)await p.addInitScript(()=>localStorage.setItem('dyslexie-stand','1'));
+ if(process.env.RSET)await p.addInitScript(s=>localStorage.setItem('dyslexie-liniaal',s),process.env.RSET);
  await p.goto('file://'+FILE);
  await p.fill('#nmi','Test');await p.click('#go');
  const ov=async(tag)=>{const w=await p.evaluate(()=>document.documentElement.scrollWidth);if(w>W+1)bad.push(tag+' overflow '+w)};
  const raw=async(tag)=>{const t=await p.evaluate(()=>document.body.innerText);if(/undefined|NaN|\{\/|\[object|@@/.test(t))bad.push(tag+' RAW: '+(t.match(/.{0,30}(undefined|NaN|\{\/|\[object|@@).{0,30}/)||[''])[0])};
- const navok=async(tag)=>{const n=await p.evaluate(()=>['bMenu','bPrev','bMain'].map(i=>!!document.getElementById(i)));if(n.some(x=>!x))bad.push(tag+' nav mist '+n)};
- const shot=async(n)=>{if(SHOTS&&run===0)await p.screenshot({path:'t/'+PFX+'-'+n+'.png',fullPage:true})};
+ const navok=async(tag)=>{const n=await p.evaluate(()=>['bMenu','bPrev','bMain'].map(i=>!!document.getElementById(i)));if(n.some(x=>!x))bad.push(tag+' nav mist '+n);
+  await p.evaluate(()=>window.dispatchEvent(new Event('scroll')));await p.waitForTimeout(70);
+  const hit=await p.evaluate(()=>{const R=e=>e.getBoundingClientRect();const nb=[...document.querySelectorAll('.nav .btn')].map(R);const dk=[document.getElementById('dysbtn'),...document.querySelectorAll('#dysdock button:not([hidden])')].filter(Boolean).map(R);let h=0;for(const a of nb)for(const d of dk){const w=Math.min(a.right,d.right)-Math.max(a.left,d.left),hh=Math.min(a.bottom,d.bottom)-Math.max(a.top,d.top);if(w>2&&hh>2)h++}return h});
+  if(hit)bad.push(tag+' knoppen over nav ('+hit+')')};
+ const shot=async(n)=>{if(SHOTS&&run===0)await p.screenshot({path:T+'/'+PFX+'-'+n+'.png',fullPage:true})};
  await ov('menu');await shot('menu');
  const NL=await p.evaluate(()=>BR.LV.length);
  for(let l=0;l<NL;l++){
@@ -61,9 +66,9 @@ for(let run=0;run<RUNS;run++){
   await p.evaluate(k=>bookEx(BR.BOOK[k].id),k);await ov('book'+k);await raw('book'+k);await navok('book'+k);
   await p.waitForTimeout(150);
   const img=await p.evaluate(()=>{const i=document.querySelector('img.bk');return i&&i.complete&&i.naturalWidth>0});if(!img)bad.push('book'+k+' plaatje laadt niet');
-  const ns=await p.evaluate(()=>document.querySelectorAll('#sts .stp').length);
-  const txt0=await p.evaluate(()=>document.querySelectorAll('#sts .stp').length);
-  for(let s=0;s<ns;s++)await p.click('#sts .stp[data-k="'+s+'"]');
+  const ns=await p.evaluate(()=>document.querySelectorAll('#sts .bstp').length);
+  const shows=await p.$$('#sts .show');for(const x of shows)await x.click();await ov('bookpic'+k);await raw('bookpic'+k);
+  for(let s=0;s<ns;s++)await p.click('#sts .bstp[data-k="'+s+'"] .sh');
   const okTxt=await p.evaluate(()=>/klaar! Goed gedaan/.test(document.body.innerText));if(!okTxt)bad.push('book'+k+' geen klaar-melding');
   await shot('book'+k);
  }

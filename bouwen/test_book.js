@@ -1,0 +1,21 @@
+const {chromium}=require('playwright');
+const T=process.env.SHOTDIR||require('path').join(require('os').tmpdir(),'oefenen-t');require('fs').mkdirSync(T,{recursive:true});
+const FILE=process.argv[2],W=+(process.argv[3]||360),PFX=process.argv[4]||'bk',ONLY=process.argv[5]||'';
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:W,height:800},deviceScaleFactor:1});
+const errs=[];p.on('pageerror',e=>errs.push(e.message));p.on('console',m=>{if(m.type()==='error'&&!/fonts|ERR_|Failed to load|net::/.test(m.text()))errs.push('CONSOLE '+m.text())});
+await p.addInitScript(()=>{window.speechSynthesis={getVoices:()=>[],addEventListener(){},cancel(){},speak(){}}});
+if(process.env.DYS)await p.addInitScript(()=>localStorage.setItem('dyslexie-stand','1'));
+await p.goto('file://'+FILE);await p.fill('#nmi','Test');await p.click('#go');
+const ids=await p.evaluate(()=>BR.BOOK.map(b=>b.id));
+for(const id of ids){ if(ONLY&&!ONLY.split(',').includes(id))continue;
+  await p.evaluate(id=>bookEx(id),id);
+  const bt=await p.$$('#sts .show');for(const x of bt)await x.click();
+  const w=await p.evaluate(()=>document.documentElement.scrollWidth);if(w>W+1)errs.push('OVERFLOW '+id+' '+w);
+  const raw=await p.evaluate(()=>document.body.innerText);if(/undefined|NaN|\[object|@@/.test(raw))errs.push('RAW '+id+' '+(raw.match(/.{0,30}(undefined|NaN|\[object|@@).{0,30}/)||[''])[0]);
+  const n=await p.evaluate(()=>document.querySelectorAll('#sts .bstp').length);
+  for(let s=0;s<n;s++)await p.click('#sts .bstp[data-k="'+s+'"] .sh');
+  const ok=await p.evaluate(()=>!!document.querySelector('#sd .fb.ok'));if(!ok)errs.push('NIET KLAAR '+id);
+  await p.evaluate(id=>bookEx(id),id);const bt2=await p.$$('#sts .show');for(const x of bt2)await x.click();
+  await p.screenshot({path:T+'/'+PFX+'-'+id+'.png',fullPage:true});
+}
+console.log('ids',ids.length,'errs',errs);await b.close()})();

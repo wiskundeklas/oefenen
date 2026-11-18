@@ -5,7 +5,7 @@ les=sys.argv[1];out=sys.argv[2]
 meta=json.load(open(os.path.join(les,'lesson.json')))
 base=rd(D+'/base.html').replace('@@TITLE@@',meta['title']).replace('@@KEY@@',meta['key'])
 base=base.replace('</style>',rd(D+'/extra.css')+'</style>',1)
-parts=[base,rd(D+'/lib.js')]
+parts=[base,rd(D+'/lib.js'),rd(D+'/help.js')]
 for f in meta['files']:parts.append(rd(os.path.join(les,f)))
 parts.append(rd(D+'/ui.js'));parts.append(rd(D+'/engine.js'))
 html='\n'.join(parts)+'\n</script></body></html>\n'

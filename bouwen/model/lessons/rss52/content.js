@@ -19,51 +19,60 @@ const NQ=LV.reduce((a,l)=>a+(l.n||5),0);
 /* snelle toets: 10 vragen door elkaar uit alle onderdelen */
 const TPLAN=[[0,'isR'],[0,'lood'],[1,'geo'],[1,'tf2'],[2,'cls'],[2,'cmp'],[2,'pickS'],[3,'vert'],[3,'count'],[3,'multi']];
 const TOETS=()=>build(TPLAN,e=>{const q=cv(M[e[1]]());if(q)q.part=e[0];return q});
-/* ---------- opdrachten uit het boek: alleen stappen ---------- */
+/* ---------- opdrachten uit het boek: stap voor stap met hulp ---------- */
+/* stap = {t: wat je doet, z: zo doe je dat, p: plaatje (Laat zien), s: wat je opschrijft} */
 const BOOK=[
- {id:'9',page:15,nr:'9',title:'Loodrechte lijnen',steps:[
-  'Kijk naar de deur. De rode lijnen staan loodrecht op elkaar.',
-  'Kijk rond in je lokaal.',
-  'Zoek drie voorwerpen waarbij je ook loodrechte lijnen ziet.',
-  'Schrijf de drie voorwerpen op de lijntjes.']},
- {id:'10',page:15,nr:'10',title:'Rechte hoeken in de molen',steps:[
-  'Kijk naar de molen. Zoek een rechte hoek.',
-  'Teken in die hoek het tekentje voor een rechte hoek.',
-  'Zoek zo drie rechte hoeken.',
-  'Gebruik beide tekentjes: ⌞ en ⌝.']},
- {id:'11',page:16,nr:'11',title:'Hoeken in het tuinhuis',steps:[
-  'Kijk naar de tekening van het tuinhuis. Drie hoeken hebben een kleur.',
-  'a: Welke gekleurde hoek is de rechte hoek? Schrijf het antwoord op.',
-  'b: Welke gekleurde hoek is kleiner dan de rechte hoek? Schrijf het antwoord op.',
-  'c: Welke gekleurde hoek is groter dan de rechte hoek? Schrijf het antwoord op.']},
- {id:'12',page:16,nr:'12',title:'Controleren met de geodriehoek',steps:[
-  'a: Pak je geodriehoek. Leg de rechte hoek in ∠P. Controleer dat ∠P een rechte hoek is.',
-  'b: Leg de rechte hoek van je geodriehoek in ∠Q. Past hij precies? Schrijf ja of nee.',
-  'c: Is ∠Q groter of kleiner dan ∠P? Schrijf het op.',
-  'd: Is ∠Q een scherpe of een stompe hoek? Schrijf het op.']},
- {id:'13',page:17,nr:'13',title:'Hoeken in een huis',steps:[
-  'Kijk naar het huis. Bij de boogjes staan letters.',
-  'Pak je geodriehoek als je het niet zeker weet.',
-  'a: Welke hoeken zijn recht? Schrijf de letters op.',
-  'b: Welke hoeken zijn scherp? Schrijf de letters op.',
-  'c: Welke hoeken zijn stomp? Schrijf de letters op.']},
- {id:'14',page:17,nr:'14',title:'Figuren A, B, C en D',steps:[
-  'Kijk naar de vlakke figuren A, B, C en D.',
-  'a: Welke figuur heeft alleen scherpe hoeken? Schrijf de letter op.',
-  'b: Welke figuur heeft alleen stompe hoeken? Schrijf de letter op.',
-  'c: Hoeveel stompe hoeken hebben de andere figuren? Schrijf het op.']},
- {id:'L15',page:17,nr:'L15',title:'Heb je het geleerd?',steps:[
-  'a: Kijk naar tekening 1. Zet bij elke rechte hoek het tekentje voor een rechte hoek.',
-  'b: Welke hoeken in tekening 1 en 2 zijn scherp? Schrijf de letters op.',
-  'c: Hoe noem je de andere hoeken in tekening 1 en 2? Schrijf het op.',
-  'Zet bij elk onderdeel een vinkje: goed of nog niet goed.']},
- {id:'O10',page:18,nr:'O10',title:'Rechte hoeken op de foto (extra hulp)',steps:[
-  'Kijk naar de foto. Met een geodriehoek kun je zien of een hoek recht is.',
-  'a: Zoek op de foto nog twee rechte hoeken. Gebruik je geodriehoek.',
-  'b: Geef de rechte hoeken op de foto aan met een tekentje.',
-  'Gebruik beide tekentjes één keer.']},
- {id:'O13',page:18,nr:'O13',title:'Hoek P en de zes hoeken (extra hulp)',steps:[
-  'a: ∠P is groter dan de rechte hoek van de geodriehoek. Is ∠P stomp of scherp? Schrijf het op.',
-  'b: Pak je geodriehoek. Leg de rechte hoek in ∠A. Schrijf op: recht, scherp of stomp.',
-  'Doe hetzelfde bij ∠B, ∠C, ∠D, ∠E en ∠F.']}
+ {id:'9',page:15,nr:'9',title:'Loodrechte lijnen',
+  doel:'Je zoekt voorwerpen in je lokaal waar twee lijnen een rechte hoek maken.',need:['geodriehoek','potlood'],steps:[
+  {t:'Kijk naar de rode lijnen op de deur.',z:'Loodrecht betekent: de lijnen maken een rechte hoek. Dat is een hoek zoals de hoek van een bladzijde.',p:'loodrecht'},
+  {t:'Kijk rond in je lokaal.',z:'Zoek twee lijnen die samen een rechte hoek maken. Denk aan het bord, een raam, een tafel of een kast.'},
+  {t:'Kies drie voorwerpen en controleer ze.',z:'Leg de rechte hoek van je geodriehoek in de hoek. Past hij precies? Dan staan de lijnen loodrecht op elkaar.',p:'pap'},
+  {t:'Schrijf de drie voorwerpen op de lijntjes.',s:'één voorwerp per lijntje, bijvoorbeeld: de hoek van een schrift'}]},
+ {id:'10',page:15,nr:'10',title:'Rechte hoeken in de molen',
+  doel:'Je zoekt drie rechte hoeken in de tekening van de molen en zet er het tekentje in.',need:['geodriehoek','potlood'],steps:[
+  {t:'Zoek een rechte hoek in de molen.',z:'Zoek twee lijnen die elkaar raken als de hoek van een bladzijde. Twijfel je? Leg de rechte hoek van je geodriehoek op de plek. Past hij precies? Dan is het een rechte hoek.',p:'pap'},
+  {t:'Teken het tekentje in de hoek.',z:'Het tekentje is een klein hoekje in de hoek, tegen het hoekpunt aan.',p:'teken'},
+  {t:'Zoek zo drie rechte hoeken.',z:'Gebruik allebei de tekentjes: ⌞ en ⌝. Kijk goed welke kant de benen op gaan.'}]},
+ {id:'11',page:16,nr:'11',title:'Hoeken in het tuinhuis',
+  doel:'In de tekening zijn drie hoeken gekleurd. Je zegt welke hoek recht is, welke kleiner is en welke groter.',need:['geodriehoek','potlood'],steps:[
+  {t:'Zoek de drie gekleurde hoeken in de tekening.',z:'Bij elke kleur zie je twee lijnen die elkaar raken. Dat zijn de benen van die hoek.'},
+  {t:'a: Welke hoek is de rechte hoek?',z:'Leg de rechte hoek van je geodriehoek in een gekleurde hoek. Past hij precies? Dan is dat de rechte hoek.',p:'pap',s:'de kleur van de hoek'},
+  {t:'b: Welke hoek is kleiner dan de rechte hoek?',z:'Welke hoek past helemaal in de rechte hoek van je geodriehoek? Die hoek is kleiner.',s:'de kleur van de hoek'},
+  {t:'c: Welke hoek is groter dan de rechte hoek?',z:'Welke hoek steekt buiten je geodriehoek uit? Die hoek is groter.',s:'de kleur van de hoek'}]},
+ {id:'12',page:16,nr:'12',title:'Controleren met de geodriehoek',
+  doel:'Je gebruikt je geodriehoek om te zien of een hoek recht, scherp of stomp is.',need:['geodriehoek','potlood'],steps:[
+  {t:'a: Leg je geodriehoek in ∠P.',z:'Zoek de rechte hoek van je geodriehoek. Leg hem in ∠P: hoekpunt op hoekpunt, één rand langs één been. Ligt het andere been precies langs de andere rand? Dan is ∠P een rechte hoek.',p:'pap'},
+  {t:'b: Doe hetzelfde bij ∠Q. Past hij precies?',z:'Leg de rechte hoek van je geodriehoek in ∠Q. Ligt het andere been precies langs de rand?',s:'ja of nee'},
+  {t:'c: Is ∠Q groter of kleiner dan ∠P?',z:'∠P is een rechte hoek. Steekt ∠Q buiten je geodriehoek uit? Dan is ∠Q groter. Past ∠Q erin? Dan is ∠Q kleiner.',s:'groter of kleiner dan ∠P'},
+  {t:'d: Is ∠Q scherp of stomp?',z:'Kleiner dan een rechte hoek? Dan is hij scherp. Groter dan een rechte hoek? Dan is hij stomp.',p:'pap'}]},
+ {id:'13',page:17,nr:'13',title:'Hoeken in een huis',
+  doel:'In de tekening van het huis staan vijf hoeken. Je zegt welke recht, scherp of stomp zijn.',need:['geodriehoek','potlood'],steps:[
+  {t:'Zoek de vijf hoeken met een boogje.',z:'Bij de letters A, B, C, D en E zit een boogje. Het boogje laat zien welke hoek bedoeld is.'},
+  {t:'Controleer elke hoek met je geodriehoek.',z:'Leg de rechte hoek van je geodriehoek in de hoek. Past precies = recht. Past erin = scherp. Steekt eruit = stomp.',p:'pap'},
+  {t:'Maak een rijtje in je schrift.',z:'Zo vergeet je geen hoek. Schrijf het meteen op terwijl je controleert.',s:'A = …, B = …, C = …, D = …, E = … (recht, scherp of stomp)'},
+  {t:'a, b en c: Schrijf de letters bij de goede vraag.',z:'Kijk in je rijtje. Welke letters zijn recht? Welke scherp? Welke stomp? Elke letter hoort bij één vraag.'}]},
+ {id:'14',page:17,nr:'14',title:'Figuren A, B, C en D',
+  doel:'Je kijkt naar alle hoeken van vier figuren. Je zoekt scherpe en stompe hoeken.',need:['geodriehoek','potlood'],steps:[
+  {t:'Kijk naar alle hoeken van elke figuur.',z:'Bij elke punt van een figuur zit een hoek. Een driehoek heeft 3 hoeken, een vierhoek 4 en een zeshoek 6.'},
+  {t:'Controleer elke hoek met je geodriehoek.',z:'Leg de rechte hoek van je geodriehoek in de hoek. Past erin = scherp. Steekt eruit = stomp.',p:'pap'},
+  {t:'Maak een rijtje in je schrift.',z:'Schrijf per figuur wat elke hoek is: s (scherp), r (recht) of st (stomp). Dan zie je alles in één keer.',s:'bijvoorbeeld: X: s, s, st'},
+  {t:'a en b: Zoek de figuur.',z:'Alleen scherpe hoeken: in je rijtje staat alleen s. Alleen stompe hoeken: in je rijtje staat alleen st.'},
+  {t:'c: Tel de stompe hoeken van de andere figuren.',z:'Kijk in je rijtjes. Tel bij elke figuur die overblijft hoeveel keer st erin staat.'}]},
+ {id:'L15',page:17,nr:'L15',title:'Heb je het geleerd?',
+  doel:'Test jezelf: kun je rechte, scherpe en stompe hoeken herkennen?',need:['geodriehoek','potlood'],steps:[
+  {t:'a: Zet het tekentje bij elke rechte hoek in tekening ❶.',z:'Leg de rechte hoek van je geodriehoek in de hoeken A, B, C en D. Past hij precies? Zet dan het tekentje voor een rechte hoek in die hoek.',p:'teken'},
+  {t:'b: Welke hoeken in ❶ en ❷ zijn scherp?',z:'Scherp is kleiner dan een rechte hoek: de hoek past in je geodriehoek. Controleer ook de hoeken E, F, G en H van tekening ❷.',p:'pap',s:'de letters, bijvoorbeeld ∠X en ∠Y'},
+  {t:'c: Hoe noem je de andere hoeken?',z:'Zo’n hoek is niet recht en niet scherp. Hij is groter dan een rechte hoek. Je kent drie woorden: recht, scherp en …'},
+  {t:'Zet bij elk onderdeel een vinkje.',z:'Ging het goed? Vink "goed" aan. Nog niet goed? Doe de opdracht waar de pijl naar wijst (E4 of E5).'}]},
+ {id:'O10',page:18,nr:'O10',title:'Rechte hoeken op de foto (extra hulp)',
+  doel:'Je zoekt rechte hoeken op een foto en geeft ze aan met het tekentje.',need:['geodriehoek','potlood'],steps:[
+  {t:'Kijk naar de foto.',z:'Zoek hoeken die eruitzien als de hoek van een bladzijde. Denk aan het scherm, het kastje en de plek waar de vloer en de muur samenkomen.'},
+  {t:'a: Controleer met je geodriehoek.',z:'Leg de rechte hoek van je geodriehoek op de hoek in de foto. Past hij precies? Dan is het een rechte hoek. Zoek er nog twee.',p:'pap'},
+  {t:'b: Geef de rechte hoeken aan met het tekentje.',z:'Teken het tekentje in de hoek, tegen het hoekpunt aan. Gebruik ⌞ één keer en ⌝ één keer.',p:'teken'}]},
+ {id:'O13',page:18,nr:'O13',title:'Hoek P en de zes hoeken (extra hulp)',
+  doel:'Eerst kijk je naar ∠P. Daarna controleer je zes hoeken in een figuur.',need:['geodriehoek','potlood'],steps:[
+  {t:'a: ∠P is groter dan de rechte hoek. Is ∠P stomp of scherp?',z:'Scherp is kleiner dan een rechte hoek. Stomp is groter dan een rechte hoek. Welk woord past bij "groter dan"?',p:'pap'},
+  {t:'b: Zoek de zes hoeken A tot en met F.',z:'Bij elke letter staat een boogje. Dat is de hoek.'},
+  {t:'Leg de rechte hoek van je geodriehoek in ∠A.',z:'Past precies = recht. Past erin = scherp. Steekt eruit = stomp.',s:'∠A is …'},
+  {t:'Doe hetzelfde bij ∠B, ∠C, ∠D, ∠E en ∠F.',z:'Schrijf bij elke hoek meteen op wat het is. Zo houd je overzicht.'}]}
 ];
