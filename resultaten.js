@@ -1,4 +1,5 @@
-/* Stuurt de uitslag van een leerling naar een Google Sheet van de docent.
+/* Telt hoeveel keer elke les gedaan is, in een Google Sheet van de docent. ZONDER namen:
+   er gaat alleen les, punten en een willekeurig apparaat-nummer naar de Sheet.
    Doet niets zolang SHEET_URL leeg is. De docent plakt hier de link van het Apps Script. */
 (function(){
   var SHEET_URL='';
@@ -9,10 +10,10 @@
   function get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
   function dev(){var d;try{d=localStorage.getItem('apparaat-id');if(!d){d=Math.random().toString(36).slice(2,10);localStorage.setItem('apparaat-id',d)}}catch(e){d='onbekend'}return d}
   function rows(k){var o=get(k);if(!o)return[];var out=[];
-    if(o.lv){var d=0,p=0,n=0;Object.keys(o.lv).forEach(function(i){var r=o.lv[i];if(r&&r.done){d++;p+=r.pts||0;n+=r.n||1}});if(d&&o.name)out.push({naam:o.name,les:NAMEN[k],gedaan:Math.round(d/(SZ[k]?SZ[k].length:6)*100),goed:Math.round(p/(SZ[k]?SZ[k].reduce(function(a,b){return a+b},0)*d/SZ[k].length:d*10)*100),keer:n,toets:(o.toets&&typeof o.toets.last==='number')?o.toets.last:''})}
-    else if(o.res){var ks=Object.keys(o.res),mx=1,p2=0;ks.forEach(function(q){var v=o.res[q].pts||0;if(v>mx)mx=v;p2+=v});if(ks.length&&o.name)out.push({naam:o.name,les:NAMEN[k],gedaan:Math.round(ks.length/60*100),goed:Math.round(p2/(ks.length*mx)*100),keer:''})}
+    if(o.lv){var d=0,p=0,n=0;Object.keys(o.lv).forEach(function(i){var r=o.lv[i];if(r&&r.done){d++;p+=r.pts||0;n=Math.max(n,r.n||1)}});if(d)out.push({les:NAMEN[k],gedaan:Math.round(d/(SZ[k]?SZ[k].length:6)*100),goed:Math.round(p/(SZ[k]?SZ[k].reduce(function(a,b){return a+b},0)*d/SZ[k].length:d*10)*100),keer:n,toets:(o.toets&&typeof o.toets.last==='number')?o.toets.last:''})}
+    else if(o.res){var ks=Object.keys(o.res),mx=1,p2=0;ks.forEach(function(q){var v=o.res[q].pts||0;if(v>mx)mx=v;p2+=v});if(ks.length)out.push({les:NAMEN[k],gedaan:Math.round(ks.length/60*100),goed:Math.round(p2/(ks.length*mx)*100),keer:''})}
     else if(o.pupils){var best=null;Object.keys(o.pupils).forEach(function(i){var p=o.pupils[i],ss=p.sessions||[];if(ss.length&&(!best||ss[ss.length-1].id>best.s.id))best={p:p,s:ss[ss.length-1]}});
-      if(best)[1,2,3].forEach(function(ch){var ss=best.p.sessions.filter(function(x){return x.chapter===ch});if(ss.length){var l=ss[ss.length-1];out.push({naam:best.p.name,les:REK[ch],gedaan:100,goed:Math.round(l.points/l.max*100),keer:ss.length})}})}
+      if(best)[1,2,3].forEach(function(ch){var ss=best.p.sessions.filter(function(x){return x.chapter===ch});if(ss.length){var l=ss[ss.length-1];out.push({les:REK[ch],gedaan:100,goed:Math.round(l.points/l.max*100),keer:ss.length})}})}
     return out}
   var timers={};
   function stuur(k){clearTimeout(timers[k]);timers[k]=setTimeout(function(){rows(k).forEach(function(r){r.apparaat=dev();try{fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(r)})}catch(e){}})},2500)}
