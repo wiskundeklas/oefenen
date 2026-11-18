@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>5.4 Hoeken meten</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e8f3ff;--ink:#17324d;--soft:#4b6580;--blue:#2a6fdb;--blue2:#1d57b3;--orange:#e8870a;--good:#1d8a4a;--goodbg:#dff3e6;--oops:#c0392b;--oopsbg:#fde7e3;--card:#fff;--line:#c4dcf2;--yel:#ffc533;--rood:#d6336c}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 18px/1.5 Lexend,"Segoe UI",system-ui,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:12px 16px 60px}
+header.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.who{display:flex;align-items:center;gap:10px;font-weight:600;flex:1;min-width:140px}.who svg{width:44px;height:44px}
+.chip{border:0;border-radius:999px;padding:8px 14px;font:600 14px Lexend,sans-serif;background:var(--blue);color:#fff;cursor:pointer;min-height:40px}
+.chip.pts{background:var(--yel);color:#4a3200;cursor:default}
+.prog{height:12px;border-radius:99px;background:#c4dcf2;overflow:hidden;margin:6px 0 14px}.prog i{display:block;height:100%;background:var(--good);width:0;transition:width .3s}
+.card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:18px 18px 20px;margin-bottom:14px}
+h1{font-size:1.7rem;line-height:1.2;margin:.2em 0 .4em}h2{font-size:1.4rem;margin:.2em 0 .5em}h3{font-size:1.1rem;margin:.9em 0 .3em}
+p{margin:.5em 0}.note{color:var(--soft);font-size:.9rem}.center{text-align:center}
+.btn{border:0;border-radius:14px;padding:12px 20px;font:600 1.05rem Lexend,sans-serif;background:var(--blue);color:#fff;cursor:pointer;min-height:50px;box-shadow:0 3px 0 var(--blue2)}
+.btn:active{transform:translateY(2px);box-shadow:none}.btn:disabled{opacity:.5;box-shadow:none;cursor:default}
+.btn.alt{background:#fff;color:var(--blue);border:2px solid var(--blue);box-shadow:none}.btn.small{min-height:40px;padding:6px 14px;font-size:.95rem}
+.btn.good{background:var(--good);box-shadow:0 3px 0 #146b37}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}.row.sp{justify-content:space-between}
+.qhead{display:flex;justify-content:space-between;gap:8px;color:var(--soft);font-size:.9rem;font-weight:600}
+.q{font-size:1.2rem;font-weight:600;margin:8px 0}
+.opts{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}.opts.two{grid-template-columns:1fr 1fr}.opts.four{grid-template-columns:1fr 1fr}
+.opt{border:2px solid var(--line);background:#fff;border-radius:14px;padding:10px 14px;font:600 1.05rem Lexend,sans-serif;color:var(--ink);cursor:pointer;text-align:left;min-height:54px}
+.opt:hover{border-color:var(--blue)}.opt.ok{background:var(--goodbg);border-color:var(--good)}.opt.no{background:var(--oopsbg);border-color:var(--oops);opacity:.8}
+.opt svg{display:block;margin:0 auto;width:90px;height:auto}.opts.sg .opt{text-align:center}
+.fb{border-radius:14px;padding:12px 14px;margin-top:12px;font-weight:600}.fb.ok{background:var(--goodbg);color:#0f5a2c}.fb.no{background:var(--oopsbg);color:#7a2118}.fb.tip{background:#fff6d9;color:#5a4300;font-weight:400}
+.say{background:#f1f7ff;border-left:5px solid var(--blue);border-radius:10px;padding:10px 14px;margin:12px 0}
+.big{font-weight:700;font-size:1.3em}
+.kw{background:#fff0b3;border-radius:6px;padding:0 6px;font-weight:700}
+.fig{display:block;width:100%;margin:6px auto;touch-action:manipulation}.fig.ang{max-width:260px}.fig.poly{max-width:260px}
+.ray{stroke:var(--ink);stroke-width:4;stroke-linecap:round}.ray2{stroke:var(--blue);stroke-width:4;stroke-linecap:round}.ray.ghost{stroke:#9bb;stroke-dasharray:6 6;stroke-width:3}
+.arc{fill:none;stroke:var(--orange);stroke-width:3}.sgn{fill:none;stroke:var(--rood);stroke-width:3;stroke-linejoin:round}
+.geo{fill:rgba(255,197,51,.38);stroke:#b88600;stroke-width:3;stroke-linejoin:round}
+.vd{fill:var(--ink)}.pg{fill:#eaf4ff;stroke:var(--ink);stroke-width:3.5;stroke-linejoin:round}.lt{font:700 13px Lexend,sans-serif;fill:var(--ink)}
+.hd{fill:var(--orange);stroke:#fff;stroke-width:3;cursor:grab}.dr{touch-action:none;user-select:none;-webkit-user-select:none}
+.vtx{fill:#fff;stroke:var(--blue);stroke-width:3;cursor:pointer}.vtx.sel{fill:var(--orange)}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.acard{position:relative;border:2px solid var(--line);background:#fff;border-radius:14px;padding:4px 4px 8px;cursor:pointer;font:inherit;color:inherit;text-align:center}
+.acard:hover{border-color:var(--blue)}.acard.ok{background:var(--goodbg);border-color:var(--good)}.acard.no{background:var(--oopsbg);border-color:var(--oops);opacity:.8}
+.acard b{display:block}.acard .nb{position:absolute;top:6px;right:8px;background:var(--blue);color:#fff;border-radius:50%;width:28px;height:28px;display:grid;place-items:center;font-weight:700}
+.acard .fig{max-width:150px}.acard.sel{border-color:var(--blue);background:#eef5ff}
+.mrow{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:center;margin-top:8px;border-top:1px solid var(--line);padding-top:8px}.mrow .fig{max-width:110px;margin:0}
+.mrow .tri{display:flex;gap:6px;flex-wrap:wrap}.mrow .tri button{flex:1;min-width:70px;border:2px solid var(--line);background:#fff;border-radius:12px;font:600 .95rem Lexend,sans-serif;padding:8px 4px;cursor:pointer;min-height:44px;color:var(--ink)}
+.mrow .tri button.sel{background:var(--blue);color:#fff;border-color:var(--blue)}.mrow .tri button.ok{background:var(--goodbg);border-color:var(--good);color:var(--ink)}.mrow .tri button.no{background:var(--oopsbg);border-color:var(--oops);color:var(--ink)}
+.slider{width:100%;height:44px;accent-color:var(--blue)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.c2{border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font:600 1rem Lexend,sans-serif;color:var(--ink);cursor:pointer;min-height:42px}.c2.sel{background:var(--blue);color:#fff;border-color:var(--blue)}
+.wd{background:#f6faff;border:2px dashed var(--line);border-radius:16px;padding:12px;margin:12px 0}
+.verd{text-align:center;font-weight:700;font-size:1.25rem;min-height:1.6em}
+.lv{display:grid;gap:10px;margin-top:10px}.lvb{display:flex;align-items:center;gap:12px;border:2px solid var(--line);background:#fff;border-radius:16px;padding:12px 14px;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.lvb:hover{border-color:var(--blue)}.lvb b{display:block}.lvb small{color:var(--soft)}.lvn{width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700;display:grid;place-items:center;flex:none}.lvb.done .lvn{background:var(--good)}
+.lvb .st{margin-left:auto;color:#e5a400;font-size:1.3rem;white-space:nowrap}
+.lvb.bk{border-color:var(--orange);background:#fff8ec}.lvb.bk .lvn{background:var(--orange)}
+.stars{font-size:2.4rem;text-align:center;letter-spacing:6px;color:#e5a400}
+input.nm{font:600 1.2rem Lexend,sans-serif;width:100%;padding:12px;border:3px solid var(--line);border-radius:14px;color:var(--ink)}
+.lg{border-collapse:collapse;width:100%;font-size:.9rem;margin-top:6px}.lg th,.lg td{text-align:left;padding:3px 8px 3px 0;border-bottom:1px solid var(--line)}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}.badge{background:var(--blue);color:#fff;border-radius:12px;padding:6px 14px;font-weight:700}.badge.o{background:var(--orange)}
+.where{background:#fff6d9;border:2px solid #f0d27a;border-radius:14px;padding:12px 14px;margin:10px 0;font-weight:600}
+.stp{display:flex;gap:10px;align-items:flex-start;background:#f1f7ff;border-radius:12px;padding:10px 12px;margin:8px 0}.stp .n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700;display:grid;place-items:center}
+.ans{background:var(--goodbg);border:2px solid var(--good);border-radius:14px;padding:12px 14px;margin:10px 0}.ans ul{margin:.3em 0 0;padding-left:1.2em}
+img.bk{display:block;width:100%;border-radius:12px;border:2px solid var(--line);margin:8px 0}
+@keyframes pop{0%{transform:scale(.8)}60%{transform:scale(1.08)}100%{transform:scale(1)}}.pop{animation:pop .35s}
+.nav{position:sticky;bottom:0;z-index:5;display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px;padding:10px 0 4px;margin-top:14px;background:linear-gradient(to top,#fff 78%,rgba(255,255,255,0))}
+.nav .btn{padding:10px 6px;font-size:1rem;min-height:52px}
+.rn{font:600 10.5px Lexend,sans-serif;fill:#17324d}.rl{font:700 11px Lexend,sans-serif;fill:#8aa3bd}
+.bub{font:700 14px Lexend,sans-serif;fill:#b35f00;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.opt.sel{border-color:var(--blue);background:#eef5ff}.opt .nb{margin-left:8px;background:var(--blue);color:#fff;border-radius:50%;width:26px;height:26px;display:inline-grid;place-items:center;font-weight:700}
+.vt:hover circle{fill:#ffe9b0}
+.qhead span:last-child{white-space:nowrap}
+</style></head><body><a href="index.html" id="back" style="display:inline-block;margin:10px 14px 0;color:#2a6fdb;font:700 15px/1.2 system-ui,sans-serif;text-decoration:none">← Alle lessen</a>
+<div class="wrap">
+<header class="bar" id="bar" hidden>
+ <div class="who"><span id="av"></span><span id="nm"></span></div>
+ <button class="chip" id="tp" type="button">🗣 Stem kiezen</button><button class="chip" id="ts" type="button"></button><span class="chip pts" id="pt">0 punten</span>
+</header>
+<div id="vmsg" class="fb tip" hidden></div><div class="card" id="vp" hidden></div>
+<div class="prog" id="pg" hidden><i></i></div>
+<main id="stage"></main>
+</div>
+<script src="resultaten.js"></script>
+<script>
+'use strict';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const KEY='wiskunde-hoeken-meten-v1';
+let DB={name:'',lv:{},book:{},voice:true,sound:true};
+try{const r=localStorage.getItem(KEY);if(r)DB=Object.assign(DB,JSON.parse(r))}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}}
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=ri(0,i);[a[i],a[j]]=[a[j],a[i]]}return a}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* ---------- geluid en stem ---------- */
+let AC=null;
+function tone(f,t,d,type,g){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),v=AC.createGain();o.type=type||'sine';o.frequency.value=f;v.gain.setValueAtTime(0.0001,AC.currentTime+t);v.gain.exponentialRampToValueAtTime(g||.12,AC.currentTime+t+.02);v.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+t+d);o.connect(v);v.connect(AC.destination);o.start(AC.currentTime+t);o.stop(AC.currentTime+t+d+.05)}catch(e){}}
+function sfx(k){if(!DB.sound)return;
+  if(k==='ok'){[523,659,784].forEach((f,i)=>tone(f,i*.1,.25))}
+  else if(k==='no'){tone(300,0,.18,'triangle',.08);tone(260,.14,.22,'triangle',.08)}
+  else if(k==='tap')tone(620,0,.07,'sine',.07);
+  else if(k==='win'){[523,659,784,1047,784,1047].forEach((f,i)=>tone(f,i*.12,.3))}}
+let VOICES=[];
+function loadVoices(){try{VOICES=speechSynthesis.getVoices().filter(v=>/^nl([-_]|$)/i.test(v.lang))}catch(e){VOICES=[]}}
+try{loadVoices();speechSynthesis.addEventListener('voiceschanged',loadVoices)}catch(e){}
+function vScore(v){let n=0;if(/nl[-_]NL/i.test(v.lang))n+=3;if(/natural|online|neural|premium|enhanced|siri/i.test(v.name))n+=5;if(/colette|fenna|claire|ellen|google nederlands|female|vrouw|dena/i.test(v.name))n+=3;if(/maarten|xander|frank|ruben|arnaud/i.test(v.name))n-=2;if(v.localService)n+=1;return n}
+function bestVoice(){loadVoices();if(!VOICES.length)return null;if(DB.voiceName){const m=VOICES.find(v=>v.name===DB.voiceName);if(m)return m}return VOICES.slice().sort((a,b)=>vScore(b)-vScore(a))[0]}
+function stopSpeech(){try{speechSynthesis.cancel()}catch(e){}}
+let vmT=0;
+function noVoiceMsg(){const m=$('#vmsg');m.textContent='Op dit apparaat is geen Nederlandse stem gevonden. Daarom lees ik niet voor. Installeer een Nederlandse stem in de instellingen van je apparaat (bij Spraak), of gebruik Microsoft Edge of Google Chrome.';m.hidden=false;clearTimeout(vmT);vmT=setTimeout(()=>{m.hidden=true},9000)}
+function speak(t){if(!t)return;try{const v=bestVoice();if(!v){noVoiceMsg();return}stopSpeech();const u=new SpeechSynthesisUtterance(t);u.voice=v;u.lang=v.lang;u.rate=DB.rate||.9;u.pitch=1.05;speechSynthesis.speak(u)}catch(e){}}
+function listenBtn(t){const b=document.createElement('button');b.type='button';b.className='btn alt small';b.textContent='\u{1F50A} Lees voor';b.onclick=()=>speak(t);return b}
+const say=s=>String(s).replace(/<[^>]+>/g,' ').replace(/∠/g,'hoek ').replace(/°/g,' graden').replace(/₁/g,' 1').replace(/₂/g,' 2').replace(/[∟┐]/g,'hoekje').replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim();
+
+let S={lv:null,i:0,tries:0,pts:0,qs:[],locked:false,log:[],mode:'',t0:0,seq:[],snap:[],keep:false,saved:false,fin:false};const stage=$('#stage');
+/* ---------- meetkunde: kompasroos en hoeken ---------- */
+const rad=d=>d*Math.PI/180;
+const f1=n=>(+n).toFixed(1);
+const N360=b=>((b%360)+360)%360;
+const RC=[130,130],RR=100;
+const PB=(C,b,r)=>[C[0]+r*Math.sin(rad(b)),C[1]-r*Math.cos(rad(b))];
+const cls=d=>Math.abs(d-90)<.5?'recht':d<90?'scherp':'stomp';
+const ADJ={recht:'rechte',scherp:'scherpe',stomp:'stompe'};
+const O=(v,h)=>({v,h:h==null?v:h});
+const O3=()=>[O('recht','Recht'),O('scherp','Scherp'),O('stomp','Stomp')];
+function build(plan,make){const seen=new Set(),out=[];let t=0;plan=shuffle(plan);
+  while(out.length<plan.length&&t<800){t++;const q=make(plan[out.length]);if(!q||seen.has(q.key))continue;seen.add(q.key);out.push(q)}
+  return out}
+function roseInner(){const C=RC,R=RR;let s='<circle cx="130" cy="130" r="100" fill="rgba(238,246,255,.55)" stroke="#17324d" stroke-width="2"/><circle cx="130" cy="130" r="72" fill="rgba(255,255,255,.35)" stroke="#9fbbd6" stroke-width="1"/>';
+  s+='<line x1="130" y1="58" x2="130" y2="202" stroke="#c4dcf2" stroke-width="1"/><line x1="58" y1="130" x2="202" y2="130" stroke="#c4dcf2" stroke-width="1"/>';
+  for(let a=0;a<360;a+=5){const L=a%30===0?14:a%10===0?9:5,p=PB(C,a,R),q=PB(C,a,R-L);s+='<line x1="'+f1(p[0])+'" y1="'+f1(p[1])+'" x2="'+f1(q[0])+'" y2="'+f1(q[1])+'" stroke="#17324d" stroke-width="'+(a%10===0?1.4:.8)+'"/>'}
+  for(let a=0;a<360;a+=30){const p=PB(C,a,R-23);s+='<text class="rn" text-anchor="middle" dominant-baseline="middle" x="'+f1(p[0])+'" y="'+f1(p[1])+'">'+a+'</text>'}
+  [['N',0],['O',90],['Z',180],['W',270]].forEach(x=>{const p=PB(C,x[1],R-47);s+='<text class="rl" text-anchor="middle" dominant-baseline="middle" x="'+f1(p[0])+'" y="'+f1(p[1])+'">'+x[0]+'</text>'});
+  return s}
+function arcD(b1,b2,r){let d=N360(b2-b1);const p=PB(RC,b1,r),q=PB(RC,b2,r);return 'M'+f1(p[0])+','+f1(p[1])+' A'+r+' '+r+' 0 '+(d>180?1:0)+' 1 '+f1(q[0])+','+f1(q[1])}
+function sqD(b1,b2,s){const p=PB(RC,b1,s),q=PB(RC,b2,s),m=[p[0]+q[0]-RC[0],p[1]+q[1]-RC[1]];return 'M'+f1(p[0])+','+f1(p[1])+' L'+f1(m[0])+','+f1(m[1])+' L'+f1(q[0])+','+f1(q[1])}
+/* o: legs [{b,col,w,len}], rot (graden), noRose, hl [{b,t}], arc [b1,b2], arcs [{a:[b1,b2],r,col}], right (vierkantje), name (hoekletter), max, id, rid, aria, ends [{b,t}], full (vaste kijkdoos) */
+function roseSvg(o){o=o||{};const nr=!!o.noRose;
+  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;const add=(x,y,m)=>{m=m||0;x0=Math.min(x0,x-m);y0=Math.min(y0,y-m);x1=Math.max(x1,x+m);y1=Math.max(y1,y+m)};
+  add(130,130,4);
+  let s='';
+  if(!nr)s+='<g'+(o.rid?' id="'+o.rid+'"':'')+' style="transform-origin:130px 130px;transform:rotate('+(o.rot||0)+'deg)">'+roseInner()+'</g>';
+  (o.legs||[]).forEach(l=>{const L=l.len||(nr?112:120),q=PB(RC,l.b,L);add(q[0],q[1],4);s+='<line x1="130" y1="130" x2="'+f1(q[0])+'" y2="'+f1(q[1])+'" stroke="'+(l.col||'#2a6fdb')+'" stroke-width="'+(l.w||4)+'" stroke-linecap="round"/>'});
+  const AR=(a,r,col,w)=>{[a[0],a[1],a[0]+N360(a[1]-a[0])/2].forEach(b=>{const p=PB(RC,b,r);add(p[0],p[1],3)});return '<path d="'+arcD(a[0],a[1],r)+'" fill="none" stroke="'+(col||'#d6336c')+'" stroke-width="'+(w||3)+'"/>'};
+  if(o.arc){if(o.right){[o.arc[0],o.arc[1]].forEach(b=>{const p=PB(RC,b,22);add(p[0],p[1],3)});s+='<path d="'+sqD(o.arc[0],o.arc[1],22)+'" fill="none" stroke="#d6336c" stroke-width="3" stroke-linejoin="round"/>'}else s+=AR(o.arc,nr?30:20)}
+  (o.arcs||[]).forEach(a=>{s+=AR(a.a,a.r,a.col,a.w)});
+  (o.ends||[]).forEach(e=>{const p=PB(RC,e.b,nr?126:126);add(p[0],p[1],10);s+='<text class="bub" text-anchor="middle" dominant-baseline="middle" x="'+f1(p[0])+'" y="'+f1(p[1])+'" style="fill:#17324d">'+e.t+'</text>'});
+  (o.hl||[]).forEach(h=>{const p=PB(RC,h.b,RR-4),q=PB(RC,h.b,RR+16);add(q[0],q[1],14);s+='<circle cx="'+f1(p[0])+'" cy="'+f1(p[1])+'" r="6" fill="#ffc533" stroke="#b35f00" stroke-width="2"/><text class="bub" text-anchor="middle" dominant-baseline="middle" x="'+f1(q[0])+'" y="'+f1(q[1])+'">'+h.t+'</text>'});
+  if(o.name){const bis=(o.arc?o.arc[0]+N360(o.arc[1]-o.arc[0])/2:0)+180,p=PB(RC,bis,nr?22:34);add(p[0],p[1],8);s+='<text class="lt" text-anchor="middle" dominant-baseline="middle" x="'+f1(p[0])+'" y="'+f1(p[1])+'">'+o.name+'</text>'}
+  s+='<circle cx="130" cy="130" r="4.5" fill="#d6336c" stroke="#fff" stroke-width="1.5"/>';
+  let vb;
+  if(!nr||o.full){vb='-10 -10 280 280'}
+  else{x0-=14;y0-=14;x1+=14;y1+=14;let w=x1-x0,h=y1-y0,cx=(x0+x1)/2,cy=(y0+y1)/2;w=Math.max(w,150);h=Math.max(h,110);if(w/h>2)h=w/2;if(h/w>1.25)w=h/1.25;vb=f1(cx-w/2)+' '+f1(cy-h/2)+' '+f1(w)+' '+f1(h)}
+  return '<svg class="fig'+(o.dr?' dr':'')+'"'+(o.id?' id="'+o.id+'"':'')+' viewBox="'+vb+'" style="max-width:'+(o.max||300)+'px;max-height:'+(nr?230:320)+'px" role="img" aria-label="'+(o.aria||'Kompasroos met een hoek')+'">'+s+'</svg>'}
+const FIGC=svg=>'<div class="center">'+svg+'</div>';
+/* aflezen: 0°-lijn (grijs) en blauwe lijn */
+const FIGREAD=X=>FIGC(roseSvg({legs:[{b:0,col:'#8aa3bd',w:3},{b:X}],hl:[{b:X,t:'?'}],aria:'Kompasroos. De blauwe lijn wijst naar een getal.'}));
+/* meten: roos met 0° op het eerste been */
+const FIGMEAS=(b1,d,nm)=>FIGC(roseSvg({legs:[{b:b1},{b:b1+d}],rot:b1,hl:[{b:b1+d,t:'?'}],arc:[b1,b1+d],name:nm,aria:'Kompasroos op een hoek. De 0° ligt op een been.'}));
+/* alleen een hoek */
+const FIGANG=(b1,d,nm)=>FIGC(roseSvg({noRose:true,legs:[{b:b1},{b:b1+d}],arc:[b1,b1+d],right:Math.abs(d-90)<.5,name:nm,max:240,aria:'Een hoek'}));
+const FIGLEG=(b1,d,L1,L2)=>FIGC(roseSvg({noRose:true,legs:[{b:b1},{b:b1+d}],ends:[{b:b1,t:L1},{b:b1+d,t:L2}],arc:[b1,b1+d],max:240,aria:'Een hoek met twee benen'}));
+/* veelhoeken */
+function polyAng(P,i){const n=P.length,a=P[(i+n-1)%n],b=P[i],c=P[(i+1)%n],u=[a[0]-b[0],a[1]-b[1]],v=[c[0]-b[0],c[1]-b[1]];return Math.acos((u[0]*v[0]+u[1]*v[1])/Math.hypot(...u)/Math.hypot(...v))*180/Math.PI}
+function triPts(A,B,C){const base=150,g=180-A-B,b=base*Math.sin(rad(B))/Math.sin(rad(g)),P=[[0,0],[base,0],[b*Math.cos(rad(A)),-b*Math.sin(rad(A))]];
+  const xs=P.map(p=>p[0]),ys=P.map(p=>p[1]),w=Math.max(...xs)-Math.min(...xs),h=Math.max(...ys)-Math.min(...ys),k=Math.min(190/w,120/h,1.3);
+  return P.map(p=>[(p[0]-Math.min(...xs))*k+15,(p[1]-Math.min(...ys))*k+20])}
+const QUAD=[[16,98],[92,118],[185,84],[66,14]];
+function polySvg(P,letters,o){o=o||{};let s='<svg class="fig poly" viewBox="-16 -16 252 192" style="max-width:300px" role="img" aria-label="'+(o.aria||'Een figuur met hoeken')+'"><polygon class="pg" points="'+P.map(p=>f1(p[0])+','+f1(p[1])).join(' ')+'"/>';
+  const cen=[P.reduce((a,p)=>a+p[0],0)/P.length,P.reduce((a,p)=>a+p[1],0)/P.length];
+  P.forEach((p,i)=>{const an=polyAng(P,i),dx=p[0]-cen[0],dy=p[1]-cen[1],L=Math.hypot(dx,dy)||1,tx=p[0]+dx/L*13,ty=p[1]+dy/L*13;
+    const sel=o.sel===i;
+    if(Math.abs(an-90)<1.5&&o.marks!==false){const n=P.length,a=P[(i+n-1)%n],c=P[(i+1)%n],u=[a[0]-p[0],a[1]-p[1]],v=[c[0]-p[0],c[1]-p[1]],lu=Math.hypot(...u),lv=Math.hypot(...v),s0=9,p1=[p[0]+u[0]/lu*s0,p[1]+u[1]/lu*s0],p3=[p[0]+v[0]/lv*s0,p[1]+v[1]/lv*s0],p2=[p1[0]+p3[0]-p[0],p1[1]+p3[1]-p[1]];s+='<path class="sgn" d="M'+f1(p1[0])+','+f1(p1[1])+' L'+f1(p2[0])+','+f1(p2[1])+' L'+f1(p3[0])+','+f1(p3[1])+'"/>'}
+    if(o.tap)s+='<g class="vt" data-v="'+i+'" style="cursor:pointer"><circle class="vtx'+(sel?' sel':'')+'" cx="'+f1(p[0])+'" cy="'+f1(p[1])+'" r="8"/></g>';
+    s+='<text class="lt" text-anchor="middle" dominant-baseline="middle" x="'+f1(tx)+'" y="'+f1(ty)+'">'+letters[i]+'</text>'});
+  return s+'</svg>'}
+
+/* ---------- knoppen om mee te spelen ---------- */
+const chipsH=(list,sel,att,f)=>'<div class="chips">'+list.map(x=>'<button type="button" class="c2'+(String(sel)===String(x)?' sel':'')+'" '+att+'="'+x+'">'+(f?f(x):x)+'</button>').join('')+'</div>';
+function bearingOf(svg,e){const r=svg.getBoundingClientRect(),x=e.clientX-(r.left+r.width/2),y=e.clientY-(r.top+r.height/2);return N360(Math.round(Math.atan2(x,-y)*180/Math.PI/5)*5)}
+/* 1. getal bij de lijn */
+function wLees(box,o){o=o||{};let b=o.start==null?50:o.start;
+  const hint=()=>{if(!o.tick)return '';const base=Math.floor(b/30)*30,ex=Math.round((b-base)/5);return '<div class="say" id="rh">'+(ex?'Het laatste getal is '+base+'°. Dan nog '+ex+' streepje'+(ex>1?'s':'')+' van 5°: '+base+' + '+ex*5+' = <b>'+b+'°</b>.':'De lijn wijst precies naar het getal <b>'+b+'°</b>.')+'</div>'};
+  const paint=()=>{$('#rs',box).innerHTML=roseSvg({legs:[{b:0,col:'#8aa3bd',w:3},{b:b}],hl:[{b,t:b+'°'}],dr:true,id:'rz',aria:'Kompasroos. Sleep de blauwe lijn.'});$('#rv',box).innerHTML='De blauwe lijn staat bij <span class="kw">'+b+'°</span>';if(o.tick)$('#rh',box).outerHTML=hint();$('#sl',box).value=b;$$('[data-g]',box).forEach(x=>x.classList.toggle('sel',+x.dataset.g===b));wireDrag()};
+  function wireDrag(){const svg=$('#rz',box);let drag=0;svg.onpointerdown=e=>{drag=1;try{svg.setPointerCapture(e.pointerId)}catch(_){}b=bearingOf(svg,e);paint()};svg.onpointermove=e=>{if(drag){b=bearingOf(svg,e);paint()}};svg.onpointerup=svg.onpointercancel=()=>{drag=0}}
+  box.innerHTML='<div id="rs"></div><div class="verd" id="rv"></div>'+(o.tick?'<div id="rh"></div>':'')+'<input class="slider" id="sl" type="range" min="0" max="355" step="5" value="'+b+'" aria-label="Draai de blauwe lijn"><p class="note center" style="margin:0">Sleep de lijn, of gebruik de schuifknop.</p>'+chipsH([0,90,180,270],-1,'data-g',x=>x+'°');
+  $('#sl',box).oninput=e=>{b=+e.target.value;paint()};$$('[data-g]',box).forEach(x=>x.onclick=()=>{sfx('tap');b=+x.dataset.g;paint()});paint()}
+/* 2. met de klok mee */
+function wKlok(box){let b=0;
+  const paint=()=>{box.innerHTML=roseSvg({legs:[{b:0,col:'#8aa3bd',w:3},{b:b}],hl:b?[{b,t:b+'°'}]:[],arc:b>0?[0,b]:null,aria:'Kompasroos. De lijn draait met de klok mee.'})+'<div class="verd">'+(b?'Je bent met de klok mee gedraaid tot <span class="kw">'+b+'°</span>':'Je begint bij 0° (noord).')+'</div><div class="row" style="justify-content:center"><button class="btn" id="kk" type="button">'+(b>=330?'Opnieuw beginnen':'Draai 30° met de klok mee ↻')+'</button></div>';$('#kk',box).onclick=()=>{sfx('tap');b=b>=330?0:b+30;paint()}};paint()}
+/* 3. de 4 stappen */
+const STAPT=['Stap 1. Kijk eerst: is de hoek recht, scherp of stomp?','Stap 2. Leg het midden van de kompasroos precies op het hoekpunt.','Stap 3. Leg de lijn van 0° (noord) op één been. Je meet met de klok mee naar het andere been.','Stap 4. Lees bij het andere been het aantal graden af.'];
+const STAPB=['Stap 1: recht, scherp of stomp?','Stap 2: midden op het hoekpunt','Stap 3: 0° op één been','Stap 4: lees het getal af'];
+const POOL=[{n:'A',b1:20,d:50},{n:'B',b1:290,d:35},{n:'C',b1:75,d:115},{n:'D',b1:200,d:70},{n:'E',b1:150,d:130},{n:'P',b1:330,d:95},{n:'Q',b1:240,d:60},{n:'R',b1:110,d:155}];
+function wStap(box,o){o=o||{};const items=o.items||POOL;let hi=0,st=0,first=true;
+  function figure(H){const rot=H.b1>180?H.b1-360:H.b1,right=Math.abs(H.d-90)<.5;
+    return roseSvg({legs:[{b:H.b1},{b:H.b1+H.d}],arc:[H.b1,H.b1+H.d],right,name:'∠'+H.n,noRose:st<2,full:true,rot:st>=3?rot:0,rid:'rg',hl:st>=4?[{b:H.b1+H.d,t:H.d+'°'}]:[],aria:'Een hoek met een kompasroos'})}
+  function msg(H){const c=cls(H.d);
+    if(st===0)return 'Tik op de knop. Dan doe je stap 1.';
+    if(st===1)return '∠'+H.n+' is een <b>'+ADJ[c]+' hoek</b>. '+(c==='scherp'?'Hij is kleiner dan 90°.':c==='stomp'?'Hij is groter dan 90°.':'Hij is precies 90°.');
+    if(st===2)return 'Het midden van de kompasroos ligt precies op het hoekpunt.';
+    if(st===3)return 'De 0° ligt op het ene been. Kijk nu met de klok mee naar het andere been.';
+    return 'Aflezen geeft: <b>∠'+H.n+' = '+H.d+'°</b>. Klopt dat met '+ADJ[c]+'? '+(c==='scherp'?'Ja, 0° tot 90°.':c==='stomp'?'Ja, 90° tot 180°.':'Ja, precies 90°.')}
+  function paint(anim){const H=items[hi];
+    box.innerHTML=(items.length>1?'<p class="note center" style="margin:0">Kies een hoek</p>'+chipsH(items.map((x,i)=>i),hi,'data-h',i=>'∠'+items[i].n):'')+'<div id="sf">'+figure(H)+'</div><div class="say" id="sm">'+msg(H)+'</div><div class="row" style="justify-content:center"><button class="btn" id="sn" type="button">'+(st>=4?'Nog een keer':(STAPB[st]))+'</button></div>';
+    if(anim&&st===3){const g=$('#rg',box),rot=H.b1>180?H.b1-360:H.b1;g.style.transition='none';g.style.transform='rotate(0deg)';g.getBoundingClientRect();g.style.transition='transform .9s';g.style.transform='rotate('+rot+'deg)'}
+    $('#sn',box).onclick=()=>{sfx('tap');if(st>=4){st=0;if(items.length>1)hi=(hi+1)%items.length}else st++;paint(true)};
+    $$('[data-h]',box).forEach(x=>x.onclick=()=>{sfx('tap');hi=+x.dataset.h;st=0;paint()})}
+  paint()}
+/* 4. kies het goede been */
+function wBeen(box){let H,done=null;
+  const nieuw=()=>{const L=shuffle(['P','Q']);H={b1:ri(0,23)*15,d:pick([40,50,60,70,80,100,110,120,130]),L1:L[0],L2:L[1]};done=null;paint()};
+  function paint(){const rot=done===null?0:(done===1?H.b1:H.b1+H.d),other=done===null?null:(done===1?H.d:360-H.d),ob=done===1?H.b1+H.d:H.b1;
+    box.innerHTML='<div id="bf">'+(done===null?roseSvg({noRose:true,legs:[{b:H.b1},{b:H.b1+H.d}],ends:[{b:H.b1,t:H.L1},{b:H.b1+H.d,t:H.L2}],arc:[H.b1,H.b1+H.d],max:260,full:true,aria:'Een hoek met twee benen'}):roseSvg({legs:[{b:H.b1},{b:H.b1+H.d}],ends:[{b:H.b1,t:H.L1},{b:H.b1+H.d,t:H.L2}],rot:rot>180?rot-360:rot,hl:[{b:ob,t:other+'°'}],max:260,aria:'Kompasroos op de hoek'}))+'</div>'
+     +'<div class="say" id="bm">'+(done===null?'Op welk been leg je de lijn van 0° (noord)? Je moet daarna met de klok mee kunnen meten naar het andere been.':done===1?'<b>Goed!</b> Van '+H.L1+' naar '+H.L2+' ga je met de klok mee. Je leest <b>'+H.d+'°</b> af. Dat is de hoek.':'<b>Niet handig.</b> Je leest nu <b>'+(360-H.d)+'°</b> af. Dat is niet de hoek, want je gaat de lange kant om. Probeer het andere been.')+'</div>'
+     +'<div class="row" style="justify-content:center">'+['1','2'].map(k=>'<button type="button" class="btn alt" data-l="'+k+'">Been naar '+(k==='1'?H.L1:H.L2)+'</button>').join('')+'<button type="button" class="btn alt small" id="bnw">Nieuwe hoek</button></div>';
+    $$('[data-l]',box).forEach(x=>x.onclick=()=>{done=x.dataset.l==='1'?1:2;sfx(done===1?'ok':'no');paint()});$('#bnw',box).onclick=()=>{sfx('tap');nieuw()}}
+  nieuw()}
+/* 5. scherp, recht of stomp */
+function wSoort(box){let d=60;
+  const paint=()=>{const c=cls(d);$('#sf',box).innerHTML=roseSvg({noRose:true,legs:[{b:90,col:'#17324d'},{b:90-d}],arc:[90-d,90],right:c==='recht',max:260,aria:'Een hoek van '+d+' graden'});
+    $('#sv',box).innerHTML='De hoek is <span class="kw">'+d+'°</span>. Dat is een <b>'+ADJ[c]+' hoek</b>.';$('#sx',box).textContent=c==='scherp'?'Kleiner dan 90°: tussen 0° en 90°.':c==='stomp'?'Groter dan 90°: tussen 90° en 180°.':'Precies 90°. Het teken is een vierkantje.';$('#sl',box).value=d;$$('[data-g]',box).forEach(x=>x.classList.toggle('sel',+x.dataset.g===d))};
+  box.innerHTML='<div id="sf"></div><div class="verd" id="sv"></div><p class="note center" id="sx" style="margin:0"></p><input class="slider" id="sl" type="range" min="5" max="175" step="5" value="'+d+'" aria-label="Maak de hoek groter of kleiner">'+chipsH([45,90,135],-1,'data-g',x=>x+'°');
+  $('#sl',box).oninput=e=>{d=+e.target.value;paint()};$$('[data-g]',box).forEach(x=>x.onclick=()=>{sfx('tap');d=+x.dataset.g;paint()});paint()}
+/* 6. schat en meet */
+function wKlopt(box){let H,g=null;
+  const nieuw=()=>{const c=pick(['scherp','recht','stomp']);H={b1:ri(0,23)*15,d:c==='recht'?90:c==='scherp'?pick([25,35,45,55,65,75]):pick([105,115,125,135,145,155])};g=null;paint()};
+  function paint(){const c=cls(H.d);
+    box.innerHTML='<div id="kf">'+(g?FIGMEAS(H.b1,H.d,'').replace('>?<','>'+H.d+'°<'):FIGANG(H.b1,H.d,''))+'</div>'
+     +(g?'<div class="say"><b>Jij dacht: '+g+'.</b> Je meet: <b>'+H.d+'°</b>. '+H.d+'° is '+(c==='scherp'?'kleiner dan 90°':c==='stomp'?'groter dan 90°':'precies 90°')+', dus de hoek is <b>'+c+'</b>.<br>'+(g===c?'✔ Het klopt!':'✘ Het klopt niet. Kijk de volgende keer nog beter naar de hoek.')+'</div><div class="row" style="justify-content:center"><button class="btn" id="kn" type="button">Nog een hoek</button></div>'
+       :'<div class="say">Kijk naar de hoek. Wat denk je?</div><div class="chips">'+['scherp','recht','stomp'].map(k=>'<button type="button" class="c2" data-k="'+k+'">'+k[0].toUpperCase()+k.slice(1)+'</button>').join('')+'</div>');
+    $$('[data-k]',box).forEach(x=>x.onclick=()=>{sfx('tap');g=x.dataset.k;paint()});if(g)$('#kn',box).onclick=()=>{sfx('tap');nieuw()}}
+  nieuw()}
+/* 7. benen verlengen */
+function wVerleng(box,o){o=o||{};const H=o.H||{b1:30,d:65};let lang=false;
+  function paint(){box.innerHTML=roseSvg({legs:[{b:H.b1,len:lang?124:40},{b:H.b1+H.d,len:lang?124:40}],rot:H.b1>180?H.b1-360:H.b1,hl:lang?[{b:H.b1+H.d,t:H.d+'°'}]:[],arc:[H.b1,H.b1+H.d],max:280,aria:'Een hoek met korte of lange benen'})+'<div class="say">'+(lang?'<b>Nu zie je het getal:</b> '+H.d+'°. De hoek is niet groter geworden. Alleen de benen zijn langer.':'<b>De benen zijn te kort.</b> Ze komen niet bij de getallen. Je kunt het getal niet zien.')+'</div><div class="row" style="justify-content:center"><button class="btn" id="vl" type="button">'+(lang?'Maak de benen weer kort':'Verleng de benen')+'</button></div>';$('#vl',box).onclick=()=>{sfx('tap');lang=!lang;paint()}}
+  paint()}
+/* 8. hoeken in een figuur */
+function wFig(box){const SH={driehoek:{P:triPts(50,50,80),L:'ABC'},vierhoek:{P:QUAD,L:'ABCD'}};let sh='driehoek',seen={},sel=-1;
+  const R5=a=>Math.round(a/5)*5;
+  function paint(){const {P,L}=SH[sh];
+    box.innerHTML=chipsH(['driehoek','vierhoek'],sh,'data-s',x=>x[0].toUpperCase()+x.slice(1))+'<div id="ff">'+polySvg(P,L,{tap:true,sel,marks:false})+'</div><div class="say" id="fm">'+(sel<0?'Tik op een letter. Dan zie je hoe groot de hoek is.':'<b>∠'+L[sel]+' = '+R5(polyAng(P,sel))+'°</b> · '+ADJ[cls(R5(polyAng(P,sel)))]+' hoek')+'</div><div class="note center">'+L.split('').map((x,i)=>seen[sh+i]?'∠'+x+' = '+R5(polyAng(P,i))+'°':'∠'+x+' = ?').join(' · ')+'</div>';
+    $$('[data-s]',box).forEach(x=>x.onclick=()=>{sfx('tap');sh=x.dataset.s;sel=-1;paint()});
+    $$('.vt',box).forEach(x=>x.onclick=()=>{sfx('tap');sel=+x.dataset.v;seen[sh+sel]=1;paint()})}
+  paint()}
+/* 9. twee hoeken samen */
+function wSom(box){let T=80,e1=30;
+  const paint=()=>{const e2=T-e1;$('#sf',box).innerHTML=roseSvg({noRose:true,legs:[{b:90,col:'#17324d'},{b:90-e1,col:'#e8870a'},{b:90-T}],arcs:[{a:[90-e1,90],r:34,col:'#e8870a',w:5},{a:[90-T,90-e1],r:48,col:'#2a6fdb',w:5}],max:260,ends:[{b:90-e1/2,t:'E₁'},{b:90-e1-e2/2,t:'E₂'}],aria:'Hoek E is verdeeld in twee hoeken'});
+    $('#sv',box).innerHTML='∠E₁ = <span class="kw">'+e1+'°</span> en ∠E₂ = <span class="kw">'+e2+'°</span><br>'+e1+' + '+e2+' = <b>'+T+'°</b>';$('#sl',box).max=T-10;$('#sl',box).value=e1;$$('[data-t]',box).forEach(x=>x.classList.toggle('sel',+x.dataset.t===T))};
+  box.innerHTML='<div id="sf"></div><div class="verd" id="sv"></div><input class="slider" id="sl" type="range" min="10" max="70" step="5" value="'+e1+'" aria-label="Verdeel de hoek"><p class="note center" style="margin:0">Schuif de oranje lijn. De hele hoek ∠E blijft even groot.</p>'+chipsH([60,80,100,120],T,'data-t',x=>'∠E = '+x+'°');
+  $('#sl',box).oninput=e=>{e1=+e.target.value;paint()};$$('[data-t]',box).forEach(x=>x.onclick=()=>{sfx('tap');T=+x.dataset.t;e1=Math.min(e1,T-10);paint()});paint()}
+/* 10. boekplaatje nabouwen: roos al op de hoek (opdracht 20 en O22) */
+function wRoos(box,o){const items=o.items;let hi=0;
+  const paint=()=>{const H=items[hi],c=cls(H.d);box.innerHTML=chipsH(items.map((x,i)=>i),hi,'data-h',i=>'∠'+items[i].n)+roseSvg({legs:[{b:0,col:'#8aa3bd',w:3},{b:H.d}],hl:[{b:H.d,t:'± '+H.d+'°'}],arc:[0,H.d],name:'∠'+H.n,right:c==='recht',aria:'Nagebouwd uit je boek'})+'<div class="say">∠'+H.n+' is een <b>'+ADJ[c]+' hoek</b>. Het getal bij het rechter been is ongeveer <b>'+H.d+'°</b>.</div><p class="note center" style="margin:0">Zo ziet het eruit. Meet zelf ook met je boek erbij.</p>';
+    $$('[data-h]',box).forEach(x=>x.onclick=()=>{sfx('tap');hi=+x.dataset.h;paint()})};paint()}
+const WID={lees:wLees,klok:wKlok,stap:wStap,been:wBeen,soort:wSoort,klopt:wKlopt,verleng:wVerleng,fig:wFig,som:wSom,roos:wRoos};
+
+/* ---------- vragen ---------- */
+const DEGS10=[10,20,30,40,50,60,70,80,100,110,120,130,140,150,160,170,190,200,210,220,230,240,250,260,280,290,300,310,320,330,340,350];
+function numOpts(ans,cand){const s=[ans];shuffle(cand.filter(x=>x>0&&x<360&&x!==ans)).forEach(x=>{if(s.length<4&&!s.includes(x))s.push(x)});return shuffle(s).map(v=>O(String(v),v+'°'))}
+const LETS='ABCDEFPQRST'.split('');
+const STAPPEN=['Ik kijk of de hoek recht, scherp of stomp is','Ik leg het midden van de kompasroos op het hoekpunt','Ik leg de lijn van 0° op één been','Ik lees bij het andere been het aantal graden af'];
+const STP1=[
+ ['Wat doe je als eerste, voordat je gaat meten?',STAPPEN[0],['Ik lees het getal af','Ik leg de lijn van 0° op een been'],'Eerst kijk je of de hoek recht, scherp of stomp is. Dan weet je ongeveer hoe groot hij is.'],
+ ['Waar leg je het midden van de kompasroos?','Precies op het hoekpunt',['Op het midden van een been','Naast de hoek'],'Het midden van de kompasroos moet precies op het hoekpunt liggen.'],
+ ['Waar leg je de lijn van 0° (noord)?','Op één van de benen van de hoek',['Op het hoekpunt','Naast de hoek'],'De lijn van 0° ligt op één been. Het andere been wijst dan naar het getal.'],
+ ['Wat doe je als laatste?',STAPPEN[3],['Ik leg het midden op het hoekpunt','Ik kijk of de hoek scherp is'],'Als laatste lees je bij het andere been het aantal graden af.'],
+ ['In welke richting meet je naar het andere been?','Met de klok mee',['Tegen de klok in','Dwars door de kompasroos'],'Je meet met de klok mee. Kies het been voor 0° dus zo, dat dit kan.'],
+ ['Hoeveel stappen heb je nodig om een hoek te meten?','4',['2','6'],'Het zijn 4 stappen: kijken, midden leggen, 0° leggen en aflezen.']];
+const TRI=[[50,50,80],[90,30,60],[40,40,100],[30,60,90],[60,70,50],[35,35,110],[45,45,90],[80,60,40]];
+function tpick(){const s=shuffle(pick(TRI).slice());return s}
+const M={
+ rd:()=>{const X=pick(DEGS10);return{key:'rd'+X,type:'mc',text:'Welk getal staat bij de blauwe lijn?',fig:FIGREAD(X),opts:numOpts(X,[X+10,X-10,X+20,X-20,360-X,(X+180)%360,X+30,X-30]),ans:String(X),tip:'Begin bij 0° bovenaan. Ga met de klok mee. Tel de streepjes tot de blauwe lijn. Een streepje is 5°.',show:X+'°'}},
+ rd2:()=>{const X=pick(DEGS10.filter(x=>x<=180));return{key:'rh'+X,type:'mc',text:'Hoeveel graden is de hoek tussen 0° (noord) en de blauwe lijn?',fig:FIGREAD(X),opts:numOpts(X,[X+10,X-10,X+20,X-20,360-X,X+30,X-30]),ans:String(X),tip:'Lees het getal af waar de blauwe lijn de kompasroos raakt.',show:X+'°'}},
+ top:()=>({key:'top',type:'mc',text:'Welk getal staat bovenaan op de kompasroos, bij noord?',fig:FIGC(roseSvg({max:240})),opts:[0,90,180,270].map(v=>O(String(v),v+'°')),ans:'0',tip:'Bovenaan staat 0°. Dat is noord. Daar begin je met meten.',show:'0°'}),
+ dirq:()=>({key:'dirq',type:'mc',text:'In welke richting tel je de graden op de kompasroos?',opts:[O('mee','Met de klok mee'),O('tegen','Tegen de klok in'),O('dwars','Van boven naar beneden')],ans:'mee',tip:'Je telt met de klok mee: 0°, 30°, 60°, 90° ...',show:'Met de klok mee'}),
+ sym:()=>({key:'sym',type:'mc',text:'Hoe schrijf je 40 graden op?',opts:[O('a','40°'),O('b','40 g'),O('c','40 m')],ans:'a',tip:'Je schrijft graden met een klein rondje: 40°.',show:'40°'}),
+ full:()=>({key:'full',type:'mc',text:'Je draait helemaal rond op de kompasroos. Hoeveel graden is dat?',opts:[O('360','360°'),O('180','180°'),O('90','90°')],ans:'360',tip:'Een hele kompasroos is 360°. Een kwart is 90°.',show:'360°'}),
+ cls1:()=>{const X=pick([10,20,25,30,40,55,65,75,85,90,95,105,120,135,150,165]);const c=cls(X);return{key:'c1'+X,type:'mc',text:'Een hoek is '+X+'°. Is die hoek scherp, recht of stomp?',opts:O3(),ans:c,tip:'Kleiner dan 90° is scherp. Precies 90° is recht. Groter dan 90° is stomp.',show:c}},
+ bet:()=>{const c=pick(['scherp','recht','stomp']);return{key:'bet'+c,type:'mc',text:'Een '+ADJ[c]+' hoek is ...',opts:[O('recht','precies 90°'),O('scherp','tussen 0° en 90°'),O('stomp','tussen 90° en 180°')],ans:c,tip:'Scherp: tussen 0° en 90°. Recht: 90°. Stomp: tussen 90° en 180°.',show:c==='scherp'?'tussen 0° en 90°':c==='stomp'?'tussen 90° en 180°':'precies 90°'}},
+ ms:()=>{const b1=ri(0,23)*15,d=pick([20,30,35,40,45,50,55,60,65,70,80,95,100,110,120,130,140,150,160]),nm=pick(LETS);return{key:'ms'+b1+'-'+d,type:'mc',text:'Hoeveel graden is ∠'+nm+'?',fig:FIGMEAS(b1,d,'∠'+nm),opts:numOpts(d,[d+10,d-10,360-d,180-d,d+20,d-20]),ans:String(d),tip:'De lijn van 0° ligt op het ene been. Lees het getal af bij het andere been.',show:d+'°'}},
+ leg:()=>{const b1=ri(0,23)*15,d=pick([40,50,60,70,80,100,110,120,130]),L=shuffle(['P','Q']),nm=pick(['A','B','C','R','S']);return{key:'lg'+b1+'-'+d+L[0],type:'mc',two:true,text:'Je meet ∠'+nm+'. Op welk been leg je de lijn van 0° (noord)?',fig:FIGLEG(b1,d,L[0],L[1]),opts:[O('1','Op het been naar '+L[0]),O('2','Op het been naar '+L[1])],ans:'1',tip:'Je meet met de klok mee. Van het been naar '+L[0]+' draai je met de klok mee naar het been naar '+L[1]+'. Dus leg je 0° op het been naar '+L[0]+'.',show:'op het been naar '+L[0]}},
+ stp:()=>({key:'stp',type:'order',text:'Zet de 4 stappen in de goede volgorde. Tik ze één voor één aan.',cards:STAPPEN.map((h,i)=>({h,r:i})),tip:'Eerst kijken (recht, scherp of stomp), dan het midden op het hoekpunt, dan 0° op één been, en als laatste aflezen.',show:'kijken, midden, 0°, aflezen'}),
+ stp1:()=>{const v=pick(STP1),i=STP1.indexOf(v);return{key:'s1'+i,type:'mc',text:v[0],opts:shuffle([O('goed',v[1])].concat(v[2].map((t,j)=>O('fout'+j,t)))),ans:'goed',tip:v[3],show:v[1]}},
+ sch:()=>{const c=pick(['scherp','recht','stomp']),d=c==='recht'?90:c==='scherp'?pick([20,30,40,50,60,70,75]):pick([105,115,125,135,150,160]),b1=ri(0,23)*15;return{key:'sc'+b1+'-'+d,type:'mc',text:'Kijk naar de hoek. Is hij scherp, recht of stomp?',fig:FIGANG(b1,d,''),opts:O3(),ans:c,tip:'Vergelijk met een rechte hoek van 90°. Past hij erin, dan is hij scherp. Past hij er niet in, dan is hij stomp.',show:c}},
+ kz:()=>{const c=pick(['scherp','recht','stomp']),good=Math.random()<.5,X=good?(c==='recht'?90:c==='scherp'?pick([20,35,50,65,80]):pick([100,115,130,145,160])):(c==='recht'?pick([75,110]):c==='scherp'?pick([95,115,130,150]):pick([30,45,60,80])),ok=cls(X)===c;return{key:'kz'+c+X,type:'mc',two:true,text:'Je ziet een '+ADJ[c]+' hoek. Je meet '+X+'°. Klopt dat?',opts:[O('ja','Ja, dat klopt'),O('nee','Nee, dat klopt niet')],ans:ok?'ja':'nee',tip:X+'° is '+(cls(X)==='scherp'?'kleiner dan 90°':cls(X)==='stomp'?'groter dan 90°':'precies 90°')+'. Dat is een '+ADJ[cls(X)]+' hoek.',show:ok?'Ja, dat klopt':'Nee, dat klopt niet'}},
+ nm:()=>{const c=pick(['scherp','recht','stomp']),b1=ri(0,23)*15,d=c==='recht'?90:c==='scherp'?pick([30,45,60,70]):pick([110,125,140,150]),pool={scherp:[20,30,40,50,60,70,80],stomp:[100,110,120,130,150,160,170],recht:[90]},good=pick(pool[c]),others=[].concat(...['scherp','recht','stomp'].filter(k=>k!==c).map(k=>pool[k])),bad=shuffle(others).slice(0,3);
+   return{key:'nm'+c+b1+good+bad.join('-'),type:'mc',text:'Welk getal kan bij deze hoek horen?',fig:FIGANG(b1,d,''),opts:shuffle([good].concat(bad)).map(v=>O(String(v),v+'°')),ans:String(good),tip:'De hoek is '+c+'. '+(c==='scherp'?'Kies een getal kleiner dan 90°.':c==='stomp'?'Kies een getal tussen 90° en 180°.':'Kies 90°.'),show:good+'°'}},
+ vl:()=>({key:'vl',type:'mc',text:'Waarom verleng je de benen van een hoek voor je meet?',opts:shuffle([O('goed','Dan kun je het getal op de kompasroos zien'),O('a','Dan wordt de hoek groter'),O('b','Dan wordt de hoek kleiner')]),ans:'goed',tip:'Zijn de benen te kort, dan komen ze niet bij de getallen. Met langere benen zie je het getal.',show:'dan kun je het getal zien'}),
+ vl2:()=>({key:'vl2',type:'mc',text:'Je maakt de benen van een hoek langer. Wat gebeurt er met de hoek?',opts:shuffle([O('goed','Niets. De hoek blijft even groot'),O('a','De hoek wordt groter'),O('b','De hoek wordt kleiner')]),ans:'goed',tip:'De grootte van een hoek verandert niet als je de benen langer maakt.',show:'de hoek blijft even groot'}),
+ ver3:()=>({key:'ver3',type:'mc',text:'Je wilt een hoek meten. De benen zijn te kort. Wat doe je?',opts:shuffle([O('goed','Ik maak de benen langer met mijn liniaal'),O('a','Ik gok het getal'),O('b','Ik teken een andere hoek')]),ans:'goed',tip:'Maak de benen langer met je liniaal. Dan kun je het getal aflezen.',show:'de benen langer maken'}),
+ tri:()=>{const t=tpick(),P=triPts(t[0],t[1],t[2]),svg=polySvg(P,'ABC',{aria:'Een driehoek'});const kind=pick(['sc','st','re','gr']);
+   const cnt=t.filter(x=>x<90).length,L='ABC';
+   if(kind==='sc')return{key:'t1'+t.join('-'),type:'mc',text:'Hoeveel scherpe hoeken heeft deze driehoek?',fig:FIGC(svg),opts:shuffle([0,1,2,3]).map(v=>O(String(v),String(v))),ans:String(cnt),tip:'Een scherpe hoek is kleiner dan 90°. Kijk naar elke hoek: ∠A, ∠B en ∠C.',show:String(cnt)};
+   if(kind==='st'){const i=t.findIndex(x=>x>90);if(i<0)return null;return{key:'t2'+t.join('-'),type:'mc',text:'Welke hoek van deze driehoek is stomp?',fig:FIGC(svg),opts:['A','B','C'].map(x=>O(x,'∠'+x)),ans:L[i],tip:'Een stompe hoek is groter dan een rechte hoek (90°).',show:'∠'+L[i]}}
+   if(kind==='re'){const i=t.findIndex(x=>x===90);if(i<0)return null;return{key:'t3'+t.join('-'),type:'mc',text:'Welke hoek van deze driehoek is recht?',fig:FIGC(svg),opts:['A','B','C'].map(x=>O(x,'∠'+x)),ans:L[i],tip:'Een rechte hoek is precies 90°. Het vierkantje laat dat zien.',show:'∠'+L[i]}}
+   const i=t.indexOf(Math.max(...t));return{key:'t4'+t.join('-'),type:'mc',text:'Welke hoek van deze driehoek is de grootste?',fig:FIGC(svg),opts:['A','B','C'].map(x=>O(x,'∠'+x)),ans:L[i],tip:'De grootste hoek heeft de wijdste opening.',show:'∠'+L[i]}},
+ polyQ:()=>{const kind=pick(['st','re','sc','kl']),svg=polySvg(QUAD,'ABCD',{aria:'Een vierhoek'}),A=[75,145,50,90];
+   if(kind==='st')return{key:'q1',type:'mc',text:'Welke hoek van vierhoek ABCD is stomp?',fig:FIGC(svg),opts:['A','B','C','D'].map(x=>O(x,'∠'+x)),ans:'B',tip:'Een stompe hoek is groter dan 90°. ∠B is de wijdste hoek.',show:'∠B'};
+   if(kind==='re')return{key:'q2',type:'mc',text:'Welke hoek van vierhoek ABCD is recht?',fig:FIGC(svg),opts:['A','B','C','D'].map(x=>O(x,'∠'+x)),ans:'D',tip:'Een rechte hoek is precies 90°. Kijk naar het vierkantje bij ∠D.',show:'∠D'};
+   if(kind==='sc')return{key:'q3',type:'mc',text:'Hoeveel scherpe hoeken heeft vierhoek ABCD?',fig:FIGC(svg),opts:[0,1,2,3].map(x=>O(String(x),String(x))),ans:'2',tip:'∠A en ∠C zijn kleiner dan 90°. ∠B is stomp en ∠D is recht.',show:'2'};
+   return{key:'q4',type:'mc',text:'Welke hoek van vierhoek ABCD is de kleinste?',fig:FIGC(svg),opts:['A','B','C','D'].map(x=>O(x,'∠'+x)),ans:'C',tip:'De kleinste hoek heeft de smalste opening. Dat is ∠C.',show:'∠C'}},
+ som:()=>{const a=pick([10,15,20,25,30,35,40,45,50]),b=pick([10,15,20,25,30,35,40,45,50]);const T=a+b;return{key:'sm'+a+'-'+b,type:'mc',text:'∠E₁ is '+a+'° en ∠E₂ is '+b+'°. Hoe groot is ∠E samen?',say:'Hoek E 1 is '+a+' graden en hoek E 2 is '+b+' graden. Hoe groot is hoek E samen?',opts:numOpts(T,[T+10,T-10,T+20,Math.abs(a-b),T+5,T-5]),ans:String(T),tip:'Je telt de twee hoeken bij elkaar op: '+a+' + '+b+' = '+T+'.',show:T+'°'}},
+ som2:()=>{const a=pick([20,25,30,35,40,45]),b=pick([20,25,30,35,40,45]),T=a+b;return{key:'sn'+a+'-'+b,type:'mc',text:'Hoek E is '+T+'°. ∠E₁ is '+a+'°. Hoe groot is ∠E₂?',say:'Hoek E is '+T+' graden. Hoek E 1 is '+a+' graden. Hoe groot is hoek E 2?',opts:numOpts(b,[b+10,b-10,T,b+5,a+T,b+20]),ans:String(b),tip:'Samen is het '+T+'°. Trek ∠E₁ er af: '+T+' − '+a+' = '+b+'.',show:b+'°'}}
+};
+const mk=plan=>()=>build(plan,t=>M[t]());
+
+/* ---------- onderdelen ---------- */
+const IMGB=(f,t)=>()=>'<img class="bk" src="boek/'+f+'" alt="'+t+'"><p class="note center">'+t+'</p>';
+const LV=[
+ {t:'De kompasroos lezen',sub:'Graden aflezen',gen:mk(['rd','rd','rd','rd','rd2','rd2','top','dirq','cls1','cls1']),steps:[
+  {h:'Een kompasroos meet hoeken',txt:'Met een kompasroos kun je hoeken meten.\nRondom staan getallen van 0 tot 360. Dat zijn graden. Een graad schrijf je zo: 1°.\nBovenaan staat 0° (noord). Sleep de blauwe lijn en kijk welk getal erbij staat.',w:'lees'},
+  {h:'Met de klok mee',txt:'Je telt de graden met de klok mee. Dat is de richting van de wijzers van de klok.\nVan 0° ga je naar rechts: 30°, 60°, 90° ...\nTik op de knop en kijk hoe de lijn met de klok mee draait.',w:'klok'},
+  {h:'Tel de streepjes',txt:'Tussen twee getallen staan streepjes. Een klein streepje is 5°. Een iets langer streepje is 10°.\nZoek het laatste getal vóór de blauwe lijn. Tel dan de streepjes.\nSleep de blauwe lijn en kijk hoe je het getal vindt.',w:'lees',o:{tick:true,start:40}}]},
+ {t:'Een hoek meten',sub:'De 4 stappen',gen:mk(['ms','ms','ms','ms','leg','leg','leg','stp','stp1','stp1']),steps:[
+  {h:'Hoe meet je een hoek?',txt:'Een hoek meet je in 4 stappen.\nTik steeds op de knop en kijk wat er gebeurt.',w:'stap'},
+  {h:'Kies het goede been',txt:'Je meet altijd met de klok mee.\nLeg de lijn van 0° dus op het been waar je met de klok mee naar het andere been draait.\nTik op het been waar jij de 0° op legt.',w:'been'},
+  {h:'Zo staat het in je boek',txt:'Zo staan de stappen in je boek.\n∠A is een scherpe hoek, dus tussen 0° en 90°. Aflezen geeft: ∠A = 52°.',fig:IMGB('p24-theorie.png','Zo staat het in je boek (bladzijde 24).')}]},
+ {t:'Eerst schatten, dan meten',sub:'Scherp, recht of stomp?',gen:mk(['sch','sch','sch','kz','kz','kz','nm','nm','nm','bet']),steps:[
+  {h:'Kijk eerst naar de hoek',txt:'Voor je meet, kijk je eerst: is de hoek scherp, recht of stomp?\nScherp: tussen 0° en 90°. Recht: precies 90°. Stomp: tussen 90° en 180°.\nSchuif en kijk wat er gebeurt.',w:'soort'},
+  {h:'Klopt het getal?',txt:'Na het meten kijk je: past het getal bij je eerste antwoord?\nKies eerst scherp, recht of stomp. Dan zie je hoeveel graden de hoek is. Klopt het?',w:'klopt'}]},
+ {t:'Meer hoeken',sub:'Benen verlengen en optellen',gen:mk(['vl','vl2','ver3','tri','tri','tri','polyQ','polyQ','som','som2']),steps:[
+  {h:'Verleng de benen',txt:'Zijn de benen van de hoek te kort? Dan komen ze niet bij de getallen van de kompasroos.\nMaak de benen langer met je liniaal. De hoek zelf wordt niet groter of kleiner.',w:'verleng'},
+  {h:'Hoeken in een figuur',txt:'Een driehoek heeft 3 hoeken. Een vierhoek heeft 4 hoeken. Elke hoek heeft een letter.\nMeet elke hoek één voor één. Tik op een letter en kijk hoe groot de hoek is.',w:'fig'},
+  {h:'Twee hoeken samen',txt:'Soms is één hoek verdeeld in twee hoeken, zoals ∠E₁ en ∠E₂.\nDan tel je de twee getallen bij elkaar op: ∠E₁ + ∠E₂ = ∠E.\nSchuif en kijk.',w:'som'}]},
+ {t:'Alles door elkaar',sub:'Oefen alle stappen',gen:mk(['rd','ms','leg','stp1','sch','kz','tri','som2','vl','nm']),steps:[
+  {h:'Je kunt hoeken meten!',txt:'Je weet nu hoe je een hoek meet met de kompasroos.\nOefen de 4 stappen nog een keer met een nieuwe hoek. Daarna maak je 10 vragen door elkaar.',w:'stap'}]}
+];
+const NQ=LV.length*10;
+/* ---------- opdrachten uit het boek ---------- */
+const PAD='Hoofdstuk 5 Hoeken · 5.4 Hoeken meten';
+const KLMN=[[15,110],[141,109],[52,8],[18,38]];
+const Q=(lab,text,opts,why,fig)=>({lab,text,opts:opts.map((t,i)=>({t,ok:i===0})),why,fig});
+const FROOS=(d,nm)=>()=>FIGC(roseSvg({legs:[{b:0,col:'#8aa3bd',w:3},{b:d}],hl:[{b:d,t:'?'}],arc:[0,d],name:nm?'∠'+nm:'',aria:'Kompasroos met een hoek'}));
+const FANG=(b1,d,nm)=>()=>FIGANG(b1,d,'∠'+nm);
+const FPOLY=(P,L)=>()=>FIGC(polySvg(P,L,{aria:'Een figuur met hoeken'}));
+const BOOK=[
+ {id:'20',page:24,nr:'20',title:'Hoeken aflezen op de kompasroos',about:'Je ziet drie kompasrozen. Bij elke kompasroos staat een hoek: ∠P, ∠Q en ∠R. Je kijkt of de hoek scherp, recht of stomp is. En je leest af welk getal bij het rechter been staat.',
+  steps:['Pak je boek. Sla open bladzijde 24. Zoek opdracht 20.','Kijk naar kompasroos 1. Een lijn wijst naar boven. Dat is 0°. De andere lijn is het rechter been.','a. Is het rechter been bij een getal kleiner dan 90°? Dan is de hoek scherp. Is het getal groter dan 90°? Dan is de hoek stomp. Schrijf het op.','b. Kijk waar het rechter been het getal raakt. Schrijf dat getal op.','c en d. Doe hetzelfde bij kompasroos 2 (∠Q) en kompasroos 3 (∠R).'],
+  w:[{t:'roos',items:[{n:'P',d:50},{n:'Q',d:130},{n:'R',d:70}]}],
+  qs:[Q('a','Is ∠P een rechte, scherpe of stompe hoek?',['Een scherpe hoek','Een rechte hoek','Een stompe hoek'],'Het rechter been wijst naar ongeveer 50°. Dat is kleiner dan 90°. Dus een scherpe hoek.',FROOS(50,'P')),
+   Q('b','Welk getal staat bij het rechter been van ∠P?',['ongeveer 50°','ongeveer 130°','ongeveer 310°'],'Het been wijst naar ongeveer 50°. Een paar graden meer of minder is ook goed, want meten is nooit helemaal precies.',FROOS(50,'P')),
+   Q('c','∠Q is een ... hoek.',['stompe','scherpe','rechte'],'Het rechter been van ∠Q wijst naar ongeveer 130°. Dat is groter dan 90°. Dus een stompe hoek.',FROOS(130,'Q')),
+   Q('c','Welk getal staat bij het rechter been van ∠Q?',['ongeveer 130°','ongeveer 50°','ongeveer 230°'],'Je telt met de klok mee vanaf 0°. Dan kom je bij ongeveer 130°.',FROOS(130,'Q')),
+   Q('d','∠R is een ... hoek.',['scherpe','stompe','rechte'],'Het rechter been van ∠R wijst naar ongeveer 70°. Dat is kleiner dan 90°. Dus een scherpe hoek.',FROOS(70,'R')),
+   Q('d','Welk getal staat bij het rechter been van ∠R?',['ongeveer 70°','ongeveer 110°','ongeveer 290°'],'Je telt met de klok mee vanaf 0°. Dan kom je bij ongeveer 70°.',FROOS(70,'R'))]},
+ {id:'21',page:25,nr:'21',title:'Hoek B meten',about:'Je meet ∠B met je kompasroos. Eerst kijk je of de hoek scherp, recht of stomp is. Dan meet je. Daarna kijk je of het getal klopt met je eerste antwoord.',
+  steps:['Pak je boek. Sla open bladzijde 25. Zoek opdracht 21.','a. Kijk naar ∠B. Is de hoek recht, scherp of stomp? Schrijf het op.','b. Leg het midden van je kompasroos precies op hoekpunt B.','Leg de lijn van 0° (noord) goed neer op één been. Kies het been zo, dat je met de klok mee naar het andere been kunt meten.','c. Lees bij het andere been het aantal graden af. Schrijf het getal op.','d. Klopt het getal met je antwoord bij a? Scherp is kleiner dan 90°. Stomp is groter dan 90°.'],
+  w:[{t:'stap',items:[{n:'B',b1:270,d:65}]}],
+  qs:[Q('a','Is ∠B een rechte, scherpe of stompe hoek?',['Een scherpe hoek','Een rechte hoek','Een stompe hoek'],'∠B is kleiner dan een rechte hoek. Dus een scherpe hoek.',FANG(270,65,'B')),
+   Q('b','Op welk been leg je de lijn van 0° (noord)?',['Op het been dat naar links loopt','Op het been dat schuin omhoog loopt'],'Je meet met de klok mee. Van het been naar links draai je met de klok mee omhoog naar het andere been. Dus 0° ligt op het been naar links.',FANG(270,65,'B')),
+   Q('c','Hoeveel graden is ∠B?',['ongeveer 65°','ongeveer 115°','ongeveer 295°'],'Je leest ongeveer 65° af. Leg je de 0° op het verkeerde been, dan lees je 295° af. Dat is niet de hoek.',FANG(270,65,'B')),
+   Q('d','Bij a zei je: ∠B is scherp. Bij c lees je 65° af. Klopt dat?',['Ja, 65° is kleiner dan 90°','Nee, 65° is groter dan 90°'],'65° is kleiner dan 90°. Dat is een scherpe hoek. Het klopt dus.',FANG(270,65,'B'))]},
+ {id:'22',page:25,nr:'22',title:'Drie hoeken meten',about:'Je ziet drie hoeken: ∠A, ∠B en ∠C. Je meet ze alle drie met je kompasroos en schrijft het aantal graden op de stippellijn.',
+  steps:['Pak je boek. Sla open bladzijde 25. Zoek opdracht 22.','Begin met ∠A. Kijk eerst: is de hoek scherp, recht of stomp?','Leg het midden van je kompasroos op het hoekpunt. Leg de lijn van 0° op één been. Meet met de klok mee.','Lees het getal af. Schrijf het op de stippellijn: ∠A is ... °','Doe hetzelfde bij ∠B en ∠C.'],
+  w:[{t:'stap',items:[{n:'A',b1:50,d:40},{n:'B',b1:0,d:90},{n:'C',b1:343,d:75}]}],
+  qs:[Q('∠A','Hoeveel graden is ∠A?',['ongeveer 40°','ongeveer 140°','ongeveer 320°'],'∠A is een scherpe hoek van ongeveer 40°.',FANG(50,40,'A')),
+   Q('∠B','∠B is een ... hoek. Hoeveel graden is hij?',['Een rechte hoek van 90°','Een scherpe hoek van 45°','Een stompe hoek van 135°'],'∠B heeft een vierkantje. Het is een rechte hoek van 90°.',FANG(0,90,'B')),
+   Q('∠C','Hoeveel graden is ∠C?',['ongeveer 75°','ongeveer 105°','ongeveer 285°'],'∠C is een scherpe hoek van ongeveer 75°.',FANG(343,75,'C')),
+   Q('a–c','Welke van de drie hoeken is de grootste?',['∠B','∠A','∠C'],'∠A is ongeveer 40°, ∠C is ongeveer 75° en ∠B is 90°. ∠B is de grootste.')]},
+ {id:'23',page:25,nr:'23',title:'De benen verlengen en een driehoek meten',about:'Eerst leg je uit waarom je de benen verlengt. Daarna meet je de drie hoeken van driehoek ABC. Je maakt eerst de benen langer.',
+  steps:['Pak je boek. Sla open bladzijde 25. Zoek opdracht 23.','a. Zijn de benen te kort, dan komen ze niet bij de getallen van de kompasroos. Daarom verleng je de benen.','b. Verleng de benen van ∠A, ∠B en ∠C met je liniaal.','Meet elke hoek met de 4 stappen: kijken, midden op het hoekpunt, 0° op één been, aflezen.','Schrijf het aantal graden in de hoek.'],
+  w:[{t:'verleng',H:{b1:40,d:50}},{t:'stap',items:[{n:'A',b1:40,d:50},{n:'B',b1:270,d:50},{n:'C',b1:140,d:80}]}],
+  qs:[Q('a','Waarom is het handig om de benen te verlengen?',['Dan kun je het getal op de kompasroos zien','Dan wordt de hoek groter','Dan wordt de hoek kleiner'],'Met korte benen kom je niet bij de getallen. Met langere benen zie je het getal. De hoek zelf verandert niet.',FPOLY(triPts(50,50,80),'ABC')),
+   Q('b','Hoeveel graden is ∠A?',['ongeveer 50°','ongeveer 130°','ongeveer 80°'],'∠A is een scherpe hoek van ongeveer 50°.',FPOLY(triPts(50,50,80),'ABC')),
+   Q('b','Hoeveel graden is ∠C?',['ongeveer 80°','ongeveer 100°','ongeveer 50°'],'∠C is een scherpe hoek van ongeveer 80°.',FPOLY(triPts(50,50,80),'ABC')),
+   Q('b','Welke twee hoeken zijn even groot?',['∠A en ∠B','∠B en ∠C','∠A en ∠C'],'∠A en ∠B zijn allebei ongeveer 50°.',FPOLY(triPts(50,50,80),'ABC'))]},
+ {id:'24',page:25,nr:'24',title:'Een vierhoek meten',about:'Je kijkt eerst of elke hoek van vierhoek ABCD scherp, recht of stomp is. Daarna meet je elke hoek.',
+  steps:['Pak je boek. Sla open bladzijde 25. Zoek opdracht 24.','a. Kijk naar elke hoek: ∠A, ∠B, ∠C en ∠D. Is de hoek scherp, recht of stomp? Schrijf het op.','b. Meet elke hoek met de 4 stappen. Maak de benen eventueel langer.','Schrijf het aantal graden in de hoek.'],
+  w:[{t:'fig'}],
+  qs:[Q('a','∠A is een ... hoek.',['scherpe','stompe','rechte'],'∠A is kleiner dan 90°. Dus scherp.',FPOLY(QUAD,'ABCD')),
+   Q('a','∠B is een ... hoek.',['stompe','scherpe','rechte'],'∠B is groter dan 90°. Dus stomp.',FPOLY(QUAD,'ABCD')),
+   Q('a','∠C is een ... hoek.',['scherpe','stompe','rechte'],'∠C is kleiner dan 90°. Dus scherp.',FPOLY(QUAD,'ABCD')),
+   Q('a','∠D is een ... hoek.',['rechte','scherpe','stompe'],'Bij ∠D past precies een rechte hoek. Dus recht (90°).',FPOLY(QUAD,'ABCD')),
+   Q('b','Hoeveel graden is ∠B ongeveer?',['ongeveer 145°','ongeveer 35°','ongeveer 215°'],'∠B is een stompe hoek van ongeveer 145°.',FPOLY(QUAD,'ABCD')),
+   Q('b','Hoeveel graden is ∠D?',['90°','ongeveer 50°','ongeveer 130°'],'∠D is een rechte hoek. Dat is 90°.',FPOLY(QUAD,'ABCD'))]},
+ {id:'25',page:26,nr:'25',title:'Hoeken in bouwkranen',about:'Op de foto’s staan twee bouwkranen. Bij de rode boogjes staan letters: A, B, C, D en E. Jij meet elke hoek en schrijft de grootte op.',
+  steps:['Pak je boek. Sla open bladzijde 26. Zoek opdracht 25.','Zoek de letters bij de rode boogjes: A, B, C, D en E. Elke letter is een hoek.','Kies één hoek. Leg het midden van je kompasroos op het hoekpunt. Dat is de plek waar de twee delen van de kraan elkaar raken.','Leg de lijn van 0° op één been. Meet met de klok mee naar het andere been.','Lees het getal af. Schrijf op: ∠A = ...°','Doe hetzelfde bij de andere hoeken.'],
+  w:[{t:'stap'}],
+  qs:[Q('1','Waar leg je het midden van je kompasroos?',['Op het hoekpunt, bij de letter van de hoek','Op het midden van de kraan','Naast de kraan'],'Het midden van de kompasroos ligt altijd precies op het hoekpunt.'),
+   Q('2','Hoeveel hoeken meet je bij opdracht 25?',['Alle hoeken met een letter: A, B, C, D en E','Alleen ∠A','Alleen de hoeken van de eerste kraan'],'Bij elk rood boogje staat een letter. Je meet alle hoeken met een letter.'),
+   Q('3','Je leest 120° af. Is de hoek scherp, recht of stomp?',['Stomp','Scherp','Recht'],'120° is groter dan 90°. Dus een stompe hoek.'),
+   Q('4','Wat schrijf je op?',['De letter van de hoek en het aantal graden, bijvoorbeeld ∠A = 40°','Alleen de letter','Alleen een getal zonder °'],'Je schrijft de letter van de hoek en het aantal graden. Bijvoorbeeld ∠A = 40°.')]},
+ {id:'26',page:26,nr:'26',title:'Hoek E is verdeeld in twee hoeken',about:'Hoek E is verdeeld in ∠E₁ en ∠E₂. Je kijkt of elke hoek scherp, recht of stomp is. Je meet ze. Daarna reken je uit hoe groot ze samen zijn.',
+  steps:['Pak je boek. Sla open bladzijde 26. Zoek opdracht 26.','a. Kijk naar ∠E₁ en ∠E₂. Is elke hoek recht, scherp of stomp? Schrijf het op.','b. Meet ∠E₁ met de 4 stappen. Schrijf het getal op. Meet daarna ∠E₂.','c. Tel de twee getallen bij elkaar op. Zo weet je hoe groot ∠E₁ en ∠E₂ samen zijn.'],
+  w:[{t:'som'}],
+  qs:[Q('c','Hoe reken je uit hoe groot ∠E₁ en ∠E₂ samen zijn?',['Je telt de twee getallen bij elkaar op','Je trekt de twee getallen van elkaar af','Je meet nog een keer'],'∠E₁ en ∠E₂ samen zijn samen ∠E. Je telt de twee getallen op.'),
+   Q('c','Stel: ∠E₁ is 40° en ∠E₂ is 50°. Hoe groot zijn ze samen?',['90°','10°','45°'],'40 + 50 = 90. Samen is het 90°.'),
+   Q('a','Stel: ∠E₁ is 70°. Is die hoek scherp, recht of stomp?',['Scherp','Recht','Stomp'],'70° is kleiner dan 90°. Dus scherp.')]},
+ {id:'L27',page:26,nr:'L27',title:'Vierhoek KLMN meten (leerdoelen)',about:'Hier laat je zien dat je het kunt. Je meet de vier hoeken van vierhoek KLMN en schrijft de grootte op.',
+  steps:['Pak je boek. Sla open bladzijde 26. Zoek opdracht L27.','Meet de vier hoeken: ∠K, ∠L, ∠M en ∠N. Eén voor één.','Doe voor elke hoek de 4 stappen: kijken, midden op het hoekpunt, 0° op één been, aflezen.','Zijn de benen te kort? Maak ze langer met je liniaal.','Schrijf de getallen op de stippellijn.','Kijk of je het goed hebt. Nog niet goed? Dan ga je naar opdracht E8.'],
+  w:[{t:'stap',items:[{n:'K',b1:3,d:85},{n:'L',b1:270,d:50},{n:'M',b1:138,d:85},{n:'N',b1:45,d:140}]}],
+  qs:[Q('1','Hoeveel scherpe hoeken heeft vierhoek KLMN?',['3','1','2'],'∠K, ∠L en ∠M zijn kleiner dan 90°. Alleen ∠N is stomp.',FPOLY(KLMN,'KLMN')),
+   Q('2','Welke hoek van vierhoek KLMN is stomp?',['∠N','∠K','∠L','∠M'],'∠N is groter dan 90° (ongeveer 140°). Dat is een stompe hoek.',FPOLY(KLMN,'KLMN')),
+   Q('3','Hoeveel graden is ∠L ongeveer?',['ongeveer 50°','ongeveer 130°','ongeveer 310°'],'∠L is een scherpe hoek van ongeveer 50°.',FPOLY(KLMN,'KLMN')),
+   Q('4','Hoeveel graden is ∠N ongeveer?',['ongeveer 140°','ongeveer 40°','ongeveer 220°'],'∠N is een stompe hoek van ongeveer 140°.',FPOLY(KLMN,'KLMN'))]},
+ {id:'O22',page:27,nr:'O22',title:'Hoeken meten (extra hulp)',about:'Dit is een extra opdracht met hulp. Bij ∠M staat de kompasroos al op de hoek. Je leest het getal af. Daarna meet je ∠N en ∠O zelf.',
+  steps:['Pak je boek. Sla open bladzijde 27. Zoek opdracht O22.','a. Bij ∠M staat de kompasroos al op de hoek. Lees het getal af bij het rechter been. Schrijf het op.','b. Meet ∠N met de 4 stappen: kijken, midden op het hoekpunt, 0° op één been, aflezen.','Meet daarna ∠O op dezelfde manier.','Maak de benen eventueel langer. Schrijf de getallen op de stippellijn.'],
+  w:[{t:'roos',items:[{n:'M',d:60}]},{t:'stap',items:[{n:'N',b1:13,d:110},{n:'O',b1:133,d:40}]}],
+  qs:[Q('a','Hoeveel graden is ∠M?',['ongeveer 60°','ongeveer 120°','ongeveer 300°'],'Het rechter been van ∠M wijst naar ongeveer 60°.',FROOS(60,'M')),
+   Q('b','∠N is een ... hoek.',['stompe','scherpe','rechte'],'∠N is ongeveer 110°. Dat is groter dan 90°. Dus stomp.',FANG(13,110,'N')),
+   Q('b','Hoeveel graden is ∠N?',['ongeveer 110°','ongeveer 70°','ongeveer 250°'],'∠N is een stompe hoek van ongeveer 110°.',FANG(13,110,'N')),
+   Q('b','Hoeveel graden is ∠O?',['ongeveer 40°','ongeveer 140°','ongeveer 320°'],'∠O is een scherpe hoek van ongeveer 40°.',FANG(133,40,'O'))]},
+ {id:'O24',page:27,nr:'O24',title:'De hoeken van een huis (extra hulp)',about:'Op de tekening van een huis staan zes hoeken: ∠A tot en met ∠F. Jij vult de tabel in. Eerst recht, scherp of stomp. Daarna de grootte van de hoek.',
+  steps:['Pak je boek. Sla open bladzijde 27. Zoek opdracht O24.','a. Controleer met je geodriehoek: is elke hoek recht, scherp of stomp? Vul het antwoord in de tabel in.','b. Meet elke hoek met je kompasroos. Gebruik de 4 stappen.','Maak de benen eventueel langer.','Vul de grootte van de hoek in de tabel in.','Doe het zo bij ∠A, ∠B, ∠C, ∠D, ∠E en ∠F.'],
+  w:[{t:'stap'}],
+  qs:[Q('a','Waarmee controleer je bij a of een hoek recht, scherp of stomp is?',['Met je geodriehoek','Met je passer','Met je schaar'],'Bij a gebruik je je geodriehoek. De rechte hoek van je geodriehoek helpt je.'),
+   Q('b','Waarmee meet je bij b de grootte van de hoek?',['Met je kompasroos','Met je liniaal','Met je geodriehoek'],'Bij b meet je de grootte met je kompasroos.'),
+   Q('b','Wat doe je als de benen te kort zijn?',['Ik maak de benen langer','Ik gok het getal','Ik sla de hoek over'],'Maak de benen eventueel langer. Dan kun je het getal aflezen.'),
+   Q('tabel','Hoeveel hoeken moet je invullen in de tabel?',['6','4','3'],'Er staan zes hoeken in de tabel: ∠A, ∠B, ∠C, ∠D, ∠E en ∠F.')]}
+];
+
+const mascot=()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="#ffc533" stroke="#c98f00" stroke-width="4"/><path d="M28 72 L28 30 L72 72 Z" fill="#fff" stroke="#17324d" stroke-width="4" stroke-linejoin="round"/><path d="M28 60 L40 60 L40 72" fill="none" stroke="#d6336c" stroke-width="3.5"/></svg>';
+function totalPts(){return Object.values(DB.lv).reduce((a,v)=>a+(v.pts||0),0)}
+function topbar(show){$('#bar').hidden=!show;if(!show)return;$('#av').innerHTML=mascot();$('#nm').textContent=DB.name;$('#pt').textContent=S.mode==='quiz'?('Punten: '+S.pts+' van 10'):(totalPts()+' van '+NQ+' punten');$('#ts').textContent=DB.sound?'\u{1F3B5} Geluid aan':'\u{1F515} Geluid uit'}
+function renderVP(){const box=$('#vp');loadVoices();const cur=bestVoice();let h='<h2>Kies een stem</h2>';
+  if(!VOICES.length)h+='<div class="say">Op dit apparaat is geen Nederlandse stem gevonden. Daarom wordt er niet voorgelezen. Installeer een Nederlandse stem in de instellingen van je apparaat (bij Spraak), of gebruik Microsoft Edge of Google Chrome.</div>';
+  else{h+='<p class="note">Tik op een stem om hem te horen. De stem die je kiest blijft bewaard.</p><div class="opts">'+VOICES.slice().sort((a,b)=>vScore(b)-vScore(a)).map((v,i)=>'<button class="opt'+(cur&&cur.name===v.name?' ok':'')+'" type="button" data-vn="'+esc(v.name)+'">'+esc(v.name)+' ('+esc(v.lang)+')'+(i===0?' · aanbevolen':'')+'</button>').join('')+'</div><p><b>Snelheid</b></p><div class="chips">'+[['Langzaam',.75],['Normaal',.9],['Snel',1.05]].map(x=>'<button type="button" class="c2'+((DB.rate||.9)===x[1]?' sel':'')+'" data-rt="'+x[1]+'">'+x[0]+'</button>').join('')+'</div>'}
+  h+='<div class="row"><button class="btn alt small" id="vc" type="button">Sluiten</button></div>';box.innerHTML=h;
+  $$('[data-vn]',box).forEach(b=>b.onclick=()=>{DB.voiceName=b.dataset.vn;save();speak('Hallo '+DB.name+'. Een hoek meet je met de kompasroos.');renderVP()});
+  $$('[data-rt]',box).forEach(b=>b.onclick=()=>{DB.rate=+b.dataset.rt;save();speak('Dit is de snelheid die je kiest.');renderVP()});
+  $('#vc').onclick=()=>{box.hidden=true}}
+$('#tp').onclick=()=>{const v=$('#vp');v.hidden=!v.hidden;if(!v.hidden)renderVP()};
+$('#ts').onclick=()=>{DB.sound=!DB.sound;save();topbar(true)};
+function setProg(p){const g=$('#pg');g.hidden=p==null;if(p!=null)$('i',g).style.width=p+'%'}
+const fmtT=t=>Math.floor(t/60)+':'+String(t%60).padStart(2,'0')+' min';
+const starsOf=p=>p>=9?3:p>=7?2:p>=5?1:0;
+const starTxt=n=>'★'.repeat(n)+'☆'.repeat(3-n);
+
+/* ---------- onderkant: Menu, Vorige, Volgende ---------- */
+function navHtml(){return '<div class="nav"><button class="btn alt" id="bMenu" type="button">Menu</button><button class="btn alt" id="bPrev" type="button">← Vorige</button><button class="btn" id="bMain" type="button">Volgende →</button></div>'}
+function setMain(label,fn,off,good){const x=$('#bMain');x.textContent=label;x.disabled=!!off;x.className='btn'+(good?' good':'');x.onclick=off?null:fn}
+function wireNav(prev,ask){const m=$('#bMenu'),p=$('#bPrev');p.disabled=!prev;p.onclick=prev?()=>{sfx('tap');prev()}:null;
+  m.onclick=()=>{if(ask&&ask()&&!m.dataset.arm){m.dataset.arm='1';m.textContent='Zeker weten?';setTimeout(()=>{if(m.isConnected){delete m.dataset.arm;m.textContent='Menu'}},3500);return}menu()}}
+const askMenu=()=>S.mode==='quiz'&&S.log.length>0&&!S.fin;
+function leaveQ(){if(S.mode==='quiz'&&S.locked&&S.snap&&$('#ans')){S.snap[S.i]=stage.innerHTML}}
+function qNext(){leaveQ();S.i<S.qs.length-1?(S.i++,showQ()):finish()}
+function qPrev(){leaveQ();if(S.i>0){S.i--;showQ()}else explain(S.lv,LV[S.lv].steps.length-1)}
+/* ---------- schermen ---------- */
+function nameScreen(){topbar(false);setProg(null);
+  stage.innerHTML='<div class="card"><h1>5.4 Hoeken meten</h1><p>In deze les leer je hoe je een hoek meet met de kompasroos. Je speelt met knoppen en maakt 50 vragen. Daarna leer je stap voor stap hoe je de opdrachten uit je boek maakt.</p><label for="nmi"><b>Schrijf hier je naam</b></label><div class="row"><input class="nm" id="nmi" maxlength="30" autocomplete="off"></div><div class="row"><button class="btn" id="go" type="button">Beginnen</button></div><p class="note" id="er" hidden>Schrijf eerst je naam.</p></div>';
+  const go=()=>{const v=$('#nmi').value.trim();if(v.length<2){$('#er').hidden=false;return}DB.name=v;save();menu()};
+  $('#go').onclick=go;$('#nmi').onkeydown=e=>{if(e.key==='Enter')go()}}
+function menu(){S.lv=null;S.mode='';S.keep=false;S.fin=false;stopSpeech();topbar(true);setProg(null);window.scrollTo(0,0);
+  const done=LV.every((_,i)=>DB.lv[i]&&DB.lv[i].done);
+  let h='<div class="card"><h1>Hoi '+esc(DB.name)+'!</h1><p>Kies een onderdeel. Je begint met de uitleg en daarna maak je 10 vragen.</p>'+(done?'<div class="fb ok">Je hebt alle onderdelen gedaan! Totaal: '+totalPts()+' van '+NQ+' punten.</div>':'')+'<div class="lv">';
+  LV.forEach((l,i)=>{const r=DB.lv[i];h+='<button class="lvb'+(r&&r.done?' done':'')+'" data-i="'+i+'" type="button"><span class="lvn">'+(i+1)+'</span><span><b>'+l.t+'</b><small>'+l.sub+(r&&r.done?' · '+r.pts+' van 10'+(r.time?' · '+fmtT(r.time):''):'')+'</small></span><span class="st">'+(r&&r.done?starTxt(starsOf(r.pts)):'')+'</span></button>'});
+  const nb=Object.keys(DB.book).length;
+  h+='<button class="lvb bk" id="bk" type="button"><span class="lvn">\u{1F4D6}</span><span><b>Extra: opdrachten uit je boek</b><small>Stap voor stap uitleg bij elke opdracht van 5.4 · '+nb+' van '+BOOK.length+' bekeken</small></span></button></div>';
+  h+='<div class="row"><button class="btn alt small" id="rs" type="button">Opnieuw beginnen</button><span class="note" id="rsn"></span></div></div>';
+  stage.innerHTML=h;$$('.lvb[data-i]').forEach(b=>b.onclick=()=>explain(+b.dataset.i,0));$('#bk').onclick=bookMenu;
+  let armed=0;$('#rs').onclick=function(){if(!armed){armed=1;$('#rsn').textContent='Zeker weten? Tik nog een keer. Je punten en je naam worden gewist.';setTimeout(()=>{armed=0;$('#rsn').textContent=''},4000)}else{DB={name:'',lv:{},book:{},voice:DB.voice,sound:DB.sound,rate:DB.rate,voiceName:DB.voiceName};save();nameScreen()}}}
+function explain(i,k){S.lv=i;S.mode='';stopSpeech();topbar(true);setProg(null);const L=LV[i],st=L.steps[k];
+  const paras=st.txt.split('\n').map(p=>'<div class="say">'+p+'</div>').join('');
+  stage.innerHTML='<div class="card"><div class="qhead"><span>Uitleg · onderdeel '+(i+1)+': '+L.t+'</span><span>'+(k+1)+' van '+L.steps.length+'</span></div><h2>'+st.h+'</h2>'+paras+(st.fig?'<div>'+st.fig()+'</div>':'')+(st.w?'<div class="wd" id="wd"></div>':'')+'<div class="row"><span id="lis"></span></div>'+navHtml()+'</div>';
+  if(st.w)WID[st.w]($('#wd'),st.o);
+  $('#lis').appendChild(listenBtn(say(st.h+'. '+st.txt.replace(/\n/g,' '))));
+  wireNav(k?()=>explain(i,k-1):null,null);
+  setMain('Volgende →',()=>{if(k<L.steps.length-1)explain(i,k+1);else if(S.keep&&S.lv===i&&!S.fin){showQ()}else startQuiz(i)});
+  window.scrollTo(0,0)}
+/* ----- vragen ----- */
+function startQuiz(i){S={lv:i,i:0,tries:0,pts:0,qs:LV[i].gen(),locked:false,log:[],mode:'quiz',t0:0,seq:[],snap:[],keep:true,saved:false,fin:false};showQ()}
+function progress(){const L=S.qs.length;let h='';for(let i=0;i<L;i++){h+='<i style="display:inline-block;width:20px;height:20px;margin:0 2px;border-radius:50%;border:3px solid '+(i<S.log.length?(S.log[i].pts?'#4aa83a':'#e8883a'):(i===S.i?'#2a6fdb':'#c4dcf2'))+';background:'+(i<S.log.length?(S.log[i].pts?'#7ed36a':'#ffb066'):'#fff')+'"></i>'}return '<div class="center" style="margin:4px 0 10px">'+h+'</div>'}
+function showQ(){stopSpeech();window.scrollTo(0,0);S.mode='quiz';S.fin=false;topbar(true);const L=LV[S.lv],q=S.qs[S.i],n=S.qs.length;setProg(S.i/n*100);
+  const lastLab=S.i===n-1?'Klaar ▶':'Volgende →';
+  if(S.snap[S.i]){stage.innerHTML=S.snap[S.i];S.locked=true;$('#lis').innerHTML='';$('#lis').appendChild(listenBtn(q.say||say(q.text)));wireNav(qPrev,askMenu);setMain(lastLab,qNext,false,true);return}
+  S.t0=Date.now();S.tries=0;S.locked=false;S.seq=[];
+  let h='<div class="card"><div class="qhead"><span>'+L.t+'</span><span>Vraag '+(S.i+1)+' van '+n+'</span></div>'+progress();
+  if(q.fig)h+=q.fig;
+  h+='<div class="q">'+q.text+'</div><div id="ans">';
+  if(q.type==='mc')h+='<div class="opts'+(q.two?' two':'')+'">'+q.opts.map(o=>'<button class="opt" type="button" data-v="'+esc(o.v)+'">'+o.h+'</button>').join('')+'</div>';
+  else if(q.type==='order'){const cs=shuffle(q.cards.map((c,i)=>i));h+='<div class="opts" id="ord">'+cs.map(i=>'<button class="opt" type="button" data-v="'+i+'">'+q.cards[i].h+'<span class="nb" hidden></span></button>').join('')+'</div>'}
+  h+='</div><div id="fbk" role="status" aria-live="polite"></div><div class="row"><span id="lis"></span></div>'+navHtml()+'</div>';
+  stage.innerHTML=h;$('#lis').appendChild(listenBtn(q.say||say(q.text)));
+  wireNav(qPrev,askMenu);setMain(lastLab,qNext,true);
+  if(q.type==='mc')$$('.opt').forEach(b=>b.onclick=()=>judge(b.dataset.v===q.ans,b));
+  else if(q.type==='order')$$('#ord > button').forEach(b=>b.onclick=()=>{if(S.locked||S.seq.includes(+b.dataset.v))return;sfx('tap');S.seq.push(+b.dataset.v);const nb=$('.nb',b);nb.hidden=false;nb.textContent=S.seq.length;b.classList.add('sel');
+    if(S.seq.length===q.cards.length){const ok=S.seq.every((v,i)=>q.cards[v].r===i);if(ok)judge(true);else{judge(false,null,'Nog niet goed. De volgorde klopt niet. Begin opnieuw.');if(!S.locked){S.seq=[];$$('#ord > button').forEach(x=>{x.classList.remove('sel');$('.nb',x).hidden=true})}}}})}
+function fb(k,t){$('#fbk').innerHTML='<div class="fb '+k+'">'+t+'</div>'}
+function judge(ok,btn,msg){if(S.locked)return;const q=S.qs[S.i];
+  if(ok){S.locked=true;sfx('ok');const aw=S.tries===0?1:0,sec=Math.round((Date.now()-S.t0)/1000);S.pts+=aw;S.log.push({pts:aw,sec});topbar(true);if(btn)btn.classList.add('ok');fb('ok',pick(['Goed zo!','Super!','Knap gedaan!','Helemaal goed!'])+' '+(aw?'+1 punt':'Geen punt, want het was niet de eerste keer goed.')+' · '+sec+' sec');endQ()}
+  else{S.tries++;sfx('no');if(btn){btn.classList.add('no');btn.disabled=true}
+    if(S.tries===1)fb('no',msg||'Nog niet goed. Probeer het nog een keer.');
+    else if(S.tries===2)$('#fbk').innerHTML='<div class="fb no">'+(msg||'Nog niet goed.')+'</div><div class="fb tip">'+q.tip+'</div>';
+    else{S.locked=true;const sec=Math.round((Date.now()-S.t0)/1000);S.log.push({pts:0,sec});
+      if(q.type==='mc')$$('.opt').forEach(b=>{if(b.dataset.v===q.ans)b.classList.add('ok')});
+      if(q.type==='order'){const o=q.cards.map((c,i)=>i).sort((a,b)=>q.cards[a].r-q.cards[b].r);$$('#ord > button').forEach(b=>{const nb=$('.nb',b);nb.hidden=false;nb.textContent=o.indexOf(+b.dataset.v)+1})}
+      $('#fbk').innerHTML='<div class="fb no">Het goede antwoord is: '+q.show+' · 0 punten · '+sec+' sec</div><div class="fb tip">'+q.tip+'</div>';endQ()}}}
+function endQ(){$$('.opt').forEach(b=>b.disabled=true);setMain(S.i===S.qs.length-1?'Klaar ▶':'Volgende →',qNext,false,true);$('#bMain').focus()}
+function finish(){setProg(100);window.scrollTo(0,0);const i=S.lv,p=S.pts,n=S.qs.length,old=DB.lv[i]||{};
+  const tot=S.log.reduce((a,x)=>a+x.sec,0);
+  if(!S.saved){S.saved=true;DB.lv[i]={done:true,pts:Math.max(old.pts||0,p),last:p,time:tot,n:(old.n||0)+1};save()}
+  S.mode='';S.fin=true;topbar(true);sfx('win');
+  const all=LV.every((_,j)=>DB.lv[j]&&DB.lv[j].done),s=starsOf(p),r=p/n;
+  let h='<div class="card center"><h1>Onderdeel '+(i+1)+' klaar!</h1><div class="stars">'+starTxt(s)+'</div><p class="big">'+p+' van '+n+' meteen goed</p><p>Tijd: '+fmtT(tot)+' · gemiddeld '+Math.round(tot/Math.max(1,S.log.length))+' sec per vraag</p><details style="text-align:left"><summary>Bekijk elke vraag</summary><table class="lg"><tr><th>Vraag</th><th>Punten</th><th>Tijd</th></tr>'+S.log.map((x,j)=>'<tr><td>'+(j+1)+'</td><td>'+x.pts+'</td><td>'+x.sec+' sec</td></tr>').join('')+'</table></details><p>'+(r>=.9?'Fantastisch!':r>=.7?'Heel goed gedaan!':r>=.5?'Goed bezig. Oefen nog een keer voor meer sterren.':'Blijf oefenen, dan wordt het steeds makkelijker.')+'</p>';
+  if(all)h+='<div class="fb ok">Je hebt alle '+LV.length+' onderdelen gedaan! Totaal: '+totalPts()+' van '+NQ+' punten.</div>';
+  h+='<div class="row" style="justify-content:center"><button class="btn alt" id="ag" type="button">Nog een keer</button></div>'+navHtml()+'</div>';
+  stage.innerHTML=h;$('#ag').onclick=()=>startQuiz(i);
+  wireNav(()=>{S.i=n-1;showQ()},null);
+  if(i<LV.length-1)setMain('Volgende →',()=>explain(i+1,0));else setMain('Naar het boek ▶',bookMenu)}
+/* ----- opdrachten uit het boek ----- */
+function bookMenu(){S.mode='';S.keep=false;S.fin=false;stopSpeech();topbar(true);setProg(null);window.scrollTo(0,0);
+  const pages=[...new Set(BOOK.map(b=>b.page))];
+  let h='<div class="card"><h1>Opdrachten uit je boek</h1><div class="where">Pak je boek. Zoek <b>'+PAD+'</b>. Kies hieronder de opdracht waar je mee bezig bent. Je krijgt kleine stappen: wat moet je doen?</div>';
+  pages.forEach(pg=>{h+='<h3>Bladzijde '+pg+'</h3><div class="lv">'+BOOK.filter(b=>b.page===pg).map(b=>'<button class="lvb bk" data-id="'+b.id+'" type="button"><span class="lvn" style="font-size:.95rem">'+b.nr+'</span><span><b>Opdracht '+b.nr+'</b><small>'+b.title+'</small></span><span class="st">'+(DB.book[b.id]?'✓':'')+'</span></button>').join('')+'</div>'});
+  h+=navHtml()+'</div>';
+  stage.innerHTML=h;$$('.lvb[data-id]').forEach(b=>b.onclick=()=>bookEx(b.dataset.id));
+  wireNav(null,null);setMain('Eerste opdracht →',()=>bookEx(BOOK[0].id))}
+function bookEx(id){stopSpeech();topbar(true);setProg(null);S.mode='';const B=BOOK.find(x=>x.id===id),ix=BOOK.indexOf(B);let qi=0,good=0;const R=[];
+  const IMG='<a href="boek/p'+B.page+'-opdracht-'+B.nr+'.png" target="_blank" rel="noopener"><img class="bk" src="boek/p'+B.page+'-opdracht-'+B.nr+'.png" alt="Opdracht '+B.nr+' uit je boek, bladzijde '+B.page+'"></a><p class="note center" style="margin:0">Tik op de afbeelding om groter te zien.</p>';
+  stage.innerHTML='<div class="card"><div class="badges"><span class="badge">Bladzijde '+B.page+'</span><span class="badge o">Opdracht '+B.nr+'</span></div><p class="note" style="margin-top:0">'+PAD+'</p><h2>'+B.title+'</h2>'
+   +'<div class="where">Pak je boek. Sla open <b>bladzijde '+B.page+'</b> en zoek <b>opdracht '+B.nr+'</b>.</div>'
+   +'<h3>Waar gaat het over?</h3><div class="say">'+B.about+'</div>'
+   +'<h3>De opdracht uit je boek</h3>'+IMG+'<p class="note center">Zo staat de opdracht in je boek. Het antwoord staat er niet bij.</p>'
+   +'<h3>Wat moet je doen? Stap voor stap</h3>'+B.steps.map((t,i)=>'<div class="stp"><span class="n">'+(i+1)+'</span><span>'+t+'</span></div>').join('')
+   +'<div class="row"><span id="lis"></span></div>'
+   +(B.w?'<h3>Probeer het hier met de kompasroos</h3>'+B.w.map((w,i)=>'<div class="wd" id="bw'+i+'"></div>').join(''):'')
+   +'<h3>Nu jij</h3><div id="qz"></div>'+navHtml()+'</div>';
+  $('#lis').appendChild(listenBtn(say(B.title+'. '+B.about+' Wat moet je doen? '+B.steps.join(' '))));
+  if(B.w)B.w.forEach((w,i)=>WID[w.t]($('#bw'+i),w));
+  const qz=$('#qz');
+  function nextOpdr(){ix<BOOK.length-1?bookEx(BOOK[ix+1].id):menu()}
+  function prevOpdr(){ix>0?bookEx(BOOK[ix-1].id):bookMenu()}
+  function nav(){const last=qi>=B.qs.length;
+    wireNav(()=>{if(qi>0){qi--;showQ()}else prevOpdr()},null);
+    if(last)setMain(ix<BOOK.length-1?'Volgende opdracht →':'Naar het menu ▶',nextOpdr,false,true);
+    else setMain('Volgende vraag →',()=>{qi++;qi<B.qs.length?showQ():done()},!R[qi],true)}
+  function showQ(){const q=B.qs[qi],r=R[qi];
+    qz.innerHTML='<div class="qhead"><span>Opdracht '+B.nr+' · vraag '+q.lab+'</span><span>Stap '+(qi+1)+' van '+B.qs.length+'</span></div>'+(q.fig?'<div>'+q.fig()+'</div>':'')+'<div class="q">'+q.text+'</div><div class="opts" id="bo">'+(r?r.order:shuffle(q.opts.map((o,i)=>i))).map(i=>'<button class="opt" type="button" data-i="'+i+'" data-ok="'+(q.opts[i].ok?1:0)+'">'+q.opts[i].t+'</button>').join('')+'</div><div id="bf"></div><div class="row"><span id="bl2"></span></div>';
+    $('#bl2').appendChild(listenBtn(say(q.text)));
+    const order=$$('#bo .opt').map(x=>+x.dataset.i);
+    const show=(b,ok)=>{$$('#bo .opt').forEach(x=>{x.disabled=true;if(x.dataset.ok==='1')x.classList.add('ok')});if(!ok)b.classList.add('no');
+      const right=q.opts.filter(o=>o.ok).map(o=>o.t).join(', ');
+      $('#bf').innerHTML='<div class="fb '+(ok?'ok':'no')+'">'+(ok?'Goed zo!':'Niet goed. Het goede antwoord is: '+right)+'</div><div class="ans"><b>Waarom?</b> '+q.why+'</div>'};
+    if(r){show($('#bo .opt[data-i="'+r.i+'"]'),r.ok)}
+    else $$('#bo .opt').forEach(b=>b.onclick=()=>{const ok=b.dataset.ok==='1';sfx(ok?'ok':'no');if(ok)good++;R[qi]={i:+b.dataset.i,ok,order};show(b,ok);nav();$('#bMain').focus()});
+    nav()}
+  function done(){DB.book[B.id]=1;save();sfx('win');qz.innerHTML='<div class="fb ok">Opdracht '+B.nr+' klaar! Je had '+good+' van '+B.qs.length+' meteen goed.</div><p>Maak nu de opdracht ook in je boek. Je weet hoe je het moet aanpakken.</p>';nav();window.scrollTo({top:$('#qz').offsetTop-200,behavior:'smooth'})}
+  showQ();window.scrollTo(0,0)}
+window.BR={S:()=>S,LV,BOOK,M,WID};
+if(DB.name)menu();else nameScreen();
+
+</script></body></html>

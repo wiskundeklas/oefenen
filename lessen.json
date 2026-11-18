@@ -64,6 +64,11 @@
    "title": "Breuken keer",
    "note": "Breuk keer breuk en getal keer breuk. Daarna plus en min door elkaar. Uitleg, spelletjes en 60 vragen.",
    "url": "rekenles-breuken-keer.html"
+  },
+  "hoekenmeten": {
+   "title": "5.4 Hoeken meten",
+   "note": "Hoofdstuk 5 Hoeken · hoeken meten met de kompasroos, 50 vragen en de boekopdrachten stap voor stap",
+   "url": "hoeken-meten.html"
   }
  },
  "columns": {
@@ -74,7 +79,8 @@
    "hoeken",
    "lijnen",
    "rss",
-   "kompas"
+   "kompas",
+   "hoekenmeten"
   ],
   "rekenen": [
    "getallen",
