@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Wiskunde: Hoeken</title>
+<title>5.1 Hoeken</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#e8f3ff;--ink:#17324d;--soft:#4b6580;--blue:#2a6fdb;--blue2:#1d57b3;--orange:#e8870a;--good:#1d8a4a;--goodbg:#dff3e6;--oops:#c0392b;--oopsbg:#fde7e3;--card:#fff;--line:#c4dcf2;--yel:#ffc533}
+:root{--bg:#e8f3ff;--ink:#17324d;--soft:#4b6580;--blue:#2a6fdb;--blue2:#1d57b3;--orange:#e8870a;--good:#1d8a4a;--goodbg:#dff3e6;--oops:#c0392b;--oopsbg:#fde7e3;--card:#fff;--line:#c4dcf2;--yel:#ffc533;--rood:#d6336c}
 *{box-sizing:border-box}[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 18px/1.5 Lexend,"Segoe UI",system-ui,sans-serif}
@@ -14,52 +14,82 @@ header.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:
 .chip.pts{background:var(--yel);color:#4a3200;cursor:default}
 .prog{height:12px;border-radius:99px;background:#c4dcf2;overflow:hidden;margin:6px 0 14px}.prog i{display:block;height:100%;background:var(--good);width:0;transition:width .3s}
 .card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:18px 18px 20px;margin-bottom:14px}
-h1{font-size:1.7rem;line-height:1.2;margin:.2em 0 .4em}h2{font-size:1.4rem;margin:.2em 0 .5em}
-p{margin:.5em 0}.note{color:var(--soft);font-size:.9rem}
+h1{font-size:1.7rem;line-height:1.2;margin:.2em 0 .4em}h2{font-size:1.4rem;margin:.2em 0 .5em}h3{font-size:1.1rem;margin:.9em 0 .3em}
+p{margin:.5em 0}.note{color:var(--soft);font-size:.9rem}.center{text-align:center}
 .btn{border:0;border-radius:14px;padding:12px 20px;font:600 1.05rem Lexend,sans-serif;background:var(--blue);color:#fff;cursor:pointer;min-height:50px;box-shadow:0 3px 0 var(--blue2)}
 .btn:active{transform:translateY(2px);box-shadow:none}.btn:disabled{opacity:.5;box-shadow:none;cursor:default}
 .btn.alt{background:#fff;color:var(--blue);border:2px solid var(--blue);box-shadow:none}.btn.small{min-height:40px;padding:6px 14px;font-size:.95rem}
 .btn.good{background:var(--good);box-shadow:0 3px 0 #146b37}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}.row.sp{justify-content:space-between}
-.qhead{display:flex;justify-content:space-between;color:var(--soft);font-size:.9rem;font-weight:600}
-.q{font-size:1.2rem;font-weight:600}
-.opts{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}@media(min-width:520px){.opts.two{grid-template-columns:1fr 1fr}}
-.opt{border:2px solid var(--line);background:#fff;border-radius:14px;padding:12px 14px;font:600 1.05rem Lexend,sans-serif;color:var(--ink);cursor:pointer;text-align:left;min-height:52px}
+.qhead{display:flex;justify-content:space-between;gap:8px;color:var(--soft);font-size:.9rem;font-weight:600}
+.q{font-size:1.2rem;font-weight:600;margin:8px 0}
+.opts{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}.opts.two{grid-template-columns:1fr 1fr}.opts.four{grid-template-columns:1fr 1fr}
+.opt{border:2px solid var(--line);background:#fff;border-radius:14px;padding:10px 14px;font:600 1.05rem Lexend,sans-serif;color:var(--ink);cursor:pointer;text-align:left;min-height:54px}
 .opt:hover{border-color:var(--blue)}.opt.ok{background:var(--goodbg);border-color:var(--good)}.opt.no{background:var(--oopsbg);border-color:var(--oops);opacity:.8}
-.numin{display:flex;gap:10px;margin-top:12px}.numin input{font:700 1.6rem Lexend,sans-serif;width:140px;padding:8px 12px;border:3px solid var(--line);border-radius:14px;text-align:center;color:var(--ink)}
+.opt svg{display:block;margin:0 auto;width:90px;height:auto}.opts.sg .opt{text-align:center}
 .fb{border-radius:14px;padding:12px 14px;margin-top:12px;font-weight:600}.fb.ok{background:var(--goodbg);color:#0f5a2c}.fb.no{background:var(--oopsbg);color:#7a2118}.fb.tip{background:#fff6d9;color:#5a4300;font-weight:400}
 .say{background:#f1f7ff;border-left:5px solid var(--blue);border-radius:10px;padding:10px 14px;margin:12px 0}
-.kw{background:#fff0b3;border-radius:6px;padding:0 6px;font-weight:700}
 .big{font-weight:700;font-size:1.3em}
-svg.fig,.geo svg{display:block;width:100%;max-width:560px;margin:8px auto;touch-action:manipulation}
-.fig .vis{stroke:var(--ink);stroke-width:4;stroke-linecap:round;fill:none}
-.fig .pg{fill:#fff;stroke-linejoin:round}
-.fig .lab{font:700 20px Lexend,sans-serif;fill:var(--ink)}.fig .lab.s{font-size:16px;fill:var(--soft)}
-.fig .hit{stroke:transparent;stroke-width:26;fill:transparent;cursor:pointer;stroke-linecap:round}
-.fig .dotv{fill:var(--ink)}.fig .rm{fill:none;stroke:var(--oops);stroke-width:2.5}
-.fig .wedge{fill:rgba(42,111,219,.22);stroke:var(--blue);stroke-width:2}
-.it{cursor:pointer}.it:hover .vis{stroke:var(--blue)}.it.sel .vis{stroke:var(--oops);stroke-width:7}.it.sel .pg{fill:#ffd9d4}.it.sel .dotv{fill:var(--oops)}
-.it.show .vis{stroke:var(--good);stroke-width:7}.it.show .pg{fill:#c8efd5}.it.show .dotv{fill:var(--good)}
-.geo .refl,.fig .refl{stroke:var(--blue);stroke-width:4;fill:none}
-input[type=range]{width:100%;height:44px;accent-color:var(--blue)}
-.geo{background:#fff;border:2px solid var(--line);border-radius:14px;padding:4px}.geo svg{max-width:none;touch-action:none;user-select:none;-webkit-user-select:none}
-.geo .tri{fill:rgba(120,190,255,.38);stroke:#2a6fdb;stroke-width:3;stroke-linejoin:round;cursor:grab}
-.geo .ed{stroke:transparent;stroke-width:26;stroke-linecap:round;cursor:pointer}.geo .edv{stroke:#1d57b3;stroke-width:3;pointer-events:none}.geo .edv.al{stroke:var(--good);stroke-width:5}
-.geo .arc{fill:none;stroke:#e5a400;stroke-width:3;pointer-events:none}.geo .tk{stroke:#1d57b3;stroke-width:1.5;pointer-events:none}
-.geo .dr{stroke:var(--oops);stroke-width:3;stroke-linecap:round}.geo .rv{stroke:var(--good);stroke-width:4;stroke-dasharray:8 6}
-.geo .rot{fill:var(--yel);stroke:#a97c00;stroke-width:2;cursor:grab}.geo text{pointer-events:none;font-family:Lexend,sans-serif}
+.kw{background:#fff0b3;border-radius:6px;padding:0 6px;font-weight:700}
+.fig{display:block;width:100%;margin:6px auto;touch-action:manipulation}.fig.ang{max-width:260px}.fig.poly{max-width:260px}
+.ray{stroke:var(--ink);stroke-width:4;stroke-linecap:round}.ray2{stroke:var(--blue);stroke-width:4;stroke-linecap:round}.ray.ghost{stroke:#9bb;stroke-dasharray:6 6;stroke-width:3}
+.arc{fill:none;stroke:var(--orange);stroke-width:3}.sgn{fill:none;stroke:var(--rood);stroke-width:3;stroke-linejoin:round}
+.geo{fill:rgba(255,197,51,.38);stroke:#b88600;stroke-width:3;stroke-linejoin:round}
+.vd{fill:var(--ink)}.pg{fill:#eaf4ff;stroke:var(--ink);stroke-width:3.5;stroke-linejoin:round}.lt{font:700 13px Lexend,sans-serif;fill:var(--ink)}
+.hd{fill:var(--orange);stroke:#fff;stroke-width:3;cursor:grab}.dr{touch-action:none;user-select:none;-webkit-user-select:none}
+.vtx{fill:#fff;stroke:var(--blue);stroke-width:3;cursor:pointer}.vtx.sel{fill:var(--orange)}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.acard{position:relative;border:2px solid var(--line);background:#fff;border-radius:14px;padding:4px 4px 8px;cursor:pointer;font:inherit;color:inherit;text-align:center}
+.acard:hover{border-color:var(--blue)}.acard.ok{background:var(--goodbg);border-color:var(--good)}.acard.no{background:var(--oopsbg);border-color:var(--oops);opacity:.8}
+.acard b{display:block}.acard .nb{position:absolute;top:6px;right:8px;background:var(--blue);color:#fff;border-radius:50%;width:28px;height:28px;display:grid;place-items:center;font-weight:700}
+.acard .fig{max-width:150px}.acard.sel{border-color:var(--blue);background:#eef5ff}
+.mrow{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:center;margin-top:8px;border-top:1px solid var(--line);padding-top:8px}.mrow .fig{max-width:110px;margin:0}
+.mrow .tri{display:flex;gap:6px;flex-wrap:wrap}.mrow .tri button{flex:1;min-width:70px;border:2px solid var(--line);background:#fff;border-radius:12px;font:600 .95rem Lexend,sans-serif;padding:8px 4px;cursor:pointer;min-height:44px;color:var(--ink)}
+.mrow .tri button.sel{background:var(--blue);color:#fff;border-color:var(--blue)}.mrow .tri button.ok{background:var(--goodbg);border-color:var(--good);color:var(--ink)}.mrow .tri button.no{background:var(--oopsbg);border-color:var(--oops);color:var(--ink)}
+.slider{width:100%;height:44px;accent-color:var(--blue)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.c2{border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font:600 1rem Lexend,sans-serif;color:var(--ink);cursor:pointer;min-height:42px}.c2.sel{background:var(--blue);color:#fff;border-color:var(--blue)}
+.wd{background:#f6faff;border:2px dashed var(--line);border-radius:16px;padding:12px;margin:12px 0}
+.verd{text-align:center;font-weight:700;font-size:1.25rem;min-height:1.6em}
 .lv{display:grid;gap:10px;margin-top:10px}.lvb{display:flex;align-items:center;gap:12px;border:2px solid var(--line);background:#fff;border-radius:16px;padding:12px 14px;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
 .lvb:hover{border-color:var(--blue)}.lvb b{display:block}.lvb small{color:var(--soft)}.lvn{width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700;display:grid;place-items:center;flex:none}.lvb.done .lvn{background:var(--good)}
+.lvb .st{margin-left:auto;color:#e5a400;font-size:1.3rem;white-space:nowrap}
+.lvb.bk{border-color:var(--orange);background:#fff8ec}.lvb.bk .lvn{background:var(--orange)}
 .stars{font-size:2.4rem;text-align:center;letter-spacing:6px;color:#e5a400}
 input.nm{font:600 1.2rem Lexend,sans-serif;width:100%;padding:12px;border:3px solid var(--line);border-radius:14px;color:var(--ink)}
+.lg{border-collapse:collapse;width:100%;font-size:.9rem;margin-top:6px}.lg th,.lg td{text-align:left;padding:3px 8px 3px 0;border-bottom:1px solid var(--line)}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}.badge{background:var(--blue);color:#fff;border-radius:12px;padding:6px 14px;font-weight:700}.badge.o{background:var(--orange)}
+.where{background:#fff6d9;border:2px solid #f0d27a;border-radius:14px;padding:12px 14px;margin:10px 0;font-weight:600}
+.stp{display:flex;gap:10px;align-items:flex-start;background:#f1f7ff;border-radius:12px;padding:10px 12px;margin:8px 0}.stp .n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700;display:grid;place-items:center}
+.ans{background:var(--goodbg);border:2px solid var(--good);border-radius:14px;padding:12px 14px;margin:10px 0}.ans ul{margin:.3em 0 0;padding-left:1.2em}
+img.bk{display:block;width:100%;border-radius:12px;border:2px solid var(--line);margin:8px 0}
 @keyframes pop{0%{transform:scale(.8)}60%{transform:scale(1.08)}100%{transform:scale(1)}}.pop{animation:pop .35s}
-.fig.clk{max-width:250px}.fig.clks,.fig.angset{max-width:600px}.fig.cmp{max-width:520px}.fig .it.sel .hit{fill:rgba(192,57,43,.08)}
-</style></head><body><a href="index.html" style="display:inline-block;margin:10px 14px 0;color:#2a6fdb;font:700 15px/1.2 system-ui,sans-serif;text-decoration:none">← Alle lessen</a>
+.nav{position:sticky;bottom:0;z-index:5;display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px;padding:10px 0 4px;margin-top:14px;background:linear-gradient(to top,#fff 78%,rgba(255,255,255,0))}
+.nav .btn{padding:10px 6px;font-size:1rem;min-height:52px}
+.rn{font:600 10.5px Lexend,sans-serif;fill:#17324d}.rl{font:700 11px Lexend,sans-serif;fill:#8aa3bd}
+.bub{font:700 14px Lexend,sans-serif;fill:#b35f00;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.opt.sel{border-color:var(--blue);background:#eef5ff}.opt .nb{margin-left:8px;background:var(--blue);color:#fff;border-radius:50%;width:26px;height:26px;display:inline-grid;place-items:center;font-weight:700}
+.vt:hover circle{fill:#ffe9b0}
+.qhead span:last-child{white-space:nowrap}
+.nav{position:sticky;bottom:0;z-index:5;display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px;padding:10px 0 4px;margin-top:14px;background:linear-gradient(to top,#fff 78%,rgba(255,255,255,0))}
+.nav .btn{padding:10px 6px;font-size:1rem;min-height:52px}
+.opt.sel{border-color:var(--blue);background:#eef5ff}.opt .nb{margin-left:8px;background:var(--blue);color:#fff;border-radius:50%;width:26px;height:26px;display:inline-grid;place-items:center;font-weight:700}
+.qhead span:last-child{white-space:nowrap}
+.stp{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.stp.done{background:var(--goodbg)}.stp.done .n{background:var(--good)}
+.pct{font:700 4.6rem/1.1 Lexend,sans-serif;margin:6px 0}.pct.good{color:var(--good)}.pct.mid{color:var(--orange)}.pct.low{color:var(--oops)}
+.lvb.tt .lvn{background:var(--yel);color:var(--ink)}
+.bub{font:700 14px Lexend,sans-serif;fill:#b35f00;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.vt:hover circle{fill:#ffe9b0}
+.opts.c3{grid-template-columns:repeat(3,minmax(0,1fr))}.opts.c3 .opt{min-width:0;overflow:hidden}.opts.c3 .opt{padding:6px;position:relative}.opts.c3 .opt .nb{position:absolute;top:4px;right:4px;margin:0}
+.lvb .st{text-align:center;line-height:1.2}.lvb .st small{display:block;font-size:.8rem}
+</style></head><body><a href="index.html" id="back" style="display:inline-block;margin:10px 14px 0;color:#2a6fdb;font:700 15px/1.2 system-ui,sans-serif;text-decoration:none">← Alle lessen</a>
 <div class="wrap">
 <header class="bar" id="bar" hidden>
  <div class="who"><span id="av"></span><span id="nm"></span></div>
- <button class="chip" id="tv" type="button"></button><button class="chip" id="ts" type="button"></button><span class="chip pts" id="pt">0 punten</span>
+ <button class="chip" id="tp" type="button">🗣 Stem kiezen</button><button class="chip" id="ts" type="button"></button><span class="chip pts" id="pt">0 punten</span>
 </header>
+<div id="vmsg" class="fb tip" hidden></div><div class="card" id="vp" hidden></div>
 <div class="prog" id="pg" hidden><i></i></div>
 <main id="stage"></main>
 </div>
@@ -67,317 +97,407 @@ input.nm{font:600 1.2rem Lexend,sans-serif;width:100%;padding:12px;border:3px so
 <script>
 'use strict';
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const KEY='wiskunde-hoeken51-v1';
-let DB={name:'',res:{},voice:true,sound:true,explain:false};
-try{const r=localStorage.getItem(KEY);if(r)DB=Object.assign(DB,JSON.parse(r));if(!DB.name){const o=JSON.parse(localStorage.getItem('wiskunde-hoeken-v1')||'null');if(o&&o.name)DB.name=o.name}}catch(e){}
+const KEY='wiskunde-hoeken-51-v2';
+let DB={name:'',lv:{},book:{},voice:true,sound:true};
+try{const r=localStorage.getItem(KEY);if(r)DB=Object.assign(DB,JSON.parse(r))}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}}
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=ri(0,i);[a[i],a[j]]=[a[j],a[i]]}return a}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 /* ---------- geluid en stem ---------- */
 let AC=null;
-function tone(f,t,d,type,g){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),v=AC.createGain();o.type=type||'sine';o.frequency.value=f;v.gain.setValueAtTime(0,AC.currentTime+t);v.gain.linearRampToValueAtTime(g||.12,AC.currentTime+t+.02);v.gain.exponentialRampToValueAtTime(.001,AC.currentTime+t+d);o.connect(v);v.connect(AC.destination);o.start(AC.currentTime+t);o.stop(AC.currentTime+t+d+.05)}catch(e){}}
+function tone(f,t,d,type,g){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),v=AC.createGain();o.type=type||'sine';o.frequency.value=f;v.gain.setValueAtTime(0.0001,AC.currentTime+t);v.gain.exponentialRampToValueAtTime(g||.12,AC.currentTime+t+.02);v.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+t+d);o.connect(v);v.connect(AC.destination);o.start(AC.currentTime+t);o.stop(AC.currentTime+t+d+.05)}catch(e){}}
 function sfx(k){if(!DB.sound)return;
   if(k==='ok'){[523,659,784].forEach((f,i)=>tone(f,i*.1,.25))}
   else if(k==='no'){tone(300,0,.18,'triangle',.08);tone(260,.14,.22,'triangle',.08)}
   else if(k==='tap')tone(620,0,.07,'sine',.07);
-  else if(k==='snap')tone(880,0,.09,'triangle',.08);
-  else if(k==='pen')tone(200,0,.12,'sawtooth',.04);
   else if(k==='win'){[523,659,784,1047,784,1047].forEach((f,i)=>tone(f,i*.12,.3))}}
-let VOICE=null;
+let VOICES=[];
+function loadVoices(){try{VOICES=speechSynthesis.getVoices().filter(v=>/^nl([-_]|$)/i.test(v.lang))}catch(e){VOICES=[]}}
+try{loadVoices();speechSynthesis.addEventListener('voiceschanged',loadVoices)}catch(e){}
+function vScore(v){let n=0;if(/nl[-_]NL/i.test(v.lang))n+=3;if(/natural|online|neural|premium|enhanced|siri/i.test(v.name))n+=5;if(/colette|fenna|claire|ellen|google nederlands|female|vrouw|dena/i.test(v.name))n+=3;if(/maarten|xander|frank|ruben|arnaud/i.test(v.name))n-=2;if(v.localService)n+=1;return n}
+function bestVoice(){loadVoices();if(!VOICES.length)return null;if(DB.voiceName){const m=VOICES.find(v=>v.name===DB.voiceName);if(m)return m}return VOICES.slice().sort((a,b)=>vScore(b)-vScore(a))[0]}
 function stopSpeech(){try{speechSynthesis.cancel()}catch(e){}}
-function speak(t){if(!DB.voice||!t)return;try{stopSpeech();const u=new SpeechSynthesisUtterance(t);u.lang='nl-NL';u.rate=.85;const vs=speechSynthesis.getVoices().filter(v=>/^nl/i.test(v.lang));if(vs[0])u.voice=vs[0];speechSynthesis.speak(u)}catch(e){}}
-function listenBtn(t){const b=document.createElement('button');b.type='button';b.className='btn alt small';b.textContent='\u{1F50A} Lees voor';b.onclick=()=>{const was=DB.voice;DB.voice=true;speak(t);DB.voice=was};return b}
-function mascot(){return '<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="#ffc533" stroke="#c98f00" stroke-width="4"/><circle cx="35" cy="42" r="6" fill="#17324d"/><circle cx="65" cy="42" r="6" fill="#17324d"/><path d="M28 62q22 22 44 0" fill="none" stroke="#17324d" stroke-width="6" stroke-linecap="round"/></svg>'}
-/* ---------- rekenhulp ---------- */
-const rad=d=>d*Math.PI/180,deg=r=>r*180/Math.PI,dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
-const norm180=a=>((a%180)+180)%180;
-function angDiff180(a,b){const d=Math.abs(norm180(a)-norm180(b));return Math.min(d,180-d)}
-const dirv=a=>[Math.cos(rad(a)),Math.sin(rad(a))];
-const sgnDist=(p,o,a)=>{const u=dirv(a);return -(p[0]-o[0])*u[1]+(p[1]-o[1])*u[0]};   // + = rechts van de lijn (scherm)
-const lineDist=(p,o,a)=>Math.abs(sgnDist(p,o,a));
-function clipLine(p,a,W,H){const u=dirv(a);let t0=-1e9,t1=1e9;
-  [[0,W],[1,H]].forEach(([i,m])=>{if(Math.abs(u[i])<1e-9){return}const s=(0-p[i])/u[i],e=(m-p[i])/u[i];t0=Math.max(t0,Math.min(s,e));t1=Math.min(t1,Math.max(s,e))});
-  return [[p[0]+u[0]*t0,p[1]+u[1]*t0],[p[0]+u[0]*t1,p[1]+u[1]*t1]]}
-const unit=(a,b)=>{const d=dist(a,b)||1;return [(b[0]-a[0])/d,(b[1]-a[1])/d]};
-/* ---------- figuren ---------- */
-const svgWrap=(w,h,inner,cls)=>'<svg class="fig '+(cls||'')+'" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="Figuur">'+inner+'</svg>';
-function segm(id,a,b,o){o=o||{};const l=(c,x)=>'<line class="'+c+'" x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'"'+(x||'')+'/>';
-  const st=o.col?' style="stroke:'+o.col+(o.w?';stroke-width:'+o.w:'')+'"':'';
-  return id?'<g class="it" data-id="'+id+'">'+l('vis',st)+l('hit')+'</g>':l('vis',st)}
-function dot(id,p,r){r=r||6;const c='<circle class="dotv" cx="'+p[0]+'" cy="'+p[1]+'" r="'+r+'"/>';
-  return id?'<g class="it" data-id="'+id+'"><circle class="hit" cx="'+p[0]+'" cy="'+p[1]+'" r="20"/>'+c+'</g>':c}
-const lab=(t,p,an,cl)=>'<text class="lab '+(cl||'')+'" x="'+p[0]+'" y="'+p[1]+'" text-anchor="'+(an||'middle')+'">'+t+'</text>';
-function poly(id,pts,o){o=o||{};const g='<polygon class="vis pg" points="'+pts.map(p=>p.join(',')).join(' ')+'"'+(o.fill?' style="fill:'+o.fill+'"':'')+'/>';return id?'<g class="it" data-id="'+id+'">'+g+'</g>':g}
-function rmark(P,u,v,s){s=s||15;const a=[P[0]+u[0]*s,P[1]+u[1]*s],b=[a[0]+v[0]*s,a[1]+v[1]*s],c=[P[0]+v[0]*s,P[1]+v[1]*s];return '<path class="rm" d="M'+a+' L'+b+' L'+c+'"/>'}
-function tickMark(a,b,n){const m=[(a[0]+b[0])/2,(a[1]+b[1])/2],u=unit(a,b),nv=[-u[1],u[0]];let s='';for(let i=0;i<n;i++){const o=(i-(n-1)/2)*7;s+='<line class="rm" x1="'+(m[0]+u[0]*o+nv[0]*8)+'" y1="'+(m[1]+u[1]*o+nv[1]*8)+'" x2="'+(m[0]+u[0]*o-nv[0]*8)+'" y2="'+(m[1]+u[1]*o-nv[1]*8)+'"/>'}return s}
-function angPt(V,ang,len){return [V[0]+len*Math.cos(rad(ang)),V[1]-len*Math.sin(rad(ang))]}
-function wedge(V,a0,a1,r){const p0=angPt(V,a0,r),p1=angPt(V,a1,r);return '<path class="wedge" d="M'+V+' L'+p0+' A'+r+' '+r+' 0 '+(a1-a0>180?1:0)+' 0 '+p1+' Z"/>'}
-function angFig(a,o){o=o||{};const V=[70,170],r=o.r||150;
-  return svgWrap(300,200,wedge(V,0,a,o.wr||44)+segm(null,V,angPt(V,0,r))+segm(null,V,angPt(V,a,r))+dot(null,V)+(o.lab?lab(o.lab,[V[0]-4,V[1]+28]):''),'ang')}
-/* ---------- vaste figuren ---------- */
-const FP={F:[50,50],E:[180,50],D:[310,50],A:[50,170],B:[180,170],C:[310,170]};
-function fenceFig(){const P=FP;let s='';
-  [['AC','A','C'],['DF','F','D'],['AF','A','F'],['BE','B','E'],['CD','C','D'],['AE','A','E'],['BF','B','F'],['BD','B','D'],['CE','C','E']].forEach(([id,a,b])=>s+=segm(id,P[a],P[b]));
-  return svgWrap(360,220,s+Object.keys(P).map(k=>dot(null,P[k],5)).join('')+lab('F',[34,42])+lab('E',[180,36])+lab('D',[326,42])+lab('A',[34,196])+lab('B',[180,198])+lab('C',[326,196]),'fence')}
-const TZ={A:[50,170],B:[260,170],C:[260,50],D:[120,50]};
-function trapFig(o){o=o||{};const P=TZ;let s='';
-  [['AB','A','B'],['BC','B','C'],['CD','C','D'],['AD','A','D']].forEach(([id,a,b])=>s+=segm(o.pick?id:null,P[a],P[b]));
-  s+=rmark(P.B,[-1,0],[0,-1])+rmark(P.C,[-1,0],[0,1]);
-  return svgWrap(320,220,s+lab('A',[34,196])+lab('B',[272,196])+lab('C',[276,42])+lab('D',[108,40]),'trap')}
-const RC={A:[60,170],B:[260,170],C:[260,60],D:[60,60]};
-function rectFig(o){o=o||{};const P=RC;let s='';
-  [['AB','A','B'],['BC','B','C'],['CD','C','D'],['AD','A','D']].forEach(([id,a,b])=>s+=segm(o.pick?id:null,P[a],P[b]));
-  if(o.diag)[['AC','A','C'],['BD','B','D']].forEach(([id,a,b])=>s+=segm(o.pick?id:null,P[a],P[b],{col:o.pick?null:'#e8870a'}));
-  if(o.right)Object.keys(P).forEach(k=>{});
-  return svgWrap(320,220,s+lab('A',[44,196])+lab('B',[276,196])+lab('C',[278,50])+lab('D',[44,50]),'rect')}
-function twoLines(a1,a2,o){o=o||{};const C=[160,100],l=(a,id,c)=>{const e1=[C[0]+130*Math.cos(rad(a)),C[1]-130*Math.sin(rad(a))],e2=[C[0]-130*Math.cos(rad(a)),C[1]+130*Math.sin(rad(a))];return segm(null,e1,e2,{col:c})};
-  return svgWrap(320,200,l(a1,'p','#2a6fdb')+l(a2,'q','#e8870a')+lab('p',angPt(C,a1,146),'middle')+lab('q',angPt(C,a2,146),'middle'),'two')}
-function parLines(tilt){return svgWrap(320,170,segm(null,[30,50],[290,50],{col:'#2a6fdb'})+segm(null,[30,125+tilt*-0],[290,125-tilt],{col:'#e8870a'})+lab('p',[16,56],'middle')+lab('q',[16,131],'middle'),'two')}
-/* ---------- eenvoudige vraagonderdelen ---------- */
-function mcW(box,opts,correct,check,o){o=o||{};
-  box.innerHTML='<div class="opts '+(o.two?'two':'')+'">'+opts.map(v=>'<button class="opt" type="button" data-v="'+esc(v)+'">'+v+'</button>').join('')+'</div>';
-  const bs=$$('.opt',box);
-  bs.forEach(b=>b.onclick=()=>{sfx('tap');const ok=b.dataset.v===String(correct);b.classList.add(ok?'ok':'no');b.disabled=true;check(ok);if(ok)bs.forEach(x=>x.disabled=true)});
-  return {reveal(){bs.forEach(b=>{b.disabled=true;if(b.dataset.v===String(correct))b.classList.add('ok')})}}}
-function numW(box,correct,check,unit){
-  box.innerHTML='<div class="numin"><input id="nv" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="Jouw antwoord"><button class="btn" id="nk" type="button">Klaar</button></div>'+(unit?'<p class="note">'+unit+'</p>':'');
-  const i=$('#nv',box),b=$('#nk',box);
-  const go=()=>{const t=i.value.trim();if(!t)return;const ok=Number(t)===correct;check(ok);if(!ok)i.select()};
-  b.onclick=go;i.onkeydown=e=>{if(e.key==='Enter')go()};setTimeout(()=>{try{i.focus({preventScroll:true})}catch(e){}},60);
-  return {reveal(){i.value=correct;i.disabled=true;b.disabled=true}}}
-function pickW(box,svg,okf,check,answer,extra){
-  box.innerHTML=svg+'<div class="row"><button class="btn" id="pk" type="button">Klaar</button><button class="btn alt small" id="pc" type="button">Wis keuze</button></div>';
-  const sel=new Set(),items=$$('.it',box);
-  items.forEach(g=>g.addEventListener('click',()=>{sfx('tap');const id=g.dataset.id;if(sel.has(id)){sel.delete(id);g.classList.remove('sel')}else{sel.add(id);g.classList.add('sel')}}));
-  $('#pc',box).onclick=()=>{sel.clear();items.forEach(g=>g.classList.remove('sel'))};
-  $('#pk',box).onclick=()=>{if(!sel.size)return;check(okf(sel))};
-  return {reveal(){items.forEach(g=>{g.classList.remove('sel');if(answer.includes(g.dataset.id))g.classList.add('show')});$('#pk',box).disabled=true}}}
-const sameSet=(s,arr)=>s.size===arr.length&&arr.every(x=>s.has(x));
-/* ---------- klokken ---------- */
-const pad2=n=>(n<10?'0':'')+n;
-const timeText=(h,m)=>m===0?h+' uur':h+':'+pad2(m);
-const hourAng=(h,m)=>(h%12)*30+m*.5, minAng=m=>m*6;
-const clkPt=(a,r,C)=>[(C||100)+r*Math.sin(rad(a)),(C||100)-r*Math.cos(rad(a))];
-function clockAngle(h,m){const d=Math.abs(hourAng(h,m)-minAng(m))%360;return Math.min(d,360-d)}
-function clockInner(h,m,o){o=o||{};let s='<circle class="vis pg" cx="100" cy="100" r="86" style="stroke-width:5"/>';
-  for(let i=0;i<12;i++){const a=i*30,p1=clkPt(a,i%3?72:66),p2=clkPt(a,79);s+='<line x1="'+p1[0]+'" y1="'+p1[1]+'" x2="'+p2[0]+'" y2="'+p2[1]+'" stroke="#17324d" stroke-width="'+(i%3?2:4)+'"/>'}
-  [[12,0],[3,90],[6,180],[9,270]].forEach(([n,a])=>{const p=clkPt(a,52);s+='<text x="'+p[0]+'" y="'+p[1]+'" text-anchor="middle" dominant-baseline="central" font-size="22" font-weight="700" fill="#17324d" style="font-family:Lexend,sans-serif">'+n+'</text>'});
-  const ah=hourAng(h,m),am=minAng(m);
-  if(o.arc!==false){let d=((am-ah+540)%360)-180;if(Math.abs(d)>0.5){const r=30,p0=clkPt(ah,r),p1=clkPt(ah+d,r);
-    s+='<path d="M100 100 L'+p0+' A'+r+' '+r+' 0 0 '+(d>0?1:0)+' '+p1+' Z" fill="rgba(192,57,43,.18)" stroke="#c0392b" stroke-width="3"/>'}}
-  const ph=clkPt(ah,44),pm=clkPt(am,66);
-  s+='<line x1="100" y1="100" x2="'+ph[0]+'" y2="'+ph[1]+'" stroke="#e8870a" stroke-width="9" stroke-linecap="round"/><line x1="100" y1="100" x2="'+pm[0]+'" y2="'+pm[1]+'" stroke="#2a6fdb" stroke-width="5" stroke-linecap="round"/><circle cx="100" cy="100" r="6" fill="#17324d"/>';
+let vmT=0;
+function noVoiceMsg(){const m=$('#vmsg');m.textContent='Op dit apparaat is geen Nederlandse stem gevonden. Daarom lees ik niet voor. Installeer een Nederlandse stem in de instellingen van je apparaat (bij Spraak), of gebruik Microsoft Edge of Google Chrome.';m.hidden=false;clearTimeout(vmT);vmT=setTimeout(()=>{m.hidden=true},9000)}
+function speak(t){if(!t)return;try{const v=bestVoice();if(!v){noVoiceMsg();return}stopSpeech();const u=new SpeechSynthesisUtterance(t);u.voice=v;u.lang=v.lang;u.rate=DB.rate||.9;u.pitch=1.05;speechSynthesis.speak(u)}catch(e){}}
+function listenBtn(t){const b=document.createElement('button');b.type='button';b.className='btn alt small';b.textContent='\u{1F50A} Lees voor';b.onclick=()=>speak(t);return b}
+const say=s=>String(s).replace(/<[^>]+>/g,' ').replace(/∠/g,'hoek ').replace(/°/g,' graden').replace(/₁/g,' 1').replace(/₂/g,' 2').replace(/[∟┐]/g,'hoekje').replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim();
+
+let S={lv:null,i:0,tries:0,pts:0,qs:[],locked:false,log:[],mode:'',t0:0,seq:[],snap:[],keep:false,saved:false,fin:false};const stage=$('#stage');
+
+/* ---------- gedeelde hulpjes ---------- */
+const O=(v,h)=>({v,h:h==null?v:h});
+const chipsH=(list,sel,att,f)=>'<div class="chips">'+list.map(x=>'<button type="button" class="c2'+(String(sel)===String(x)?' sel':'')+'" '+att+'="'+x+'">'+(f?f(x):x)+'</button>').join('')+'</div>';
+function build(plan,make){const seen=new Set(),out=[];let t=0;plan=shuffle(plan);
+  while(out.length<plan.length&&t<800){t++;const q=make(plan[out.length]);if(!q||seen.has(q.key))continue;seen.add(q.key);out.push(q)}
+  return out}
+const IMGB=(f,t)=>()=>'<img class="bk" src="boek/'+f+'" alt="'+t+'"><p class="note center">'+t+'</p>';
+
+/* ---------- klokken en hoeken tekenen ---------- */
+const rad=d=>d*Math.PI/180;
+const f1=n=>(+n).toFixed(1);
+const PT=(x,y,a,r)=>[x+r*Math.cos(rad(a)),y+r*Math.sin(rad(a))];
+const uurD=h=>h<=6?30*h:360-30*h;
+const arcP=(x,y,a1,a2,r)=>{const p=PT(x,y,a1,r),q=PT(x,y,a2,r);return 'M'+f1(p[0])+','+f1(p[1])+' A'+r+' '+r+' 0 '+((a2-a1)>180?1:0)+' 1 '+f1(q[0])+','+f1(q[1])};
+const wedgeP=(x,y,a1,a2,r)=>{const p=PT(x,y,a1,r);return 'M'+x+','+y+' L'+f1(p[0])+','+f1(p[1])+' '+arcP(x,y,a1,a2,r).replace(/^M[^A]*/,'')+' Z'};
+/* een klok (120 x 120) met de wijzers van h uur */
+function clockG(h,x,lab){let s='<g transform="translate('+(x||0)+',0)"><circle cx="60" cy="60" r="54" fill="#fff" stroke="#17324d" stroke-width="3"/>';
+  for(let i=0;i<60;i++){const a=i*6-90,L=i%5===0?5:2.5,p=PT(60,60,a,50),q=PT(60,60,a,50-L);s+='<line x1="'+f1(p[0])+'" y1="'+f1(p[1])+'" x2="'+f1(q[0])+'" y2="'+f1(q[1])+'" stroke="#17324d" stroke-width="'+(i%5===0?1.4:.6)+'"/>'}
+  for(let i=1;i<=12;i++){const p=PT(60,60,i*30-90,38);s+='<text x="'+f1(p[0])+'" y="'+f1(p[1])+'" text-anchor="middle" dominant-baseline="central" style="font:600 10px Lexend,sans-serif;fill:#17324d">'+i+'</text>'}
+  const ah=h*30-90,a1=h<=6?-90:ah,a2=h<=6?ah:270;
+  s+='<path d="'+wedgeP(60,60,a1,a2,24)+'" fill="rgba(214,51,108,.22)"/><path d="'+arcP(60,60,a1,a2,24)+'" fill="none" stroke="#d6336c" stroke-width="3"/>';
+  const m=PT(60,60,-90,43),hh=PT(60,60,ah,28);
+  s+='<line x1="60" y1="60" x2="'+f1(m[0])+'" y2="'+f1(m[1])+'" stroke="#2a6fdb" stroke-width="3" stroke-linecap="round"/><line x1="60" y1="60" x2="'+f1(hh[0])+'" y2="'+f1(hh[1])+'" stroke="#17324d" stroke-width="5.5" stroke-linecap="round"/><circle cx="60" cy="60" r="4" fill="#d6336c"/>';
+  if(lab)s+='<text x="60" y="134" text-anchor="middle" style="font:700 14px Lexend,sans-serif;fill:#17324d">'+lab+'</text>';
+  return s+'</g>'}
+const clockSvg=(h,max)=>'<svg class="fig" viewBox="0 0 120 120" style="max-width:'+(max||200)+'px" role="img" aria-label="Een klok met wijzers">'+clockG(h)+'</svg>';
+const clocksRow=(hs,labs)=>'<svg class="fig" viewBox="0 0 '+(hs.length*128)+' 142" style="max-width:'+Math.min(420,hs.length*140)+'px" role="img" aria-label="Klokken met wijzers">'+hs.map((h,i)=>clockG(h,i*128+4,labs[i])).join('')+'</svg>';
+/* een hoek: x,y = hoekpunt, a1 = richting van het eerste been (graden, 0 = rechts, met de klok mee), d = grootte */
+function angG(o){const x=o.x,y=o.y,a1=o.a1,a2=o.a1+o.d,L=o.len||40,col=o.col||'#2a6fdb',r=o.r||Math.min(18,L*.45);
+  const p=PT(x,y,a1,L),q=PT(x,y,a2,L);let s='';
+  if(!o.noArc)s+='<path d="'+wedgeP(x,y,a1,a2,r)+'" fill="'+(o.fill||'rgba(42,111,219,.15)')+'"/><path d="'+arcP(x,y,a1,a2,r)+'" fill="none" stroke="'+(o.arcCol||'#d6336c')+'" stroke-width="'+(o.arcW||2.5)+'"/>';
+  s+='<line x1="'+x+'" y1="'+y+'" x2="'+f1(p[0])+'" y2="'+f1(p[1])+'" stroke="'+(o.col1||col)+'" stroke-width="'+(o.w||3.5)+'" stroke-linecap="round"/><line x1="'+x+'" y1="'+y+'" x2="'+f1(q[0])+'" y2="'+f1(q[1])+'" stroke="'+(o.col2||col)+'" stroke-width="'+(o.w||3.5)+'" stroke-linecap="round"/>';
+  if(!o.noDot)s+='<circle cx="'+x+'" cy="'+y+'" r="'+(o.dot||3.2)+'" fill="'+(o.dotCol||'#17324d')+'"/>';
   return s}
-const clockFig=(h,m,o)=>svgWrap(200,200,clockInner(h,m,o),'clk');
-function clocksFig(list,cols,o){o=o||{};cols=cols||list.length;const rows=Math.ceil(list.length/cols);let s='';
-  list.forEach((c,i)=>{const x=(i%cols)*200,y=Math.floor(i/cols)*236;s+='<g class="it" data-id="'+c.id+'" transform="translate('+x+' '+y+')">'+clockInner(c.h,c.m,{arc:o.arc!==false})+'<text x="100" y="226" text-anchor="middle" class="lab">'+(c.cap||c.id)+'</text></g>'});
-  return svgWrap(cols*200,rows*236,s,'clks')}
-function clockW(box,o,check){let h=o.h||12,m=o.m||0;
-  box.innerHTML='<div id="cf"></div><p class="big" id="ct" style="text-align:center;margin:2px 0"></p><label class="note" for="hs">Uur:</label><input id="hs" type="range" min="1" max="12" step="1" value="'+h+'" aria-label="Uur">'+(o.minutes?'<label class="note" for="ms">Minuten:</label><input id="ms" type="range" min="0" max="55" step="5" value="'+m+'" aria-label="Minuten">':'')+(o.noBtn?'':'<div class="row"><button class="btn" id="ck" type="button">Klaar</button></div>');
-  const cf=$('#cf',box);
-  const paint=()=>{cf.innerHTML=clockFig(h,m,{arc:o.arc});$('#ct').textContent=o.hideTime?'':timeText(h,m)};
-  $('#hs',box).oninput=e=>{h=+e.target.value;paint();sfx('tap')};
-  const ms=$('#ms',box);if(ms)ms.oninput=e=>{m=+e.target.value;paint();sfx('tap')};
-  const ck=$('#ck',box);if(ck)ck.onclick=()=>check(!!o.goal(h,m));
-  paint();return {set(a,b){h=a;m=b;$('#hs',box).value=a;if(ms)ms.value=b;paint()},reveal(){if(o.reveal)this.set(o.reveal[0],o.reveal[1]);if(ck)ck.disabled=true}}}
-/* ---------- benen langer maken ---------- */
-function legW(box,o,check){o=o||{};let L=o.start||70;const a=o.a||50,V=[50,175];
-  box.innerHTML='<div id="lg"></div><label class="note" for="ls">Maak de benen langer of korter:</label><input id="ls" type="range" min="50" max="200" step="1" value="'+L+'" aria-label="Lengte van de benen"><p class="big" id="lr" style="text-align:center;margin:4px 0;min-height:1.5em"></p>'+(o.noBtn?'':'<div class="row"><button class="btn" id="lk" type="button">Klaar</button></div>');
-  const paint=()=>{$('#lg',box).innerHTML=svgWrap(360,215,wedge(V,0,a,42)+segm(null,V,angPt(V,0,L),{col:'#e8870a'})+segm(null,V,angPt(V,a,L),{col:'#e8870a'})+dot(null,V,6)+lab('∠S',[V[0]-6,V[1]+32],'middle'),'ang');
-    $('#lr',box).textContent=o.say&&L!==(o.start||70)?'De benen zijn anders. De hoek is nog even groot.':''};
-  $('#ls',box).oninput=e=>{L=+e.target.value;paint()};
-  const lk=$('#lk',box);if(lk)lk.onclick=()=>check(L>=(o.min||140));
-  paint();return {set(v){L=v;$('#ls',box).value=v;paint()},reveal(){this.set(190);if(lk)lk.disabled=true}}}
-/* ---------- hoek op hoek leggen ---------- */
-function compareW(box,o){o=o||{};let aQ=o.aQ,aP=o.aP,t=o.t0||0;const V=[40,215],VQ=[270,175],r0=o.r0==null?22:o.r0;
-  box.innerHTML='<div id="cp"></div><label class="note" for="cs">Schuif ∠Q op ∠P:</label><input id="cs" type="range" min="0" max="100" value="'+t+'" aria-label="Schuif hoek Q op hoek P">';
-  const paint=()=>{const e=1-t/100,Vt=[V[0]+(VQ[0]-V[0])*e,V[1]+(VQ[1]-V[1])*e],rot=r0*e;
-    $('#cp',box).innerHTML=svgWrap(420,260,wedge(V,0,aP,40)+segm(null,V,angPt(V,0,185),{col:'#2a6fdb',w:5})+segm(null,V,angPt(V,aP,185),{col:'#2a6fdb',w:5})+dot(null,V,5)+lab('∠P',[V[0]-2,V[1]+30],'start')+
-      segm(null,Vt,angPt(Vt,rot,115),{col:'#e8870a',w:5})+segm(null,Vt,angPt(Vt,rot+aQ,115),{col:'#e8870a',w:5})+dot(null,Vt,5)+lab('∠Q',[Vt[0]+4,Vt[1]+30],'start'),'cmp')};
-  $('#cs',box).oninput=e=>{t=+e.target.value;paint()};
-  paint();return {setQ(a,q){aQ=a;if(q!=null)aP=q;t=0;$('#cs',box).value=0;paint()},solve(){t=100;$('#cs',box).value=100;paint()}}}
-/* ---------- reeks hoeken ---------- */
-function angSetFig(list,cols){cols=cols||3;const rows=Math.ceil(list.length/cols);let s='';
-  list.forEach((c,i)=>{const x=(i%cols)*190+30,y=Math.floor(i/cols)*150+20,V=[x+15,y+105],len=c.len||100,e1=angPt(V,c.rot||0,len),e2=angPt(V,(c.rot||0)+c.a,len),bis=(c.rot||0)+c.a/2+180,lp=angPt(V,bis,22);
-    s+='<g class="it" data-id="'+c.id+'"><polygon class="hit" points="'+[V,e1,e2].join(' ')+'"/>'+segm(null,V,e1)+segm(null,V,e2)+'<path d="M'+angPt(V,c.rot||0,24)+' A24 24 0 0 0 '+angPt(V,(c.rot||0)+c.a,24)+'" fill="none" stroke="#c0392b" stroke-width="3" pointer-events="none"/>'+dot(null,V,4)+'<text class="lab" x="'+lp[0]+'" y="'+(lp[1]+7)+'" text-anchor="middle">'+(c.lab||c.id)+'</text></g>'});
-  return svgWrap(cols*190+20,rows*150+20,s,'angset')}
-function seqW(box,svg,ids,names,check){
-  box.innerHTML=svg+'<p class="big" id="sq" style="text-align:center;min-height:1.6em"></p><div class="row"><button class="btn" id="pk" type="button">Klaar</button><button class="btn alt small" id="pc" type="button">Opnieuw</button></div>';
-  const seq=[],items=$$('.it',box),show=()=>{$('#sq',box).textContent=seq.map(i=>names[i]||i).join('  →  ');items.forEach(g=>g.classList.toggle('sel',seq.includes(g.dataset.id)))};
-  items.forEach(g=>g.addEventListener('click',()=>{const id=g.dataset.id;if(seq.includes(id))return;sfx('tap');seq.push(id);show()}));
-  $('#pc',box).onclick=()=>{seq.length=0;show()};
-  $('#pk',box).onclick=()=>{if(seq.length<ids.length)return;check(seq.join()===ids.join())};
-  return {reveal(){seq.length=0;ids.forEach(i=>seq.push(i));show();items.forEach(g=>g.classList.add('show'));$('#pk',box).disabled=true}}}
-function hoekPickFig(legs){const V=[70,170],E1=[250,170],E2=angPt(V,50,190);
-  return svgWrap(300,200,wedge(V,0,50,44)+(legs?segm('PQ',V,E1)+segm('PR',V,E2)+dot(null,V,7)+dot(null,E1,6)+dot(null,E2,6):segm(null,V,E1)+segm(null,V,E2)+dot('P',V,7)+dot('Q',E1,7)+dot('R',E2,7))+lab('P',[V[0]-4,V[1]+30])+lab('Q',[E1[0]+4,E1[1]+30])+lab('R',[E2[0]+18,E2[1]-6]),'ang')}
-/* ---------- uitleg ---------- */
-function labelledAngle(){const V=[110,200],e1=angPt(V,50,170),e2=angPt(V,95,170);
-  return svgWrap(380,230,wedge(V,50,95,50)+segm(null,V,e1,{col:'#2a6fdb'})+segm(null,V,e2,{col:'#2a6fdb'})+dot(null,V,8)+lab('hoekpunt P',[V[0]+8,V[1]+32],'start')+lab('been',[e1[0]+8,e1[1]+6],'start')+lab('been',[e2[0]-8,e2[1]-4],'end'),'ang')}
-function sizesFig(){let s='';[[25,'klein'],[60,'middel'],[120,'groot']].forEach(([a,t],i)=>{const V=[20+i*130,150];s+=wedge(V,0,a,30)+segm(null,V,angPt(V,0,100))+segm(null,V,angPt(V,a,100))+dot(null,V,4)+lab(t,[V[0]+50,V[1]+34])});return svgWrap(420,190,s,'sizes')}
-const EX=[
- {t:'Welkom',speak:n=>'Hoi '+n+'! In deze les leer je over hoeken. Je leert wat een hoek is. Je leert wat een hoekpunt en een been is. Je leert hoe je een hoek opschrijft. En je leert hoe je hoeken met elkaar vergelijkt. We beginnen met een klok. Daarna krijg je zestig vragen. Een fout maken mag.',
-  html:n=>'<div style="width:100px;margin:0 auto">'+mascot()+'</div><p>Hoi <b>'+esc(n||'')+'</b>! In deze les leer je:</p><ul><li>wat een <b>hoek</b> is</li><li>wat een <b>hoekpunt</b> en een <b>been</b> is</li><li>hoe je een hoek opschrijft: <b>∠P</b></li><li>hoe je hoeken <b>vergelijkt</b></li></ul><p>We beginnen met een <b>klok</b>. Daarna krijg je <b>60 vragen</b>.</p>'},
- {t:'De klok maakt een hoek',speak:()=>'De wijzers van een klok maken samen een hoek. Dat zie je aan het rode stukje tussen de wijzers. Dat rode stukje heet een boogje. In een hoek zet je vaak een boogje. Zet de klok op een andere tijd. Dan wordt de hoek groter of kleiner. Probeer het zelf met de schuifbalken.',
-  html:()=>'<p>De twee wijzers van een klok maken samen een <span class="kw">hoek</span>.</p><p>In een hoek zet je vaak een <b>boogje</b>. Dat is het rode stukje.</p><p><b>Probeer zelf:</b> verander de tijd. De hoek wordt groter of kleiner.</p><div id="mw"></div>',
-  mount(b){clockW($('#mw',b),{h:2,m:0,minutes:true,noBtn:true},()=>{})}},
- {t:'Hoekpunt en benen',speak:()=>'Een hoek wordt altijd gemaakt door twee benen. De benen beginnen allebei in hetzelfde punt. Dat punt heet het hoekpunt. Hier heet het hoekpunt P.',
-  html:()=>'<p>Een hoek heeft altijd <b>twee benen</b>.</p><p>De benen beginnen in hetzelfde punt. Dat punt is het <span class="kw">hoekpunt</span>.</p>'+labelledAngle()+'<div class="say">2 benen en 1 hoekpunt.</div>'},
- {t:'Hoek P opschrijven',speak:()=>'Een hoek met hoekpunt P noem je hoek P. In de wiskunde schrijf je dit met een teken. Het teken voor het woord hoek ziet eruit als een klein hoekje. Je schrijft dus: hoek P.',
-  html:()=>'<p>Een hoek met hoekpunt <b>P</b> noem je <b>hoek P</b>.</p><p>In de wiskunde vervang je het woord <b>hoek</b> door het teken <span class="kw">∠</span>.</p><p class="big" style="text-align:center;font-size:2rem">∠P</p>'+angFig(55,{lab:'P'})},
- {t:'Groot of klein',speak:()=>'Hoeken kunnen verschillend van grootte zijn. Hier zie je een kleine hoek, een middelgrote hoek en een grote hoek. Hoe verder de benen uit elkaar staan, hoe groter de hoek is.',
-  html:()=>'<p>Hoeken zijn <b>niet allemaal even groot</b>.</p>'+sizesFig()+'<div class="say">Staan de benen <b>ver uit elkaar</b>? Dan is de hoek <b>groot</b>.</div>'},
- {t:'Langere benen',speak:()=>'Maak de benen van een hoek langer. Wordt de hoek dan groter? Nee! De grootte van de hoek verandert niet. Het gaat om hoe ver de benen uit elkaar staan. Het gaat niet om hoe lang de benen zijn. Probeer het zelf met de schuifbalk.',
-  html:()=>'<p>Je maakt de benen <b>langer</b> of <b>korter</b>. Wordt de hoek dan groter?</p><p class="big">Nee! De hoek blijft <b>even groot</b>.</p><div id="mw"></div>',
-  mount(b){legW($('#mw',b),{start:70,a:50,say:true,noBtn:true},()=>{})}},
- {t:'Hoeken vergelijken',speak:()=>'Zo vergelijk je twee hoeken. Je schuift de ene hoek op de andere hoek. Leg de hoekpunten op elkaar en een been op een been. Past het andere been precies erop? Dan zijn de hoeken even groot. Valt het been binnen de andere hoek? Dan is de hoek kleiner. Valt het been buiten de andere hoek? Dan is de hoek groter. Kies hieronder een voorbeeld en schuif de oranje hoek.',
-  html:()=>'<p>Schuif hoek <b>Q</b> op hoek <b>P</b>. Leg de hoekpunten op elkaar en een been op een been.</p><ul><li>Past hij <b>precies</b>? Dan zijn ze <b>even groot</b>.</li><li>Valt hij <b>binnen</b> ∠P? Dan is ∠Q <b>kleiner</b>.</li><li>Steekt hij <b>buiten</b> ∠P? Dan is ∠Q <b>groter</b>.</li></ul><div class="row"><button class="btn alt small" data-q="30">Q kleiner</button><button class="btn alt small" data-q="55">Q even groot</button><button class="btn alt small" data-q="85">Q groter</button></div><div id="mw"></div>',
-  mount(b){const w=compareW($('#mw',b),{aQ:30,aP:55});$$('[data-q]',b).forEach(x=>x.onclick=()=>{sfx('tap');w.setQ(+x.dataset.q,55)})}},
- {t:'Hoeken op de klok',speak:()=>'Op een klok kun je hoeken ook vergelijken. Om een uur staan de wijzers dicht bij elkaar. De hoek is klein. Om drie uur is de hoek een rechte hoek. Om zes uur staan de wijzers precies in een rechte lijn. Dan is de hoek het grootst. Hier zie je vijf klokken.',
-  html:()=>'<p>Staan de wijzers <b>dicht bij elkaar</b>? Dan is de hoek <b>klein</b>.</p><p>Staan ze <b>ver uit elkaar</b>? Dan is de hoek <b>groot</b>.</p>'+clocksFig([{id:'a',h:1,m:0,cap:'1 uur'},{id:'b',h:3,m:0,cap:'3 uur'},{id:'c',h:6,m:0,cap:'6 uur'}],3)+'<div class="say">Om <b>6 uur</b> staan de wijzers in een rechte lijn. Dat is de grootste hoek.</div>'},
- {t:'Dit weet je nu',speak:()=>'Dit weet je nu. Een hoek heeft twee benen en een hoekpunt. Het teken voor hoek is dit hoekje. Hoeken kunnen verschillend van grootte zijn. De benen langer maken verandert de hoek niet. Je vergelijkt hoeken door ze op elkaar te schuiven.',
-  html:()=>'<ul><li>Een hoek heeft <b>2 benen</b> en <b>1 hoekpunt</b>.</li><li>Het teken voor hoek is <b>∠</b>.</li><li>Hoeken kunnen <b>verschillend van grootte</b> zijn.</li><li>De benen langer maken verandert de hoek <b>niet</b>.</li><li>Je vergelijkt hoeken door ze <b>op elkaar te leggen</b>.</li></ul>'},
- {t:'Klaar voor de vragen',speak:()=>'Nu komen de zestig vragen. Ze zijn verdeeld in zes delen. Neem rustig de tijd. Je kunt dit!',
-  html:()=>'<div style="width:100px;margin:0 auto">'+mascot()+'</div><p>Nu komen de <b>60 vragen</b>, in <b>6 delen</b> van 10.</p><p>Neem rustig de tijd. Een fout maken mag.</p><p><b>Je kunt dit!</b></p>'}
-];
-/* ---------- de 60 vragen ---------- */
-const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+/* een rij hoeken, elk in een vakje van 100 x 92. items: {d,len,rot,lab} */
+function angCell(it,i){const x0=i*100,vx=x0+50,vy=78,a1=-90+(it.rot||0)-it.d/2;
+  return angG({x:vx,y:vy,a1,d:it.d,len:it.len||42})+(it.lab?'<text x="'+(x0+6)+'" y="15" style="font:700 14px Lexend,sans-serif;fill:#17324d">∠'+it.lab+'</text>':'')}
+const angRow=items=>'<svg class="fig" viewBox="0 0 '+(items.length*100)+' 96" style="max-width:'+Math.min(420,items.length*130)+'px" role="img" aria-label="Hoeken">'+items.map(angCell).join('')+'</svg>';
+const angCard=(it)=>'<svg viewBox="0 0 100 96" style="width:100%;max-width:150px;display:block;margin:0 auto" role="img" aria-label="Een hoek">'+angCell(it,0)+'</svg>';
+/* grote hoek met namen van de delen */
+function angBig(o){o=o||{};const d=o.d||50,a1=-d,len=o.len||Math.min(160,Math.round(108/Math.sin(rad(d)))),x=34,y=120,hi=o.hi||'';
+  const p=PT(x,y,0,len),q=PT(x,y,-d,len),ar=PT(x,y,-d/2,44);
+  let s='<path d="'+wedgeP(x,y,-d,0,34)+'" fill="rgba(42,111,219,.12)"/>';
+  s+='<line x1="'+x+'" y1="'+y+'" x2="'+f1(p[0])+'" y2="'+f1(p[1])+'" stroke="'+(hi==='been'?'#e8870a':'#2a6fdb')+'" stroke-width="'+(hi==='been'?7:4)+'" stroke-linecap="round" data-part="been"/>';
+  s+='<line x1="'+x+'" y1="'+y+'" x2="'+f1(q[0])+'" y2="'+f1(q[1])+'" stroke="'+(hi==='been'?'#e8870a':'#2a6fdb')+'" stroke-width="'+(hi==='been'?7:4)+'" stroke-linecap="round" data-part="been"/>';
+  s+='<path d="'+arcP(x,y,-d,0,34)+'" fill="none" stroke="'+(hi==='boogje'?'#d6336c':'#d6336c')+'" stroke-width="'+(hi==='boogje'?7:3)+'" data-part="boogje"/>';
+  s+='<circle cx="'+x+'" cy="'+y+'" r="'+(hi==='hoekpunt'?10:5)+'" fill="'+(hi==='hoekpunt'?'#ffc533':'#17324d')+'" stroke="'+(hi==='hoekpunt'?'#b35f00':'#fff')+'" stroke-width="2.5" data-part="hoekpunt"/>';
+  if(o.letter)s+='<text x="'+(x-10)+'" y="'+(y+22)+'" text-anchor="middle" style="font:700 20px Lexend,sans-serif;fill:#d6336c">'+o.letter+'</text>';
+  if(o.tags){const lab={hoekpunt:[x+2,y+30],been:[x+len*.62,y+18],boogje:[x+46,y-14]};if(hi&&lab[hi]){const nm=hi==='been'?'been':hi;s+='<text x="'+f1(lab[hi][0])+'" y="'+f1(lab[hi][1])+'" text-anchor="middle" class="bub">'+nm+'</text>'}}
+  return '<svg class="fig" viewBox="0 0 240 150" style="max-width:340px" role="img" aria-label="Een hoek met hoekpunt, benen en boogje">'+s+'</svg>'}
+const ang3=(h,ls)=>{ // hoek met drie letters: ls=[hoekpunt,eind1,eind2]
+  const d=55,x=60,y=110,len=95,p=PT(x,y,0,len),q=PT(x,y,-d,len);
+  return '<svg class="fig" viewBox="0 0 220 140" style="max-width:300px" role="img" aria-label="Een hoek met drie letters">'+angG({x,y,a1:-d,d:d,len,r:30,dot:5})+'<text x="'+(x-4)+'" y="'+(y+26)+'" text-anchor="middle" class="bub">'+ls[0]+'</text><text x="'+f1(p[0]+14)+'" y="'+f1(p[1]+5)+'" text-anchor="middle" class="bub">'+ls[1]+'</text><text x="'+f1(q[0]+6)+'" y="'+f1(q[1]-10)+'" text-anchor="middle" class="bub">'+ls[2]+'</text></svg>'};
+
+/* ---------- knoppen om mee te spelen ---------- */
+const UREN=[1,2,3,4,5,6,7,8,9,10,11];
+const jaNee=(ok,t)=>'<div class="fb '+(ok?'ok':'no')+'" style="margin:8px 0">'+t+'</div>';
+/* 1. stel de klok in */
+function wKlok(box){let h=3;
+  const paint=()=>{const d=uurD(h);
+    box.innerHTML='<p class="note center" style="margin:0">Kies een tijd</p>'+chipsH(UREN,h,'data-h',x=>x+' uur')+clockSvg(h,210)+'<div class="say">Om <b>'+h+' uur</b> maken de wijzers een hoek. Kijk naar het roze boogje. '+(h===6?'Nu is de hoek heel groot: de wijzers wijzen precies van elkaar af.':(d<=60?'De hoek is klein.':d<=120?'De hoek is middelgroot.':'De hoek is groot.'))+'</div>';
+    $$('[data-h]',box).forEach(b=>b.onclick=()=>{sfx('tap');h=+b.dataset.h;paint()})};paint()}
+/* 2. tik op de klok met de grootste (of kleinste) hoek */
+function wGroot(box){let hs,mode,res=null;
+  const nieuw=()=>{let a,b;do{a=pick(UREN);b=pick(UREN)}while(uurD(a)===uurD(b));hs=[a,b];mode=pick(['grootste','kleinste']);res=null;paint()};
+  function paint(){const want=hs.slice().sort((x,y)=>uurD(x)-uurD(y))[mode==='grootste'?1:0];
+    box.innerHTML='<div class="verd" style="font-size:1.1rem">Tik op de klok met de <span class="kw">'+mode+'</span> hoek.</div><div class="two" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+hs.map((h,i)=>'<button type="button" class="acard'+(res===i?(res>=0&&hs[i]===want?' good':' bad'):'')+'" data-i="'+i+'" style="border:3px solid '+(res===null?'var(--line)':(hs[res]===want&&hs[i]===want)?'var(--good)':(res===i&&hs[i]!==want)?'var(--oops)':'var(--line)')+';border-radius:14px;background:#fff;padding:6px;cursor:pointer">'+clockSvg(h,150)+'</button>').join('')+'</div><div id="gm"></div>'+(res!==null&&hs[res]===want?'<div class="row" style="justify-content:center"><button class="btn alt small" id="gn" type="button">Nog een keer</button></div>':'');
+    if(res!==null)$('#gm',box).innerHTML=hs[res]===want?jaNee(1,'Goed! Bij '+want+' uur is het boogje '+(mode==='grootste'?'groter':'kleiner')+'.'):jaNee(0,'Nog niet goed. Kijk goed naar het roze boogje.');
+    $$('[data-i]',box).forEach(b=>b.onclick=()=>{if(res!==null&&hs[res]===want)return;res=+b.dataset.i;sfx(hs[res]===want?'ok':'no');paint()});
+    const g=$('#gn',box);if(g)g.onclick=()=>{sfx('tap');nieuw()}}
+  nieuw()}
+/* 3. twee keer zo groot */
+const DUB=[[1,2],[2,4],[3,6]];
+function wDubbel(box){let k=1;
+  const paint=()=>{const [a,b]=DUB[k];
+    box.innerHTML='<p class="note center" style="margin:0">Kies een tijd</p>'+chipsH(DUB.map((x,i)=>i),k,'data-k',i=>DUB[i][0]+' uur')+'<div style="display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center"><div>'+clockSvg(a,150)+'<div class="center"><b>'+a+' uur</b></div></div><div class="verd" style="font-size:1.4rem">× 2<br>→</div><div>'+clockSvg(b,150)+'<div class="center"><b>'+b+' uur</b></div></div></div><div class="say">Om '+a+' uur is de hoek <b>'+uurD(a)/30+' uren</b> groot. Twee keer zo groot is <b>'+uurD(b)/30+' uren</b>. Dus: '+b+' uur.</div>';
+    $$('[data-k]',box).forEach(x=>x.onclick=()=>{sfx('tap');k=+x.dataset.k;paint()})};paint()}
+/* 4. delen van een hoek */
+function wDelen(box){let hi='';
+  const T={hoekpunt:'Het <b>hoekpunt</b> is het punt waar de twee benen elkaar raken.',been:'Een hoek heeft twee <b>benen</b>. Dit zijn de lijnen van de hoek.',boogje:'Het <b>boogje</b> laat de hoek zien. Het staat tussen de twee benen.','':'Tik op een knop. Of tik op de hoek zelf.'};
+  const paint=()=>{box.innerHTML='<div id="ab">'+angBig({d:50,hi,tags:true})+'</div><div class="say" id="at">'+T[hi]+'</div>'+chipsH(['hoekpunt','been','boogje'],hi,'data-p',x=>x[0].toUpperCase()+x.slice(1));
+    const go=p=>{sfx('tap');hi=p;paint()};$$('[data-p]',box).forEach(b=>b.onclick=()=>go(b.dataset.p));$$('[data-part]',box).forEach(e=>{e.style.cursor='pointer';e.onclick=()=>go(e.dataset.part)})};paint()}
+/* 5. ∠ en de letter */
+function wTeken(box){let L='P';
+  const paint=()=>{box.innerHTML='<p class="note center" style="margin:0">Kies een letter</p>'+chipsH(['P','Q','R','S','T'],L,'data-l')+angBig({d:50,letter:L})+'<div class="verd">Je schrijft: <span class="kw">∠'+L+'</span></div><div class="say">Je zegt: <b>hoek '+L+'</b>. De letter <b>'+L+'</b> staat bij het hoekpunt.</div>';
+    $$('[data-l]',box).forEach(b=>b.onclick=()=>{sfx('tap');L=b.dataset.l;paint()})};paint()}
+/* 6. langere benen */
+function wLanger(box){let len=60;const D=40,x=26,y=116;
+  const fig=()=>'<svg class="fig" viewBox="0 0 240 130" style="max-width:340px" role="img" aria-label="Een hoek met benen die langer of korter worden"><g opacity=".4">'+angG({x,y,a1:-D,d:D,len:50,col:'#17324d',noArc:true,noDot:true,w:2})+'</g>'+angG({x,y,a1:-D,d:D,len,r:26,w:4.5})+'</svg>';
+  const txt=()=>'De benen zijn nu <b>'+(len<55?'korter':len>65?'langer':'even lang')+'</b>. Het roze boogje blijft <b>even groot</b>. De hoek verandert niet!';
+  box.innerHTML='<div id="lgf"></div><input class="slider" id="sl" type="range" min="40" max="170" step="5" value="'+len+'" aria-label="Maak de benen langer of korter"><p class="note center" style="margin:0">Schuif en maak de benen langer of korter.</p><div class="say" id="lgt"></div>';
+  const upd=()=>{$('#lgf',box).innerHTML=fig();$('#lgt',box).innerHTML=txt()};
+  $('#sl',box).oninput=e=>{len=+e.target.value;upd()};upd()}
+/* 7. leg de ene hoek op de andere */
+const PAREN=[{A:50,B:80,t:'groter'},{A:75,B:40,t:'kleiner'},{A:60,B:60,t:'even groot'}];
+function wLeg(box){let k=0,st=0,raf=0;
+  const A0={x:46,y:108,a1:-120},B0={x:190,y:108,a1:-165};
+  function fig(tt){const P=PAREN[k],bx=B0.x+(A0.x-B0.x)*tt,by=B0.y+(A0.y-B0.y)*tt,ba=B0.a1+(A0.a1-B0.a1)*tt;
+    return '<svg class="fig" viewBox="0 0 250 130" style="max-width:360px" role="img" aria-label="Twee hoeken die je op elkaar legt">'
+     +angG({x:A0.x,y:A0.y,a1:A0.a1,d:P.A,len:62,col:'#2a6fdb',fill:'rgba(42,111,219,.22)',r:34,w:4})
+     +angG({x:bx,y:by,a1:ba,d:P.B,len:62,col:'#e8870a',fill:'rgba(232,135,10,.28)',arcCol:'#e8870a',r:26,w:3.5,noDot:true})
+     +'<text x="'+(tt<1?24:24)+'" y="126" style="font:700 14px Lexend,sans-serif;fill:#2a6fdb">∠A</text><text x="'+f1(tt<1?B0.x-20:B0.x+8)+'" y="126" style="font:700 14px Lexend,sans-serif;fill:#e8870a">∠B</text></svg>'}
+  function msg(){const P=PAREN[k];if(st===0)return 'Dit zijn ∠A (blauw) en ∠B (oranje). Welke hoek is groter? Leg ∠B op ∠A. Dan zie je het.';
+    return P.t==='even groot'?'De benen liggen precies op elkaar. ∠B is <b>even groot</b> als ∠A.':P.t==='kleiner'?'∠B ligt <b>binnen</b> ∠A. Dus ∠B is <b>kleiner</b> dan ∠A.':'∠B steekt <b>buiten</b> ∠A. Dus ∠B is <b>groter</b> dan ∠A.'}
+  function paint(tt){box.innerHTML='<p class="note center" style="margin:0">Kies twee hoeken</p>'+chipsH([0,1,2],k,'data-k',i=>'Paar '+(i+1))+'<div id="lf">'+fig(tt==null?(st?1:0):tt)+'</div><div class="say" id="lm">'+msg()+'</div><div class="row" style="justify-content:center"><button class="btn" id="lb" type="button">'+(st?'Nog een keer':'Leg ∠B op ∠A ▶')+'</button></div>';
+    $$('[data-k]',box).forEach(b=>b.onclick=()=>{cancelAnimationFrame(raf);sfx('tap');k=+b.dataset.k;st=0;paint()});
+    $('#lb',box).onclick=()=>{sfx('tap');if(st){st=0;paint();return}run()}}
+  function run(){const t0=performance.now(),dur=1000;const step=now=>{const t=Math.min(1,(now-t0)/dur),e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;const f=$('#lf',box);if(!f)return;f.innerHTML=fig(e);if(t<1)raf=requestAnimationFrame(step);else{st=1;sfx('ok');paint(1)}};raf=requestAnimationFrame(step)}
+  paint()}
+/* 8. van klein naar groot */
+function wSorteer(box){let items,next,fout=0;
+  const nieuw=()=>{let ds;do{ds=shuffle([25,40,55,70,85,100,115,130,145]).slice(0,4)}while(false);ds=ds.sort((a,b)=>a-b);const L=shuffle(['A','B','C','D']);items=shuffle(ds.map((d,i)=>({d,lab:L[i],len:pick([32,38,44]),rot:ri(-25,25),r:i})));next=0;fout=0;paint()};
+  function paint(){const done=next>=items.length;
+    box.innerHTML='<div class="verd" style="font-size:1.1rem">Tik de hoeken aan van <span class="kw">klein naar groot</span>.</div><div class="two" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+items.map((it,i)=>{const got=it.r<next;return '<button type="button" data-i="'+i+'" style="position:relative;border:3px solid '+(got?'var(--good)':'var(--line)')+';border-radius:14px;background:'+(got?'var(--goodbg)':'#fff')+';padding:6px;cursor:pointer">'+angCard({d:it.d,len:it.len,rot:it.rot,lab:it.lab})+(got?'<span class="nb" style="position:absolute;top:6px;right:6px;margin:0">'+(it.r+1)+'</span>':'')+'</button>'}).join('')+'</div><div id="sm2"></div>'+(done?'<div class="row" style="justify-content:center"><button class="btn alt small" id="sn2" type="button">Nieuwe hoeken</button></div>':'');
+    $('#sm2',box).innerHTML=done?jaNee(1,'Goed! Van klein naar groot: '+items.slice().sort((a,b)=>a.r-b.r).map(x=>'∠'+x.lab).join(', ')+'.'):(fout?jaNee(0,'Nog niet. Zoek de kleinste hoek die nog over is. Kijk niet naar de lengte van de benen.'):'');
+    $$('[data-i]',box).forEach(b=>b.onclick=()=>{if(next>=items.length)return;const it=items[+b.dataset.i];if(it.r<next)return;if(it.r===next){next++;fout=0;sfx('ok')}else{fout=1;sfx('no')}paint()});
+    const n=$('#sn2',box);if(n)n.onclick=()=>{sfx('tap');nieuw()}}
+  nieuw()}
+const WID={klok:wKlok,groot:wGroot,dubbel:wDubbel,delen:wDelen,teken:wTeken,langer:wLanger,leg:wLeg,sorteer:wSorteer};
+
+/* ---------- vragen ---------- */
+const LETS='ABCDEFPQRST'.split('');
+const hrs=(ans,cand)=>{const s=[ans];shuffle(cand.filter(x=>x>=1&&x<=11&&x!==ans)).forEach(x=>{if(s.length<4&&!s.includes(x))s.push(x)});return shuffle(s).map(v=>O(String(v),v+' uur'))};
+const ROT=()=>ri(-25,25);
+function dist3(){ // drie verschillende hoeken, de grootste krijgt soms de kortste benen
+  const ds=shuffle([25,35,45,55,65,75,90,105,120,135,150]);let a=[];for(const d of ds){if(a.every(x=>Math.abs(x-d)>=18))a.push(d);if(a.length===3)break}return a}
+const lensFor=(ds,tricky)=>{const L=shuffle([32,40,46]);if(!tricky)return ds.map((d,i)=>L[i]);const o=ds.map((d,i)=>i).sort((i,j)=>ds[i]-ds[j]),len=[];const asc=[32,40,46];o.forEach((ix,r)=>len[ix]=asc[2-r]);return len};
+const gl=(ids)=>shuffle(LETS).slice(0,ids);
+const M={
+ /* onderdeel 1: de klok */
+ tijd:()=>{const h=pick(UREN);return{key:'tijd'+h,type:'mc',text:'Hoe laat is het op de klok?',fig:clockSvg(h,200),opts:hrs(h,[h+1,h-1,h+2,h-2,h+3]),ans:String(h),tip:'De korte, dikke wijzer is de uurwijzer. Hij laat het uur zien. De lange wijzer staat op de 12.',show:h+' uur'}},
+ groot:()=>{const hs=[];while(hs.length<3){const h=pick(UREN);if(hs.every(x=>uurD(x)!==uurD(h)))hs.push(h)}const L=['A','B','C'],big=hs.indexOf(hs.slice().sort((a,b)=>uurD(a)-uurD(b))[2]);
+  return{key:'gr'+hs.join('-'),type:'mc',text:'Bij welke klok is de hoek tussen de wijzers het grootst?',fig:clocksRow(hs,L.map(x=>'Klok '+x)),opts:L.map(x=>O(x,'Klok '+x)),ans:L[big],tip:'Kijk naar het roze boogje. Het grootste boogje hoort bij de grootste hoek.',show:'Klok '+L[big]}},
+ klein:()=>{const hs=[];while(hs.length<3){const h=pick(UREN);if(hs.every(x=>uurD(x)!==uurD(h)))hs.push(h)}const L=['A','B','C'],sm=hs.indexOf(hs.slice().sort((a,b)=>uurD(a)-uurD(b))[0]);
+  return{key:'kl'+hs.join('-'),type:'mc',text:'Bij welke klok is de hoek tussen de wijzers het kleinst?',fig:clocksRow(hs,L.map(x=>'Klok '+x)),opts:L.map(x=>O(x,'Klok '+x)),ans:L[sm],tip:'Kijk naar het roze boogje. Het kleinste boogje hoort bij de kleinste hoek.',show:'Klok '+L[sm]}},
+ dubbel:()=>{const [a,b]=pick(DUB);return{key:'db'+a,type:'mc',text:'Het is '+a+' uur. De hoek tussen de wijzers wordt twee keer zo groot. Hoe laat kan het dan zijn?',say:'Het is '+a+' uur. De hoek tussen de wijzers wordt twee keer zo groot. Hoe laat kan het dan zijn?',fig:clockSvg(a,170),opts:hrs(b,[a+1,b+1,b-1,a-1,b+2].filter(x=>uurD(x)!==uurD(b))),ans:String(b),tip:'Om '+a+' uur is de hoek '+uurD(a)/30+' uren groot. Twee keer zo groot is '+uurD(b)/30+' uren. Dus '+b+' uur.',show:b+' uur'}},
+ half:()=>{const h=pick(UREN),t=(h+5)%12+1;return{key:'half'+h,type:'mc',text:'Het is '+h+' uur. De kleine wijzer draait een halve slag verder. Hoe laat is het dan?',fig:clockSvg(h,170),opts:hrs(t,[t+1,t-1,h,h+1,t+2]),ans:String(t),tip:'Een halve slag is een halve cirkel. Dat is 6 uur verder. '+h+' uur en dan 6 uur verder.',show:t+' uur'}},
+ /* onderdeel 2: delen van een hoek */
+ deel:()=>{const p=pick(['hoekpunt','been','boogje']);return{key:'deel'+p+ri(0,3),type:'mc',text:'Wat is het gekleurde deel van de hoek?',fig:angBig({d:pick([40,50,60]),hi:p}),opts:shuffle([O('hoekpunt','Het hoekpunt'),O('been','Een been'),O('boogje','Het boogje')]),ans:p,tip:'Het hoekpunt is het punt waar de benen elkaar raken. De benen zijn de lijnen. Het boogje staat tussen de benen.',show:p==='hoekpunt'?'Het hoekpunt':p==='been'?'Een been':'Het boogje'}},
+ letter:()=>{const L=shuffle(['A','B','C']);return{key:'let'+L.join(''),type:'mc',text:'Bij welke letter ligt het hoekpunt?',fig:ang3(0,L),opts:['A','B','C'].map(x=>O(x,'Letter '+x)),ans:L[0],tip:'Het hoekpunt is het punt waar de twee benen elkaar raken.',show:'Letter '+L[0]}},
+ teken:()=>{const L=pick(LETS);return{key:'tek'+L,type:'mc',text:'Hoe schrijf je "hoek '+L+'"?',say:'Hoe schrijf je hoek '+L+'?',opts:shuffle([O('goed','∠'+L),O('f1',L+'°'),O('f2','∟'+L),O('f3',L+'∠')]),ans:'goed',tip:'Voor het woord hoek schrijf je het teken ∠. Daarachter komt de letter.',show:'∠'+L}},
+ langer:()=>{const v=ri(0,1);if(v)return{key:'lg1',type:'mc',two:true,text:'Beau zegt: "Hoe langer de benen, hoe groter de hoek." Heeft Beau gelijk?',opts:[O('nee','Nee'),O('ja','Ja')],ans:'nee',tip:'De benen langer maken verandert de hoek niet. Het boogje blijft even groot.',show:'Nee'};
+   return{key:'lg0',type:'mc',text:'Je maakt de benen van een hoek langer. Wat gebeurt er met de hoek?',opts:shuffle([O('zelfde','De hoek blijft even groot'),O('groter','De hoek wordt groter'),O('kleiner','De hoek wordt kleiner')]),ans:'zelfde',tip:'De benen langer maken verandert de hoek niet. Het boogje blijft even groot.',show:'De hoek blijft even groot'}},
+ benen:()=>{const k=pick([['Hoeveel benen heeft een hoek?',2,[1,2,3,4]],['Hoeveel hoekpunten heeft een hoek?',1,[1,2,3,4]]]);return{key:'ben'+k[1],type:'mc',text:k[0],opts:k[2].map(x=>O(String(x),String(x))),ans:String(k[1]),tip:'Een hoek heeft 1 hoekpunt en 2 benen.',show:String(k[1])}},
+ /* onderdeel 3: hoeken vergelijken */
+ vgl2:()=>{const ds=dist3().slice(0,2),L=shuffle(['A','B']),len=lensFor(ds,Math.random()<.6),w=pick(['groter','kleiner']);
+  const want=w==='groter'?(ds[0]>ds[1]?0:1):(ds[0]<ds[1]?0:1);
+  return{key:'v2'+ds.join('-')+w,type:'mc',two:true,text:'Welke hoek is '+w+'?',fig:angRow(ds.map((d,i)=>({d,len:len[i],rot:ROT(),lab:L[i]}))),opts:L.map(x=>O(x,'∠'+x)),ans:L[want],tip:'Kijk niet naar de lengte van de benen. Kijk naar de opening tussen de benen. Of leg de ene hoek op de andere.',show:'∠'+L[want]}},
+ vgl3:()=>{const ds=dist3(),L=gl(3),len=lensFor(ds,Math.random()<.5),w=pick(['grootst','kleinst']),idx=ds.map((d,i)=>i).sort((a,b)=>ds[a]-ds[b]),want=w==='grootst'?idx[2]:idx[0];
+  return{key:'v3'+ds.join('-')+w,type:'mc',text:'Welke hoek is het '+w+'?',fig:angRow(ds.map((d,i)=>({d,len:len[i],rot:ROT(),lab:L[i]}))),opts:L.map(x=>O(x,'∠'+x)),ans:L[want],tip:'Kijk niet naar de lengte van de benen. Kijk naar de opening tussen de benen.',show:'∠'+L[want]}},
+ zin:()=>{const ds=dist3().slice(0,2),len=lensFor(ds,Math.random()<.5),big=ds[1]>ds[0];
+  return{key:'zin'+ds.join('-'),type:'mc',two:true,text:'Vul in: ∠B is ... ∠A.',fig:angRow([{d:ds[0],len:len[0],rot:ROT(),lab:'A'},{d:ds[1],len:len[1],rot:ROT(),lab:'B'}]),opts:shuffle([O('gr','groter dan'),O('kl','kleiner dan')]),ans:big?'gr':'kl',tip:'Kijk naar de opening. Is de opening van ∠B groter dan die van ∠A?',show:big?'groter dan':'kleiner dan'}},
+ sorteer:()=>{const ds=dist3().sort((a,b)=>a-b),L=gl(3),len=lensFor(ds,Math.random()<.5),it=ds.map((d,i)=>({d,lab:L[i],len:len[i],rot:ROT(),r:i}));
+  return{key:'so'+ds.join('-'),type:'order',text:'Tik de hoeken aan van klein naar groot.',say:'Tik de hoeken aan. Begin bij de kleinste hoek.',cards:shuffle(it).map(x=>({h:'<span style="display:block;width:100%">'+angCard(x)+'</span>',r:x.r})),tip:'Begin bij de kleinste hoek. Kijk naar de opening tussen de benen.',show:it.map(x=>'∠'+x.lab).join(', ')}},
+ overtrek:()=>{const v=pick(['in','uit','even']);
+  const T={in:['Je legt ∠B op ∠A. ∠B ligt helemaal binnen ∠A. Welke hoek is groter?','A','∠A is groter. ∠B past erin.'],uit:['Je legt ∠B op ∠A. ∠B steekt buiten ∠A uit. Welke hoek is groter?','B','∠B is groter. Hij steekt eruit.'],even:['Je legt ∠B op ∠A. De benen liggen precies op elkaar. Wat weet je dan?','even','Even groot. De benen vallen precies op elkaar.']}[v];
+  return{key:'ov'+v,type:'mc',text:T[0],opts:v==='even'?shuffle([O('even','De hoeken zijn even groot'),O('A','∠A is groter'),O('B','∠B is groter')]):shuffle([O('A','∠A'),O('B','∠B'),O('even','Even groot')]),ans:T[1],tip:'Ligt de hoek binnen de andere hoek? Dan is hij kleiner. Steekt hij eruit? Dan is hij groter.',show:T[2]}}
+};
+const mk=plan=>()=>build(plan,t=>M[t]());
+
+/* ---------- de les ---------- */
+const META={title:'5.1 Hoeken',intro:'Wat is een hoek? Speel met klokken en hoeken. Maak daarna de opdrachten uit je boek stap voor stap. Aan het eind doe je een snelle toets.'};
+const PAD='Hoofdstuk 5 Hoeken · 5.1 Hoeken';
 const LV=[
- {t:'De klok en hoeken',s:'Tijd lezen en de klok instellen',tip:'De wijzers van een klok maken een hoek. De korte wijzer is het uur.'},
- {t:'Hoekpunt, benen en ∠',s:'Hoek opschrijven met het teken ∠',tip:'Een hoek heeft 2 benen en 1 hoekpunt. Het teken voor hoek is ∠.'},
- {t:'Hoeken vergelijken',s:'Hoeken op elkaar leggen',tip:'Schuif de hoeken op elkaar. Valt het been binnen? Kleiner. Past het precies? Even groot. Buiten? Groter.'},
- {t:'Hoeken op de klok',s:'Welke hoek is groter of kleiner?',tip:'Staan de wijzers ver uit elkaar? Dan is de hoek groot. Om 6 uur is de hoek het grootst.'},
- {t:'Hoeken ordenen',s:'Groter dan, kleiner dan, van klein naar groot',tip:'Vergelijk de hoeken één voor één. Kijk hoe ver de benen uit elkaar staan. De lengte van de benen telt niet.'},
- {t:'Alles door elkaar',s:'Herhaling van de hele les',tip:'Denk aan wat je geleerd hebt: hoekpunt, benen, ∠, boogje en hoeken vergelijken.'}];
-const MC=(lv,p,c,w,o)=>({lv,prompt:'<p class="q">'+p+'</p>',ans:c,build:(a,k)=>mcW(a,shuffle([c,...w]),c,k,o)});
-const FMC=(lv,fig,p,c,w,o)=>({lv,prompt:'<p class="q">'+p+'</p>',fig:1,ans:c,build:(a,k)=>{a.innerHTML=fig+'<div id="fm"></div>';return mcW($('#fm',a),shuffle([c,...w]),c,k,o)}});
-const PK=(lv,p,svg,ans,okf)=>({lv,prompt:'<p class="q">'+p+'</p>',fig:1,ans:ans.join(' en '),build:(a,k)=>pickW(a,svg,okf||(s=>sameSet(s,ans)),k,ans)});
-const SQ=(lv,p,svg,ids,names)=>({lv,prompt:'<p class="q">'+p+'</p>',fig:1,ans:ids.map(i=>names[i]||i).join(' → '),seq:ids,build:(a,k)=>seqW(a,svg,ids,names,k)});
-const CK=(lv,p,goal,rev,minutes,hm)=>({lv,prompt:'<p class="q">'+p+'</p>',ans:rev[2]||timeText(rev[0],rev[1]),build:(a,k)=>clockW(a,{h:12,m:0,minutes,goal,reveal:rev},k),solve:a=>{const hs=$('#hs',a);hs.value=hm[0];hs.dispatchEvent(new Event('input',{bubbles:true}));const ms=$('#ms',a);if(ms){ms.value=hm[1];ms.dispatchEvent(new Event('input',{bubbles:true}))}$('#ck',a).click()}});
-const CMP=(lv,aQ,aP,r0)=>{const ans=aQ>aP?'Groter dan ∠P':aQ<aP?'Kleiner dan ∠P':'Even groot als ∠P';
-  return {lv,prompt:'<p class="q">Schuif ∠Q op ∠P. Is ∠Q groter, kleiner of even groot?</p>',fig:1,ans,build:(a,k)=>{a.innerHTML='<div id="cw"></div><div id="cm"></div>';compareW($('#cw',a),{aQ,aP,r0});return mcW($('#cm',a),['Groter dan ∠P','Kleiner dan ∠P','Even groot als ∠P'],ans,k)}}};
-const CL=(h,m)=>clockFig(h,m||0,{arc:false});
-const S1=[{id:'A',a:50,rot:15},{id:'B',a:30,rot:60},{id:'C',a:90,rot:0},{id:'D',a:70,rot:40},{id:'E',a:40,rot:70},{id:'F',a:15,rot:80}];
-const S2=[{id:'P',a:45,rot:20},{id:'Q',a:80,rot:0},{id:'R',a:35,rot:50},{id:'S',a:60,rot:30},{id:'T',a:95,rot:10}];
-const S3=[{id:'A',a:50,rot:20,len:110},{id:'B',a:70,rot:0,len:80},{id:'C',a:50,rot:60,len:60},{id:'D',a:100,rot:10,len:95}];
-const S4=[{id:'A',a:75,rot:10},{id:'B',a:40,rot:30},{id:'C',a:95,rot:0}];
-const W5=[{id:'tokio',h:9,m:0,cap:'Tokio'},{id:'ny',h:8,m:0,cap:'New York'},{id:'londen',h:1,m:0,cap:'Londen'},{id:'moskou',h:5,m:0,cap:'Moskou'},{id:'peking',h:10,m:0,cap:'Peking'}];
-const CN={tokio:'Tokio',ny:'New York',londen:'Londen',moskou:'Moskou',peking:'Peking'};
-const hoekS=(id,l)=>'∠'+id;
-const NA={};'ABCDEFPQRST'.split('').forEach(c=>NA[c]='∠'+c);
-const sAB=id=>id;
-const QS=[
- /* 1 */ FMC(1,CL(6),'Welke tijd geeft deze klok aan?','6 uur',['12 uur','3 uur','9 uur'],{two:true}),
- FMC(1,CL(3),'Welke tijd geeft deze klok aan?','3 uur',['6 uur','9 uur','12 uur'],{two:true}),
- FMC(1,CL(9),'Welke tijd geeft deze klok aan?','9 uur',['3 uur','6 uur','12 uur'],{two:true}),
- MC(1,'De wijzers van een klok maken samen een...','Hoek',['Cirkel','Vierkant','Getal'],{two:true}),
- MC(1,'Wat zet je vaak in een hoek om de hoek aan te geven?','Een boogje',['Een kruisje','Een streepje','Een stip'],{two:true}),
- MC(1,'Hoeken kunnen verschillend zijn van...','Grootte',['Kleur','Naam van de klok','Dikte van de pen'],{two:true}),
- CK(1,'Zet de klok op <b>3 uur</b>.',(h,m)=>h===3&&m===0,[3,0],false,[3,0]),
- CK(1,'Zet de klok op <b>6 uur</b>.',(h,m)=>h===6&&m===0,[6,0],false,[6,0]),
- CK(1,'Zet de klok op <b>9 uur</b>.',(h,m)=>h===9&&m===0,[9,0],false,[9,0]),
- MC(1,'Het is 3 uur. De kleine wijzer draait een <b>halve slag</b> verder. Hoe laat is het dan?','9 uur',['6 uur','12 uur','4 uur'],{two:true}),
- /* 11 */ MC(2,'Een hoek wordt gemaakt door twee...','Benen',['Boogjes','Klokken','Hoekpunten'],{two:true}),
- PK(2,'Tik op het <b>hoekpunt</b> van de hoek.',hoekPickFig(false),['P']),
- PK(2,'Tik op beide <b>benen</b> van de hoek.',hoekPickFig(true),['PQ','PR']),
- MC(2,'Hoe heet het punt waar de twee benen beginnen?','Het hoekpunt',['Het boogje','De klok','De wijzer']),
- MC(2,'Een hoek met hoekpunt P schrijf je als...','∠P',['P∠','⊥P','∥P'],{two:true}),
- MC(2,'Welk teken gebruik je in de wiskunde voor het woord <b>hoek</b>?','∠',['⊥','∥','△'],{two:true}),
- PK(2,'Tik op het hoekpunt van <b>∠T</b>.',(()=>{const V1=[70,150],V2=[250,150];return svgWrap(360,200,segm(null,V1,angPt(V1,10,110))+segm(null,V1,angPt(V1,70,110))+dot('S',V1,7)+lab('S',[V1[0]-4,V1[1]+30])+segm(null,V2,angPt(V2,20,110))+segm(null,V2,angPt(V2,95,110))+dot('T',V2,7)+lab('T',[V2[0]-4,V2[1]+30]),'ang')})(),['T']),
- PK(2,'Kleur de beide benen van <b>∠S</b> rood. Tik erop.',(()=>{const V=[70,170];return svgWrap(300,200,wedge(V,10,70,40)+segm('b1',V,angPt(V,10,160))+segm('b2',V,angPt(V,70,160))+dot(null,V,7)+lab('S',[V[0]-4,V[1]+30]),'ang')})(),['b1','b2']),
- {lv:2,prompt:'<p class="q">Maak de benen van <b>∠S</b> langer. Gebruik de schuifbalk.</p>',ans:'langere benen',build:(a,k)=>legW(a,{start:70,a:50,min:140},k),solve:a=>{const s=$('#ls',a);s.value=190;s.dispatchEvent(new Event('input',{bubbles:true}));$('#lk',a).click()}},
- MC(2,'Je maakt de benen van een hoek langer. De grootte van de hoek is nu...','Niet veranderd',['Groter geworden','Kleiner geworden','Nul'],{two:true}),
- /* 21 */ CMP(3,40,40,22),
- CMP(3,30,55,25),
- CMP(3,70,45,20),
- CMP(3,60,60,-15),
- CMP(3,100,65,30),
- CMP(3,25,50,18),
- MC(3,'∠Q past precies op ∠P. Wat weet je dan?','De hoeken zijn even groot',['∠Q is groter','∠Q is kleiner','Je weet niets']),
- MC(3,'Je legt ∠R op ∠P. Het been van ∠R steekt <b>buiten</b> ∠P uit. Dan is ∠R...','Groter dan ∠P',['Kleiner dan ∠P','Even groot als ∠P','Niet te vergelijken']),
- MC(3,'Hoe kun je de grootte van twee hoeken met elkaar vergelijken?','Eén hoek op de andere hoek leggen',['De benen tellen','De namen vergelijken','Kijken welke hoek het eerst is getekend']),
- MC(3,'Beau zegt: "Hoe langer de benen, hoe groter de hoek." Heeft Beau gelijk?','Nee',['Ja'],{two:true}),
- /* 31 */ PK(4,'Bij welke klok is de hoek tussen de wijzers het <b>grootst</b>? Tik erop.',clocksFig([{id:'k1',h:2,m:0,cap:'Klok 1'},{id:'k2',h:4,m:0,cap:'Klok 2'}],2),['k2']),
- PK(4,'Bij welke klok is de hoek tussen de wijzers het <b>kleinst</b>? Tik erop.',clocksFig([{id:'x',h:5,m:0,cap:'Klok A'},{id:'y',h:1,m:0,cap:'Klok B'},{id:'z',h:3,m:0,cap:'Klok C'}],3),['y']),
- PK(4,'Bij welke klok is de hoek tussen de wijzers het <b>kleinst</b>?',clocksFig(W5,3),['londen']),
- PK(4,'Bij welke klok is de hoek tussen de wijzers het <b>grootst</b>?',clocksFig(W5,3),['moskou']),
- SQ(4,'Tik de klokken aan van de <b>kleinste</b> naar de <b>grootste</b> hoek.',clocksFig(W5,3),['londen','peking','tokio','ny','moskou'],CN),
- MC(4,'Het is 6 uur. De wijzers staan in een rechte lijn. Dat noem je een...','Gestrekte hoek',['Scherpe hoek','Rechte hoek','Boogje'],{two:true}),
- PK(4,'Het is 2 uur. Later is de hoek <b>twee keer zo groot</b>. Tik op alle klokken die kunnen kloppen.',clocksFig([{id:'t3',h:3,m:0,cap:'3 uur'},{id:'t4',h:4,m:0,cap:'4 uur'},{id:'t5',h:5,m:0,cap:'5 uur'},{id:'t8',h:8,m:0,cap:'8 uur'}],2),['t4','t8']),
- CK(4,'Zet de klok op <b>4 uur</b>. Kijk naar de hoek tussen de wijzers.',(h,m)=>h===4&&m===0,[4,0],false,[4,0]),
- CK(4,'Zet de klok op een tijd waarbij de hoek een <b>rechte hoek</b> is (3 of 9 uur).',(h,m)=>m===0&&(h===3||h===9),[3,0,'3 uur of 9 uur'],false,[9,0]),
- CK(4,'Zet de klok op een tijd waarbij de wijzers een <b>rechte lijn</b> maken.',(h,m)=>h===6&&m===0,[6,0,'6 uur'],false,[6,0]),
- /* 41 */ FMC(5,angSetFig(S1,3),'Is ∠B groter of kleiner dan ∠A?','Kleiner',['Groter','Even groot'],{two:true}),
- PK(5,'Welke hoeken zijn <b>groter</b> dan ∠A? Tik ze aan.',angSetFig(S1,3),['C','D']),
- PK(5,'Welke hoeken zijn <b>kleiner</b> dan ∠A? Tik ze aan.',angSetFig(S1,3),['B','E','F']),
- PK(5,'Welke hoek is het <b>kleinst</b>?',angSetFig(S1,3),['F']),
- PK(5,'Welke hoek is het <b>grootst</b>?',angSetFig(S1,3),['C']),
- SQ(5,'Tik de hoeken aan van <b>klein naar groot</b>.',angSetFig(S1,3),['F','B','E','A','D','C'],NA),
- FMC(5,angSetFig(S2,3),'Welke hoek is kleiner, ∠P of ∠T?','∠P',['∠T'],{two:true}),
- PK(5,'Welke hoeken zijn <b>kleiner</b> dan ∠Q?',angSetFig(S2,3),['P','R','S']),
- SQ(5,'Schrijf de hoeken op van <b>klein naar groot</b>. Tik ze in de goede volgorde aan.',angSetFig(S2,3),['R','P','S','Q','T'],NA),
- PK(5,'Welke <b>twee</b> hoeken zijn even groot? (De benen zijn niet even lang!)',angSetFig(S3,2),['A','C']),
- /* 51 */ FMC(6,angSetFig(S4,3),'∠B is ... ∠A. Kies het goede woord.','Kleiner dan',['Groter dan'],{two:true}),
- FMC(6,angSetFig(S4,3),'∠A is ... ∠C. Kies het goede woord.','Kleiner dan',['Groter dan'],{two:true}),
- FMC(6,clockFig(4,30,{arc:false}),'Welke tijd geeft deze klok aan?','4:30 (half vijf)',['5:30 (half zes)','4:00 (vier uur)','6:20'],{two:true}),
- PK(6,'Bij welke klokken is de hoek <b>kleiner dan een rechte hoek</b>? Tik ze aan.',clocksFig([{id:'c1',h:1,m:0,cap:'1 uur'},{id:'c2',h:2,m:0,cap:'2 uur'},{id:'c3',h:3,m:0,cap:'3 uur'},{id:'c5',h:5,m:0,cap:'5 uur'}],2),['c1','c2']),
- MC(6,'Om 3 uur is de hoek tussen de wijzers een...','Rechte hoek',['Gestrekte hoek','Boogje','Hoekpunt'],{two:true}),
- MC(6,'Om 6 uur staan de wijzers in een rechte lijn. De hoek is de...','Grootste hoek op de klok',['Kleinste hoek op de klok','Hoekpunt','Boogje']),
- MC(6,'∠K en ∠L passen precies op elkaar. Wat weet je dan?','Ze zijn even groot',['∠K is groter','∠L is groter','Niets']),
- MC(6,'Je maakt de benen van een hoek <b>korter</b>. De grootte van de hoek...','Blijft hetzelfde',['Wordt groter','Wordt kleiner','Wordt nul']),
- CMP(6,95,60,25),
- MC(6,'Welke zin klopt?','De grootte van een hoek hangt niet af van de lengte van de benen',['Hoe langer de benen, hoe groter de hoek','Een hoek heeft drie benen','Het teken ∠ betekent loodrecht'])
+ {t:'De hoek op de klok',sub:'Wijzers maken een hoek',n:6,gen:mk(['tijd','tijd','groot','klein','dubbel','half']),steps:[
+  {h:'Wijzers maken een hoek',txt:'De wijzers van een klok maken een hoek.\nHet roze boogje laat de hoek zien.\nTik op een tijd en kijk.',w:'klok'},
+  {h:'Welke hoek is groter?',txt:'Kijk naar het roze boogje.\nHoe groter het boogje, hoe groter de hoek.\nTik op de goede klok.',w:'groot'},
+  {h:'Twee keer zo groot',txt:'Om 2 uur is de hoek 2 uren groot.\nTwee keer zo groot is 4 uren. Dan is het 4 uur.\nKies een tijd en kijk.',w:'dubbel'},
+  {h:'Zo staat het in je boek',txt:'Dit staat in je boek. Je weet het al!',fig:IMGB('p10-theorie.png','Zo staat het in je boek (bladzijde 10).')}]},
+ {t:'Hoekpunt en benen',sub:'De delen van een hoek',n:6,gen:mk(['deel','deel','letter','teken','langer','benen']),steps:[
+  {h:'De delen van een hoek',txt:'Een hoek heeft een hoekpunt, twee benen en een boogje.\nTik op een knop en kijk.',w:'delen'},
+  {h:'Hoek P schrijf je ∠P',txt:'Bij wiskunde schrijf je het teken ∠ voor het woord hoek.\nDe letter staat bij het hoekpunt.\nKies een letter.',w:'teken'},
+  {h:'Langere benen',txt:'Maak de benen langer of korter.\nVerandert de hoek dan?\nSchuif en kijk.',w:'langer'},
+  {h:'Zo staat het in je boek',txt:'Dit staat in je boek. Je weet het al!',fig:IMGB('p11-theorie.png','Zo staat het in je boek (bladzijde 11).')}]},
+ {t:'Hoeken vergelijken',sub:'Welke hoek is groter?',n:6,gen:mk(['vgl2','vgl2','vgl3','zin','sorteer','overtrek']),steps:[
+  {h:'Leg hoek op hoek',txt:'Zo vergelijk je twee hoeken.\nLeg het hoekpunt op het hoekpunt. Leg één been op één been.\nLigt de hoek er binnen? Dan is hij kleiner.',w:'leg'},
+  {h:'Van klein naar groot',txt:'Zet de hoeken op volgorde.\nTik eerst op de kleinste hoek.\nKijk niet naar de lengte van de benen!',w:'sorteer'}]}
 ];
-QS.forEach((q,i)=>{q.id=i+1;q.tip=LV[q.lv-1].tip});
-console.assert(QS.length===60,'aantal vragen '+QS.length);
-/* ---------- scherm en spelverloop ---------- */
-const MAXT=3,stage=()=>$('#stage');
-const speakText=h=>{const d=document.createElement('div');d.innerHTML=h;let t=d.textContent.replace(/∠/g,'hoek').replace(/⊥/g,'loodrecht').replace(/∥/g,'evenwijdig').replace(/°/g,' graden').replace(/\s+/g,' ').trim();return t};
-const total=()=>Object.values(DB.res).reduce((s,r)=>s+(r.pts||0),0);
-const lvStat=l=>{let n=0,p=0;for(let i=1;i<=10;i++){const r=DB.res[(l-1)*10+i];if(r){n++;p+=r.pts||0}}return {n,p}};
-function topbar(){const on=!!DB.name;$('#bar').hidden=!on;if(!on)return;$('#av').innerHTML=mascot();$('#av svg').style.cssText='width:44px;height:44px';$('#nm').textContent=DB.name;
-  $('#tv').textContent='Lees voor: '+(DB.voice?'aan':'uit');$('#ts').textContent='Geluid: '+(DB.sound?'aan':'uit');$('#pt').textContent=total()+' punten'}
-function prog(f){const p=$('#pg');p.hidden=f==null;if(f!=null)$('i',p).style.width=Math.round(f*100)+'%'}
-$('#tv').onclick=()=>{DB.voice=!DB.voice;if(!DB.voice)stopSpeech();save();topbar()};
-$('#ts').onclick=()=>{DB.sound=!DB.sound;save();topbar();sfx('tap')};
-function go(html){stopSpeech();stage().innerHTML=html;window.scrollTo(0,0)}
-function showLogin(){prog(null);topbar();
-  go('<section class="card"><div style="width:90px;margin:0 auto">'+mascot()+'</div><h1 style="text-align:center">Hoeken</h1><p style="text-align:center">Schrijf hier je naam.</p><input class="nm" id="nin" type="text" maxlength="40" autocomplete="off" aria-label="Je naam"><div class="row" style="justify-content:center"><button class="btn" id="nok" type="button">Start</button></div></section>');
-  const i=$('#nin'),ok=()=>{const v=i.value.trim();if(!v){i.focus();return}DB.name=v;save();sfx('tap');showHome()};
-  $('#nok').onclick=ok;i.onkeydown=e=>{if(e.key==='Enter')ok()}}
-function showHome(){topbar();prog(null);
-  let h='<section class="card"><h1>Hoi '+esc(DB.name)+'!</h1><p>Wiskunde: <b>hoeken</b>. Je leert wat een hoek is, hoe je een hoek opschrijft en hoe je hoeken met elkaar vergelijkt.</p><div class="row"><button class="btn" id="hx" type="button">'+(DB.explain?'Uitleg opnieuw':'Start met de uitleg')+'</button></div></section>';
-  h+='<section class="card"><h2>De 60 vragen</h2><p class="note">Zes delen van 10 vragen. Je hebt nu '+total()+' van 60 punten.</p><div class="lv">';
-  LV.forEach((l,i)=>{const s=lvStat(i+1);h+='<button class="lvb'+(s.n===10?' done':'')+'" type="button" data-l="'+(i+1)+'"><span class="lvn">'+(s.n===10?'✓':i+1)+'</span><span><b>'+l.t+'</b><small>'+l.s+' · '+s.n+'/10 gedaan, '+s.p+' punten</small></span></button>'});
-  h+='</div></section><section class="card"><div class="row"><button class="btn alt small" id="hr" type="button">Mijn resultaten</button></div></section>';
-  go(h);$('#hx').onclick=()=>showExplain(0);$$('.lvb').forEach(b=>b.onclick=()=>{const l=+b.dataset.l,s=lvStat(l);startLevel(l,s.n>=10?0:s.n)});$('#hr').onclick=showResults}
-function showExplain(i){const e=EX[i],N=EX.length;prog((i+1)/N);const sp=e.speak(DB.name);
-  go('<section class="card explain"><div class="qhead"><span>Uitleg '+(i+1)+' van '+N+'</span></div><h2>'+e.t+'</h2>'+e.html(DB.name)+'<div class="row sp"><span id="lb"></span><div class="row" style="margin:0">'+(i?'<button class="btn alt" id="bk" type="button">Terug</button>':'')+'<button class="btn" id="nx" type="button">'+(i===N-1?'Start de vragen':'Verder')+'</button></div></div></section>');
-  $('#lb').appendChild(listenBtn(sp));if(e.mount)e.mount($('.explain'));
-  $('#nx').onclick=()=>{sfx('tap');if(i===N-1){DB.explain=true;save();startLevel(1,lvStat(1).n>=10?0:lvStat(1).n)}else showExplain(i+1)};
-  const bk=$('#bk');if(bk)bk.onclick=()=>showExplain(i-1);if(DB.voice)setTimeout(()=>speak(sp),300)}
-let CUR=null;
-function startLevel(l,idx){CUR={l,idx:Math.min(idx,9)};showQ()}
-function showQ(){const {l,idx}=CUR,q=QS[(l-1)*10+idx];CUR.q=q;CUR.tries=0;CUR.done=false;prog(idx/10);topbar();
-  const sp=speakText(q.prompt)+(q.fig?' Kijk naar de figuur.':'');
-  go('<section class="card"><div class="qhead"><span>Vraag '+(idx+1)+' van 10</span><span>'+LV[l-1].t+'</span></div><div class="row sp" style="align-items:flex-start"><div style="flex:1;min-width:200px">'+q.prompt+'</div><span id="lb"></span></div><div id="qa"></div><div id="fb"></div><div class="row" id="nxr" hidden><button class="btn good" id="nx" type="button">'+(idx===9?'Klaar met dit deel':'Volgende vraag')+'</button></div></section>');
-  $('#lb').appendChild(listenBtn(sp));
-  CUR.w=q.build($('#qa'),check);if(DB.voice)setTimeout(()=>speak(sp),250);
-  $('#nx').onclick=()=>{sfx('tap');if(idx===9)showLevelResult();else{CUR.idx++;showQ()}}}
-function check(ok){if(CUR.done)return;const q=CUR.q,fb=$('#fb');
-  const rec=pts=>{DB.res[q.id]={pts,tries:CUR.tries+(ok?0:1),ok:ok?1:0};save();topbar()};
-  if(ok){CUR.done=true;const first=CUR.tries===0;rec(first?1:0);sfx('ok');fb.innerHTML='<div class="fb ok pop">'+(first?'Goed! Je krijgt 1 punt.':'Goed! Nu heb je het gevonden. Deze keer geen punt, want je had het niet de eerste keer goed.')+'</div>';$('#nxr').hidden=false;$('#nx').focus&&0;return}
-  CUR.tries++;sfx('no');
-  if(CUR.tries>=MAXT){CUR.done=true;DB.res[q.id]={pts:0,tries:CUR.tries,ok:0};save();topbar();if(CUR.w&&CUR.w.reveal)CUR.w.reveal();
-    fb.innerHTML='<div class="fb no">Dat was het niet. Het goede antwoord: <b>'+q.ans+'</b></div><div class="fb tip">'+q.tip+'</div>';$('#nxr').hidden=false;return}
-  fb.innerHTML='<div class="fb no">Nog niet goed. Probeer het nog een keer.</div>'+(CUR.tries>=2?'<div class="fb tip">'+q.tip+'</div>':'')}
-function showLevelResult(){const l=CUR.l,s=lvStat(l);prog(1);const st=s.p>=9?3:s.p>=7?2:s.p>=4?1:0;sfx('win');
-  go('<section class="card"><div style="width:90px;margin:0 auto">'+mascot()+'</div><h1 style="text-align:center">'+LV[l-1].t+' klaar!</h1><div class="stars" aria-label="'+st+' van 3 sterren">'+'★'.repeat(st)+'☆'.repeat(3-st)+'</div><p style="text-align:center" class="big">'+s.p+' van 10 punten</p><p style="text-align:center">'+(s.p>=9?'Fantastisch!':s.p>=7?'Heel goed gedaan!':s.p>=4?'Goed bezig! Oefenen helpt.':'Je hebt hard gewerkt. Probeer het nog een keer.')+'</p><div class="row" style="justify-content:center">'+(l<6?'<button class="btn" id="nl" type="button">Volgend deel</button>':'')+'<button class="btn alt" id="hm" type="button">Terug naar het begin</button></div></section>');
-  const nl=$('#nl');if(nl)nl.onclick=()=>startLevel(l+1,lvStat(l+1).n>=10?0:lvStat(l+1).n);$('#hm').onclick=showHome}
-function showResults(){prog(null);let h='<section class="card"><h2>Mijn resultaten</h2><p><b>'+esc(DB.name)+'</b>: '+total()+' van 60 punten.</p>';
-  LV.forEach((l,i)=>{const s=lvStat(i+1);h+='<p>'+(i+1)+'. '+l.t+': <b>'+s.p+'</b> punten ('+s.n+'/10 gedaan)</p>'});
-  h+='<div class="row"><button class="btn" id="csv" type="button">Download als bestand (CSV)</button><button class="btn alt" id="bk" type="button">Terug</button></div><p class="note">Alles wordt bewaard in deze browser. Wil je opnieuw beginnen?</p><div class="row"><button class="btn alt small" id="rs" type="button">Alles wissen en opnieuw beginnen</button></div></section>';
-  go(h);$('#bk').onclick=showHome;
-  $('#csv').onclick=()=>{const rows=[['naam','vraag','deel','punten','pogingen','goed']];QS.forEach(q=>{const r=DB.res[q.id];if(r)rows.push([DB.name,q.id,LV[q.lv-1].t,r.pts,r.tries,r.ok])});
-    const blob=new Blob(['﻿'+rows.map(r=>r.join(';')).join('\r\n')],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='hoeken-'+DB.name.replace(/\W+/g,'_')+'.csv';a.click()};
-  $('#rs').onclick=()=>{if(confirm('Alle antwoorden wissen?')){DB.res={};DB.explain=false;save();showHome()}}}
-if(DB.name)showHome();else showLogin();
+const NQ=LV.reduce((a,l)=>a+(l.n||5),0);
+M.sorteer0=M.sorteer;M.sorteer=()=>{const q=M.sorteer0();q.cols=true;return q};
+/* snelle toets: 10 vragen door elkaar uit alle onderdelen */
+const TPLAN=[[0,'tijd'],[0,'groot'],[0,'dubbel'],[1,'deel'],[1,'teken'],[1,'langer'],[2,'vgl2'],[2,'vgl3'],[2,'sorteer'],[2,'overtrek']];
+const TOETS=()=>build(TPLAN,e=>{const q=M[e[1]]();if(q)q.part=e[0];return q});
+/* ---------- opdrachten uit het boek: alleen stappen ---------- */
+const BOOK=[
+ {id:'o1',page:10,nr:'1',title:'Klokken aflezen',steps:[
+  'a: Kijk naar klok 1. Welke tijd geeft de klok aan? Schrijf het op.',
+  'b: Kijk naar klok 2. Schrijf de tijd op.',
+  'c: Stel je voor: de kleine wijzer van klok 2 draait een halve slag verder. Een halve slag is 6 uur verder. Hoe laat is het dan? Schrijf het op.']},
+ {id:'o2',page:10,nr:'2',title:'Klokken in de wereld',steps:[
+  'Kijk naar de 5 klokken: Tokio, New York, Londen, Moskou en Peking.',
+  'a: Pak je potlood. Teken bij elke klok een boogje tussen de twee wijzers.',
+  'b: Zoek de klok met de kleinste hoek. Schrijf op: "bij de klok van …".',
+  'c: Zoek de klok met de grootste hoek. Schrijf op: "bij de klok van …".']},
+ {id:'o3',page:11,nr:'3',title:'Twee keer zo groot',steps:[
+  'a: Het is 2 uur. Maak de hoek tussen de wijzers twee keer zo groot. Tel eerst de uren van de hoek en verdubbel dat getal.',
+  'Schrijf op hoe laat het dan kan zijn.',
+  'b: Pak een rode pen of potlood. Teken in de klok die tijd. De lange wijzer staat op de 12. De korte wijzer wijst naar het uur.']},
+ {id:'o4',page:11,nr:'4',title:'Beau en het horloge',steps:[
+  'a: Kijk naar de klok en naar het horloge. Is het horloge even laat als de klok? Schrijf ja of nee.',
+  'b: Kijk naar de wijzers. Zijn de wijzers van de klok langer of korter dan van het horloge? Omcirkel het goede woord.',
+  'c: Beau zegt: "Hoe langer de wijzers, hoe groter de hoek." Denk aan de langere benen die je net hebt geprobeerd. Heeft Beau gelijk? Schrijf ja of nee.']},
+ {id:'o5',page:11,nr:'5',title:'Hoekpunt en benen',steps:[
+  'a: Zoek het hoekpunt van de hoek. Dat is het punt waar de twee benen elkaar raken. Schrijf de letter S erbij.',
+  'b: Pak een rood potlood. Kleur de twee benen van ∠S rood.',
+  'c: Pak je liniaal. Maak de twee benen langer.',
+  'd: Kijk naar het boogje. Omcirkel het goede woord: wel of niet veranderd.']},
+ {id:'o6',page:12,nr:'6',title:'Hoeken vergelijken',steps:[
+  'a: Pak overtrekpapier en een potlood. Trek ∠A over.',
+  'Leg het overtrekpapier op ∠B. Hoekpunt op hoekpunt. Één been op één been.',
+  'b: Ligt ∠B binnen ∠A of steekt hij eruit? Schrijf op: groter of kleiner dan ∠A.',
+  'c: Doe hetzelfde bij ∠C, ∠D, ∠E en ∠F. Welke hoeken zijn groter dan ∠A? Schrijf de letters op.',
+  'd: Welke hoeken zijn kleiner dan ∠A? Schrijf de letters op.']},
+ {id:'o7',page:12,nr:'7',title:'Het hek',steps:[
+  'a: Kijk naar ∠P en ∠T op de foto. Welke hoek is kleiner? Schrijf de letter op.',
+  'b: Kijk naar ∠Q. Welke hoeken zijn kleiner dan ∠Q? Schrijf de letters op.',
+  'c: Zet alle hoeken op volgorde van klein naar groot. Begin bij de kleinste hoek. Schrijf de letters op, met ∠ ervoor.',
+  'Is het moeilijk? Gebruik overtrekpapier.']},
+ {id:'oL8',page:12,nr:'L8',title:'Heb je het geleerd?',steps:[
+  'a: Zoek het hoekpunt van de hoek. Schrijf de letter V erbij. Kleur de benen rood.',
+  'b: Welk teken schrijf je in de wiskunde voor het woord hoek? Schrijf het teken op.',
+  'c: Kijk naar ∠B, ∠A en ∠C. Vul in: groter dan of kleiner dan. Vergelijk ∠B met ∠A. Vergelijk ∠A met ∠C.',
+  'Zet bij elk onderdeel een vinkje: goed of nog niet goed.']},
+ {id:'oO4',page:13,nr:'O4',title:'De passers',steps:[
+  'a: Pak overtrekpapier. Trek de hoek van de bordpasser over.',
+  'b: Leg het overtrekpapier precies op de hoek van de gewone passer.',
+  'c: Zijn de hoeken even groot? Schrijf ja of nee.']},
+ {id:'oO7',page:13,nr:'O7',title:'Het hek (extra hulp)',steps:[
+  'a: Pak overtrekpapier. Trek ∠A over.',
+  'b: Leg ∠A op ∠B. Is ∠B groter of kleiner dan ∠A? Schrijf het op.',
+  'c: Leg ∠A op ∠D. Is ∠D groter of kleiner dan ∠A? Schrijf het op.',
+  'd: Welke hoeken zijn groter dan ∠A? Leg ∠A ook op ∠C en ∠E. Schrijf de letters op.',
+  'e: Welke hoek is groter: ∠D of ∠E? Leg ∠D op ∠E.',
+  'f: Zet alle hoeken op volgorde van klein naar groot. Schrijf de letters op.']}
+];
+
+const mascot=()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="#ffc533" stroke="#c98f00" stroke-width="4"/><path d="M28 72 L28 30 L72 72 Z" fill="#fff" stroke="#17324d" stroke-width="4" stroke-linejoin="round"/><path d="M28 60 L40 60 L40 72" fill="none" stroke="#d6336c" stroke-width="3.5"/></svg>';
+function totalPts(){return Object.values(DB.lv).reduce((a,v)=>a+(v.pts||0),0)}
+function topbar(show){$('#bar').hidden=!show;if(!show)return;$('#av').innerHTML=mascot();$('#nm').textContent=DB.name;
+  $('#pt').textContent=S.mode==='toets'?('Toets: '+S.pts+' van '+S.qs.length):S.mode==='quiz'?('Punten: '+S.pts+' van '+S.qs.length):(totalPts()+' van '+NQ+' punten');
+  $('#ts').textContent=DB.sound?'\u{1F3B5} Geluid aan':'\u{1F515} Geluid uit'}
+function renderVP(){const box=$('#vp');loadVoices();const cur=bestVoice();let h='<h2>Kies een stem</h2>';
+  if(!VOICES.length)h+='<div class="say">Op dit apparaat is geen Nederlandse stem gevonden. Daarom wordt er niet voorgelezen. Installeer een Nederlandse stem in de instellingen van je apparaat (bij Spraak), of gebruik Microsoft Edge of Google Chrome.</div>';
+  else{h+='<p class="note">Tik op een stem om hem te horen. De stem die je kiest blijft bewaard.</p><div class="opts">'+VOICES.slice().sort((a,b)=>vScore(b)-vScore(a)).map((v,i)=>'<button class="opt'+(cur&&cur.name===v.name?' ok':'')+'" type="button" data-vn="'+esc(v.name)+'">'+esc(v.name)+' ('+esc(v.lang)+')'+(i===0?' · aanbevolen':'')+'</button>').join('')+'</div><p><b>Snelheid</b></p><div class="chips">'+[['Langzaam',.75],['Normaal',.9],['Snel',1.05]].map(x=>'<button type="button" class="c2'+((DB.rate||.9)===x[1]?' sel':'')+'" data-rt="'+x[1]+'">'+x[0]+'</button>').join('')+'</div>'}
+  h+='<div class="row"><button class="btn alt small" id="vc" type="button">Sluiten</button></div>';box.innerHTML=h;
+  $$('[data-vn]',box).forEach(b=>b.onclick=()=>{DB.voiceName=b.dataset.vn;save();speak('Hallo '+DB.name+'. Dit is de stem die je kiest.');renderVP()});
+  $$('[data-rt]',box).forEach(b=>b.onclick=()=>{DB.rate=+b.dataset.rt;save();speak('Dit is de snelheid die je kiest.');renderVP()});
+  $('#vc').onclick=()=>{box.hidden=true}}
+$('#tp').onclick=()=>{const v=$('#vp');v.hidden=!v.hidden;if(!v.hidden)renderVP()};
+$('#ts').onclick=()=>{DB.sound=!DB.sound;save();topbar(true)};
+function setProg(p){const g=$('#pg');g.hidden=p==null;if(p!=null)$('i',g).style.width=p+'%'}
+const fmtT=t=>Math.floor(t/60)+':'+String(t%60).padStart(2,'0')+' min';
+const starsOf=(p,n)=>{const r=p/(n||5);return r>=.9?3:r>=.7?2:r>=.5?1:0};
+const starTxt=n=>'★'.repeat(n)+'☆'.repeat(3-n);
+
+
+/* ---------- onderkant: Menu, Vorige, Volgende ---------- */
+function navHtml(){return '<div class="nav"><button class="btn alt" id="bMenu" type="button">Menu</button><button class="btn alt" id="bPrev" type="button">← Vorige</button><button class="btn" id="bMain" type="button">Volgende →</button></div>'}
+function setMain(label,fn,off,good){const x=$('#bMain');x.textContent=label;x.disabled=!!off;x.className='btn'+(good?' good':'');x.onclick=off?null:fn}
+function wireNav(prev,ask){const m=$('#bMenu'),p=$('#bPrev');p.disabled=!prev;p.onclick=prev?()=>{sfx('tap');prev()}:null;
+  m.onclick=()=>{if(ask&&ask()&&!m.dataset.arm){m.dataset.arm='1';m.textContent='Zeker weten?';setTimeout(()=>{if(m.isConnected){delete m.dataset.arm;m.textContent='Menu'}},3500);return}menu()}}
+const inQ=()=>S.mode==='quiz'||S.mode==='toets';
+const askMenu=()=>inQ()&&S.log.length>0&&!S.fin;
+function leaveQ(){if(inQ()&&S.locked&&S.snap&&$('#ans')){S.snap[S.i]=stage.innerHTML}}
+function qNext(){leaveQ();S.i<S.qs.length-1?(S.i++,showQ()):(S.mode==='toets'?toetsDone():finish())}
+function qPrev(){leaveQ();if(S.i>0){S.i--;showQ()}else if(S.mode==='toets')toetsIntro();else explain(S.lv,LV[S.lv].steps.length-1)}
+const KNOP_OK=['Goed zo!','Super!','Knap gedaan!','Helemaal goed!'];
+/* ---------- schermen ---------- */
+function nameScreen(){topbar(false);setProg(null);
+  stage.innerHTML='<div class="card"><h1>'+META.title+'</h1><p>'+META.intro+'</p><label for="nmi"><b>Schrijf hier je naam</b></label><div class="row"><input class="nm" id="nmi" maxlength="30" autocomplete="off"></div><div class="row"><button class="btn" id="go" type="button">Beginnen</button></div><p class="note" id="er" hidden>Schrijf eerst je naam.</p></div>';
+  const go=()=>{const v=$('#nmi').value.trim();if(v.length<2){$('#er').hidden=false;return}DB.name=v;save();menu()};
+  $('#go').onclick=go;$('#nmi').onkeydown=e=>{if(e.key==='Enter')go()}}
+function menu(){S.lv=null;S.mode='';S.keep=false;S.fin=false;stopSpeech();topbar(true);setProg(null);window.scrollTo(0,0);
+  const done=LV.every((_,i)=>DB.lv[i]&&DB.lv[i].done),T=DB.toets;
+  let h='<div class="card"><h1>Hoi '+esc(DB.name)+'!</h1><p>Kies een onderdeel. Eerst speel je met de uitleg. Dan maak je vragen.</p>'+(done?'<div class="fb ok">Alle onderdelen klaar! '+totalPts()+' van '+NQ+' punten.</div>':'')+'<div class="lv">';
+  LV.forEach((l,i)=>{const r=DB.lv[i];h+='<button class="lvb'+(r&&r.done?' done':'')+'" data-i="'+i+'" type="button"><span class="lvn">'+(i+1)+'</span><span><b>'+l.t+'</b><small>'+l.sub+'</small></span><span class="st">'+(r&&r.done?starTxt(starsOf(r.pts,l.n||5))+'<small>'+r.pts+' van '+(l.n||5)+'</small>':'')+'</span></button>'});
+  const nb=Object.keys(DB.book).length;
+  h+='<button class="lvb bk" id="bk" type="button"><span class="lvn">\u{1F4D6}</span><span><b>Opdrachten uit je boek</b><small>Stap voor stap · '+nb+' van '+BOOK.length+' klaar</small></span></button>';
+  h+='<button class="lvb tt'+(T?' done':'')+'" id="tt" type="button"><span class="lvn">\u{26A1}</span><span><b>Snelle toets</b><small>Hoeveel procent weet jij?'+(T?' · laatste: '+T.last+'%':'')+'</small></span><span class="st">'+(T?T.best+'%':'')+'</span></button></div>';
+  h+='<div class="row"><button class="btn alt small" id="rs" type="button">Opnieuw beginnen</button><span class="note" id="rsn"></span></div></div>';
+  stage.innerHTML=h;$$('.lvb[data-i]').forEach(b=>b.onclick=()=>explain(+b.dataset.i,0));$('#bk').onclick=bookMenu;$('#tt').onclick=toetsIntro;
+  let armed=0;$('#rs').onclick=function(){if(!armed){armed=1;$('#rsn').textContent='Zeker weten? Tik nog een keer. Je punten en je naam worden gewist.';setTimeout(()=>{armed=0;$('#rsn').textContent=''},4000)}else{DB={name:'',lv:{},book:{},toets:null,voice:DB.voice,sound:DB.sound,rate:DB.rate,voiceName:DB.voiceName};save();nameScreen()}}}
+function explain(i,k){S.lv=i;S.mode='';stopSpeech();topbar(true);setProg(null);const L=LV[i],st=L.steps[k];
+  const paras=st.txt.split('\n').map(p=>'<div class="say">'+p+'</div>').join('');
+  stage.innerHTML='<div class="card"><div class="qhead"><span>Onderdeel '+(i+1)+': '+L.t+'</span><span>'+(k+1)+' van '+L.steps.length+'</span></div><h2>'+st.h+'</h2>'+paras+(st.fig?'<div>'+st.fig()+'</div>':'')+(st.w?'<div class="wd" id="wd"></div>':'')+'<div class="row"><span id="lis"></span></div>'+navHtml()+'</div>';
+  if(st.w)WID[st.w]($('#wd'),st.o);
+  $('#lis').appendChild(listenBtn(say(st.h+'. '+st.txt.replace(/\n/g,' '))));
+  wireNav(k?()=>explain(i,k-1):null,null);
+  setMain(k<L.steps.length-1?'Volgende →':'Naar de vragen →',()=>{if(k<L.steps.length-1)explain(i,k+1);else if(S.keep&&S.lv===i&&!S.fin){showQ()}else startQuiz(i)});
+  window.scrollTo(0,0)}
+/* ----- vragen ----- */
+function startQuiz(i){S={lv:i,i:0,tries:0,pts:0,qs:LV[i].gen(),locked:false,log:[],mode:'quiz',t0:0,seq:[],snap:[],keep:true,saved:false,fin:false,one:false};showQ()}
+function progress(){const L=S.qs.length;let h='';for(let i=0;i<L;i++){h+='<i style="display:inline-block;width:20px;height:20px;margin:0 2px;border-radius:50%;border:3px solid '+(i<S.log.length?(S.log[i].pts?'#4aa83a':'#e8883a'):(i===S.i?'#2a6fdb':'#c4dcf2'))+';background:'+(i<S.log.length?(S.log[i].pts?'#7ed36a':'#ffb066'):'#fff')+'"></i>'}return '<div class="center" style="margin:4px 0 10px">'+h+'</div>'}
+function showQ(){stopSpeech();window.scrollTo(0,0);S.fin=false;topbar(true);const q=S.qs[S.i],n=S.qs.length,tt=S.mode==='toets';setProg(S.i/n*100);
+  const lastLab=S.i===n-1?'Klaar ▶':'Volgende →';
+  if(S.snap[S.i]){stage.innerHTML=S.snap[S.i];S.locked=true;$('#lis').innerHTML='';$('#lis').appendChild(listenBtn(q.say||say(q.text)));wireNav(qPrev,askMenu);setMain(lastLab,qNext,false,true);return}
+  S.t0=Date.now();S.tries=0;S.locked=false;S.seq=[];
+  let h='<div class="card"><div class="qhead"><span>'+(tt?'⚡ Snelle toets':LV[S.lv].t)+'</span><span>Vraag '+(S.i+1)+' van '+n+'</span></div>'+progress();
+  if(q.fig)h+=q.fig;
+  h+='<div class="q">'+q.text+'</div><div id="ans">';
+  if(q.type==='mc')h+='<div class="opts'+(q.two?' two':'')+(q.four?' four':'')+'">'+q.opts.map(o=>'<button class="opt" type="button" data-v="'+esc(o.v)+'">'+o.h+'</button>').join('')+'</div>';
+  else if(q.type==='order'){const cs=shuffle(q.cards.map((c,i)=>i));h+='<div class="opts'+(q.cols?' c3':'')+'" id="ord">'+cs.map(i=>'<button class="opt" type="button" data-v="'+i+'">'+q.cards[i].h+'<span class="nb" hidden></span></button>').join('')+'</div>'}
+  else if(q.type==='custom')h+='<div id="cq"></div>';
+  h+='</div><div id="fbk" role="status" aria-live="polite"></div><div class="row"><span id="lis"></span></div>'+navHtml()+'</div>';
+  stage.innerHTML=h;$('#lis').appendChild(listenBtn(q.say||say(q.text)));
+  wireNav(qPrev,askMenu);setMain(lastLab,qNext,true);
+  if(q.type==='mc')$$('.opt').forEach(b=>b.onclick=()=>judge(b.dataset.v===q.ans,b));
+  else if(q.type==='custom')q.mount($('#cq'),(ok,msg)=>judge(ok,null,msg));
+  else if(q.type==='order')$$('#ord > button').forEach(b=>b.onclick=()=>{if(S.locked||S.seq.includes(+b.dataset.v))return;sfx('tap');S.seq.push(+b.dataset.v);const nb=$('.nb',b);nb.hidden=false;nb.textContent=S.seq.length;b.classList.add('sel');
+    if(S.seq.length===q.cards.length){const ok=S.seq.every((v,i)=>q.cards[v].r===i);if(ok)judge(true);else{judge(false,null,'Nog niet goed. De volgorde klopt niet.'+(S.one?'':' Begin opnieuw.'));if(!S.locked){S.seq=[];$$('#ord > button').forEach(x=>{x.classList.remove('sel');$('.nb',x).hidden=true})}}}})}
+function fb(k,t){$('#fbk').innerHTML='<div class="fb '+k+'">'+t+'</div>'}
+function judge(ok,btn,msg){if(S.locked)return;const q=S.qs[S.i];
+  if(ok){S.locked=true;sfx('ok');const aw=S.tries===0?1:0,sec=Math.round((Date.now()-S.t0)/1000);S.pts+=aw;S.log.push({pts:aw,sec,part:q.part});topbar(true);if(btn)btn.classList.add('ok');
+    fb('ok',pick(KNOP_OK)+(S.one?'':' '+(aw?'+1 punt':'Geen punt, want het was niet de eerste keer goed.')));endQ()}
+  else{if(S.one)S.tries=2;S.tries++;sfx('no');if(btn){btn.classList.add('no');btn.disabled=true}
+    if(S.tries===1)fb('no',msg||'Nog niet goed. Probeer het nog een keer.');
+    else if(S.tries===2)$('#fbk').innerHTML='<div class="fb no">'+(msg||'Nog niet goed.')+'</div><div class="fb tip">'+q.tip+'</div>';
+    else{S.locked=true;const sec=Math.round((Date.now()-S.t0)/1000);S.log.push({pts:0,sec,part:q.part});
+      if(q.type==='mc')$$('.opt').forEach(b=>{if(b.dataset.v===q.ans)b.classList.add('ok')});
+      if(q.type==='order'){const o=q.cards.map((c,i)=>i).sort((a,b)=>q.cards[a].r-q.cards[b].r);$$('#ord > button').forEach(b=>{const nb=$('.nb',b);nb.hidden=false;nb.textContent=o.indexOf(+b.dataset.v)+1})}
+      if(q.reveal)q.reveal($('#cq'));
+      $('#fbk').innerHTML='<div class="fb no">Het goede antwoord is: '+q.show+'</div>'+(S.one?'':'<div class="fb tip">'+q.tip+'</div>');endQ()}}}
+function endQ(){$$('.opt').forEach(b=>b.disabled=true);setMain(S.i===S.qs.length-1?'Klaar ▶':'Volgende →',qNext,false,true);$('#bMain').focus()}
+function finish(){setProg(100);window.scrollTo(0,0);const i=S.lv,p=S.pts,n=S.qs.length,old=DB.lv[i]||{};
+  const tot=S.log.reduce((a,x)=>a+x.sec,0);
+  if(!S.saved){S.saved=true;DB.lv[i]={done:true,pts:Math.max(old.pts||0,p),last:p,time:tot,n:(old.n||0)+1};save()}
+  S.mode='';S.fin=true;topbar(true);sfx('win');
+  const s=starsOf(p,n),r=p/n,all=LV.every((_,j)=>DB.lv[j]&&DB.lv[j].done);
+  let h='<div class="card center"><h1>Onderdeel '+(i+1)+' klaar!</h1><div class="stars">'+starTxt(s)+'</div><p class="big">'+p+' van '+n+' meteen goed</p><p>'+(r>=.9?'Fantastisch!':r>=.7?'Heel goed gedaan!':r>=.5?'Goed bezig. Probeer nog een keer voor meer sterren.':'Blijf oefenen, dan wordt het steeds makkelijker.')+'</p>';
+  if(all)h+='<div class="fb ok">Alle '+LV.length+' onderdelen klaar! '+totalPts()+' van '+NQ+' punten.</div>';
+  h+='<div class="row" style="justify-content:center"><button class="btn alt" id="ag" type="button">Nog een keer</button></div>'+navHtml()+'</div>';
+  stage.innerHTML=h;$('#ag').onclick=()=>startQuiz(i);
+  wireNav(()=>{S.i=n-1;S.mode='quiz';showQ()},null);
+  if(i<LV.length-1)setMain('Volgende →',()=>explain(i+1,0));else setMain('Naar het boek ▶',bookMenu)}
+/* ----- opdrachten uit het boek: alleen stappen ----- */
+function bookMenu(){S.mode='';S.keep=false;S.fin=false;stopSpeech();topbar(true);setProg(null);window.scrollTo(0,0);
+  const pages=[...new Set(BOOK.map(b=>b.page))];
+  let h='<div class="card"><h1>Opdrachten uit je boek</h1><div class="where">Pak je boek. Zoek <b>'+PAD+'</b>. Kies de opdracht waar je mee bezig bent.</div>';
+  pages.forEach(pg=>{h+='<h3>Bladzijde '+pg+'</h3><div class="lv">'+BOOK.filter(b=>b.page===pg).map(b=>'<button class="lvb bk" data-id="'+b.id+'" type="button"><span class="lvn" style="font-size:.95rem">'+b.nr+'</span><span><b>Opdracht '+b.nr+'</b><small>'+b.title+'</small></span><span class="st">'+(DB.book[b.id]?'✓':'')+'</span></button>').join('')+'</div>'});
+  h+=navHtml()+'</div>';
+  stage.innerHTML=h;$$('.lvb[data-id]').forEach(b=>b.onclick=()=>bookEx(b.dataset.id));
+  wireNav(()=>{S.lv=LV.length-1;explain(LV.length-1,LV[LV.length-1].steps.length-1)},null);setMain('Eerste opdracht →',()=>bookEx(BOOK[0].id))}
+function bookEx(id){stopSpeech();topbar(true);setProg(null);S.mode='';const B=BOOK.find(x=>x.id===id),ix=BOOK.indexOf(B),isL=ix===BOOK.length-1,file='boek/p'+B.page+'-opdracht-'+B.nr+'.png';
+  stage.innerHTML='<div class="card"><div class="badges"><span class="badge">Bladzijde '+B.page+'</span><span class="badge o">Opdracht '+B.nr+'</span></div><h2>'+B.title+'</h2>'
+   +'<div class="where">Pak je boek. Sla open <b>bladzijde '+B.page+'</b> en zoek <b>opdracht '+B.nr+'</b>.</div>'
+   +'<a href="'+file+'" target="_blank" rel="noopener"><img class="bk" src="'+file+'" alt="Opdracht '+B.nr+' uit je boek, bladzijde '+B.page+'"></a><p class="note center" style="margin:0">Tik op de afbeelding om groter te zien.</p>'
+   +'<h3>Wat moet je doen?</h3><p class="note" style="margin:0 0 6px">Tik een stap aan als je hem gedaan hebt.</p><div id="sts">'+B.steps.map((t,i)=>'<div class="stp" role="button" tabindex="0" data-k="'+i+'"><span class="n">'+(i+1)+'</span><span>'+t+'</span></div>').join('')+'</div><div id="sd"></div>'
+   +'<div class="row"><span id="lis"></span></div>'+navHtml()+'</div>';
+  $('#lis').appendChild(listenBtn(say('Opdracht '+B.nr+'. '+B.title+'. Wat moet je doen? '+B.steps.map((t,i)=>'Stap '+(i+1)+'. '+t).join(' '))));
+  const upd=()=>{const n=$$('#sts .stp.done').length;$('#sd').innerHTML=n===B.steps.length?'<div class="fb ok">Opdracht '+B.nr+' klaar! Goed gedaan.</div>':'';if(n===B.steps.length&&!DB.book[B.id]){DB.book[B.id]=1;save();sfx('win')}};
+  $$('#sts .stp').forEach(el=>{const tg=()=>{sfx('tap');el.classList.toggle('done');const sp=$('.n',el);sp.textContent=el.classList.contains('done')?'✓':(+el.dataset.k+1);upd()};el.onclick=tg;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tg()}}});
+  wireNav(()=>ix>0?bookEx(BOOK[ix-1].id):bookMenu(),null);
+  setMain(isL?'Naar de toets ▶':'Volgende opdracht →',()=>{if(!DB.book[B.id]){DB.book[B.id]=1;save()}isL?toetsIntro():bookEx(BOOK[ix+1].id)},false,isL);
+  window.scrollTo(0,0)}
+/* ----- snelle toets ----- */
+function toetsIntro(){S.mode='';S.keep=false;S.fin=false;stopSpeech();topbar(true);setProg(null);window.scrollTo(0,0);const T=DB.toets;
+  stage.innerHTML='<div class="card center"><h1>⚡ Snelle toets</h1><p class="big">10 vragen</p><p>Je hebt 1 kans per vraag. Aan het eind zie je hoeveel procent je weet van deze les.</p>'+(T?'<div class="fb ok">Laatste keer: <b>'+T.last+'%</b> · Beste: <b>'+T.best+'%</b></div>':'')+navHtml()+'</div>';
+  wireNav(()=>bookEx(BOOK[BOOK.length-1].id),null);setMain(T?'Toets opnieuw ▶':'Start de toets ▶',startToets,false,true)}
+function startToets(){S={lv:null,i:0,tries:0,pts:0,qs:TOETS(),locked:false,log:[],mode:'toets',t0:0,seq:[],snap:[],keep:false,saved:false,fin:false,one:true};showQ()}
+function toetsDone(){setProg(100);window.scrollTo(0,0);const n=S.qs.length,p=S.pts,pct=Math.round(p/n*100),old=DB.toets||{};
+  if(!S.saved){S.saved=true;DB.toets={last:pct,best:Math.max(old.best||0,pct),n:(old.n||0)+1};save()}
+  S.mode='';S.fin=true;topbar(true);sfx('win');
+  const kl=pct>=90?'good':pct>=60?'mid':'low',msg=pct>=90?'Wauw! Je weet bijna alles van deze les.':pct>=70?'Goed! Je weet de meeste dingen.':pct>=50?'Je bent op weg. Oefen de onderdelen hieronder nog een keer.':'Nog even oefenen. Doe de onderdelen hieronder nog een keer.';
+  const miss={};S.log.forEach(x=>{if(x.part!=null&&!x.pts)miss[x.part]=(miss[x.part]||0)+1});
+  const weak=Object.keys(miss).map(Number).sort((a,b)=>a-b);
+  let h='<div class="card center"><h1>Jouw resultaat</h1><div class="pct '+kl+'">'+pct+'%</div><p class="big">'+p+' van '+n+' goed</p><p>'+msg+'</p>';
+  if(weak.length)h+='<div style="text-align:left"><h3>Oefen nog een keer</h3><div class="lv">'+weak.map(j=>'<button class="lvb" data-w="'+j+'" type="button"><span class="lvn">'+(j+1)+'</span><span><b>'+LV[j].t+'</b><small>'+miss[j]+' fout</small></span></button>').join('')+'</div></div>';
+  else h+='<div class="fb ok">Alles goed! Je hoeft niets meer te oefenen.</div>';
+  h+='<div class="row" style="justify-content:center"><button class="btn alt" id="ag" type="button">Toets opnieuw</button></div>'+navHtml()+'</div>';
+  stage.innerHTML=h;$('#ag').onclick=startToets;$$('[data-w]').forEach(b=>b.onclick=()=>explain(+b.dataset.w,0));
+  wireNav(()=>{S.i=n-1;S.mode='toets';showQ()},null);setMain('Naar het menu ▶',menu,false,true)}
+window.BR={S:()=>S,LV,BOOK,M,WID,TOETS};
+if(DB.name)menu();else nameScreen();
+
 </script></body></html>

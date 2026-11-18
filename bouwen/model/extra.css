@@ -1,0 +1,12 @@
+.nav{position:sticky;bottom:0;z-index:5;display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px;padding:10px 0 4px;margin-top:14px;background:linear-gradient(to top,#fff 78%,rgba(255,255,255,0))}
+.nav .btn{padding:10px 6px;font-size:1rem;min-height:52px}
+.opt.sel{border-color:var(--blue);background:#eef5ff}.opt .nb{margin-left:8px;background:var(--blue);color:#fff;border-radius:50%;width:26px;height:26px;display:inline-grid;place-items:center;font-weight:700}
+.qhead span:last-child{white-space:nowrap}
+.stp{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.stp.done{background:var(--goodbg)}.stp.done .n{background:var(--good)}
+.pct{font:700 4.6rem/1.1 Lexend,sans-serif;margin:6px 0}.pct.good{color:var(--good)}.pct.mid{color:var(--orange)}.pct.low{color:var(--oops)}
+.lvb.tt .lvn{background:var(--yel);color:var(--ink)}
+.bub{font:700 14px Lexend,sans-serif;fill:#b35f00;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.vt:hover circle{fill:#ffe9b0}
+.opts.c3{grid-template-columns:repeat(3,minmax(0,1fr))}.opts.c3 .opt{min-width:0;overflow:hidden}.opts.c3 .opt{padding:6px;position:relative}.opts.c3 .opt .nb{position:absolute;top:4px;right:4px;margin:0}
+.lvb .st{text-align:center;line-height:1.2}.lvb .st small{display:block;font-size:.8rem}

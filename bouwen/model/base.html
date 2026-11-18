@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>@@TITLE@@</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e8f3ff;--ink:#17324d;--soft:#4b6580;--blue:#2a6fdb;--blue2:#1d57b3;--orange:#e8870a;--good:#1d8a4a;--goodbg:#dff3e6;--oops:#c0392b;--oopsbg:#fde7e3;--card:#fff;--line:#c4dcf2;--yel:#ffc533;--rood:#d6336c}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 18px/1.5 Lexend,"Segoe UI",system-ui,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:12px 16px 60px}
+header.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.who{display:flex;align-items:center;gap:10px;font-weight:600;flex:1;min-width:140px}.who svg{width:44px;height:44px}
+.chip{border:0;border-radius:999px;padding:8px 14px;font:600 14px Lexend,sans-serif;background:var(--blue);color:#fff;cursor:pointer;min-height:40px}
+.chip.pts{background:var(--yel);color:#4a3200;cursor:default}
+.prog{height:12px;border-radius:99px;background:#c4dcf2;overflow:hidden;margin:6px 0 14px}.prog i{display:block;height:100%;background:var(--good);width:0;transition:width .3s}
+.card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:18px 18px 20px;margin-bottom:14px}
+h1{font-size:1.7rem;line-height:1.2;margin:.2em 0 .4em}h2{font-size:1.4rem;margin:.2em 0 .5em}h3{font-size:1.1rem;margin:.9em 0 .3em}
+p{margin:.5em 0}.note{color:var(--soft);font-size:.9rem}.center{text-align:center}
+.btn{border:0;border-radius:14px;padding:12px 20px;font:600 1.05rem Lexend,sans-serif;background:var(--blue);color:#fff;cursor:pointer;min-height:50px;box-shadow:0 3px 0 var(--blue2)}
+.btn:active{transform:translateY(2px);box-shadow:none}.btn:disabled{opacity:.5;box-shadow:none;cursor:default}
+.btn.alt{background:#fff;color:var(--blue);border:2px solid var(--blue);box-shadow:none}.btn.small{min-height:40px;padding:6px 14px;font-size:.95rem}
+.btn.good{background:var(--good);box-shadow:0 3px 0 #146b37}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}.row.sp{justify-content:space-between}
+.qhead{display:flex;justify-content:space-between;gap:8px;color:var(--soft);font-size:.9rem;font-weight:600}
+.q{font-size:1.2rem;font-weight:600;margin:8px 0}
+.opts{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}.opts.two{grid-template-columns:1fr 1fr}.opts.four{grid-template-columns:1fr 1fr}
+.opt{border:2px solid var(--line);background:#fff;border-radius:14px;padding:10px 14px;font:600 1.05rem Lexend,sans-serif;color:var(--ink);cursor:pointer;text-align:left;min-height:54px}
+.opt:hover{border-color:var(--blue)}.opt.ok{background:var(--goodbg);border-color:var(--good)}.opt.no{background:var(--oopsbg);border-color:var(--oops);opacity:.8}
+.opt svg{display:block;margin:0 auto;width:90px;height:auto}.opts.sg .opt{text-align:center}
+.fb{border-radius:14px;padding:12px 14px;margin-top:12px;font-weight:600}.fb.ok{background:var(--goodbg);color:#0f5a2c}.fb.no{background:var(--oopsbg);color:#7a2118}.fb.tip{background:#fff6d9;color:#5a4300;font-weight:400}
+.say{background:#f1f7ff;border-left:5px solid var(--blue);border-radius:10px;padding:10px 14px;margin:12px 0}
+.big{font-weight:700;font-size:1.3em}
+.kw{background:#fff0b3;border-radius:6px;padding:0 6px;font-weight:700}
+.fig{display:block;width:100%;margin:6px auto;touch-action:manipulation}.fig.ang{max-width:260px}.fig.poly{max-width:260px}
+.ray{stroke:var(--ink);stroke-width:4;stroke-linecap:round}.ray2{stroke:var(--blue);stroke-width:4;stroke-linecap:round}.ray.ghost{stroke:#9bb;stroke-dasharray:6 6;stroke-width:3}
+.arc{fill:none;stroke:var(--orange);stroke-width:3}.sgn{fill:none;stroke:var(--rood);stroke-width:3;stroke-linejoin:round}
+.geo{fill:rgba(255,197,51,.38);stroke:#b88600;stroke-width:3;stroke-linejoin:round}
+.vd{fill:var(--ink)}.pg{fill:#eaf4ff;stroke:var(--ink);stroke-width:3.5;stroke-linejoin:round}.lt{font:700 13px Lexend,sans-serif;fill:var(--ink)}
+.hd{fill:var(--orange);stroke:#fff;stroke-width:3;cursor:grab}.dr{touch-action:none;user-select:none;-webkit-user-select:none}
+.vtx{fill:#fff;stroke:var(--blue);stroke-width:3;cursor:pointer}.vtx.sel{fill:var(--orange)}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.acard{position:relative;border:2px solid var(--line);background:#fff;border-radius:14px;padding:4px 4px 8px;cursor:pointer;font:inherit;color:inherit;text-align:center}
+.acard:hover{border-color:var(--blue)}.acard.ok{background:var(--goodbg);border-color:var(--good)}.acard.no{background:var(--oopsbg);border-color:var(--oops);opacity:.8}
+.acard b{display:block}.acard .nb{position:absolute;top:6px;right:8px;background:var(--blue);color:#fff;border-radius:50%;width:28px;height:28px;display:grid;place-items:center;font-weight:700}
+.acard .fig{max-width:150px}.acard.sel{border-color:var(--blue);background:#eef5ff}
+.mrow{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:center;margin-top:8px;border-top:1px solid var(--line);padding-top:8px}.mrow .fig{max-width:110px;margin:0}
+.mrow .tri{display:flex;gap:6px;flex-wrap:wrap}.mrow .tri button{flex:1;min-width:70px;border:2px solid var(--line);background:#fff;border-radius:12px;font:600 .95rem Lexend,sans-serif;padding:8px 4px;cursor:pointer;min-height:44px;color:var(--ink)}
+.mrow .tri button.sel{background:var(--blue);color:#fff;border-color:var(--blue)}.mrow .tri button.ok{background:var(--goodbg);border-color:var(--good);color:var(--ink)}.mrow .tri button.no{background:var(--oopsbg);border-color:var(--oops);color:var(--ink)}
+.slider{width:100%;height:44px;accent-color:var(--blue)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.c2{border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font:600 1rem Lexend,sans-serif;color:var(--ink);cursor:pointer;min-height:42px}.c2.sel{background:var(--blue);color:#fff;border-color:var(--blue)}
+.wd{background:#f6faff;border:2px dashed var(--line);border-radius:16px;padding:12px;margin:12px 0}
+.verd{text-align:center;font-weight:700;font-size:1.25rem;min-height:1.6em}
+.lv{display:grid;gap:10px;margin-top:10px}.lvb{display:flex;align-items:center;gap:12px;border:2px solid var(--line);background:#fff;border-radius:16px;padding:12px 14px;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.lvb:hover{border-color:var(--blue)}.lvb b{display:block}.lvb small{color:var(--soft)}.lvn{width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700;display:grid;place-items:center;flex:none}.lvb.done .lvn{background:var(--good)}
+.lvb .st{margin-left:auto;color:#e5a400;font-size:1.3rem;white-space:nowrap}
+.lvb.bk{border-color:var(--orange);background:#fff8ec}.lvb.bk .lvn{background:var(--orange)}
+.stars{font-size:2.4rem;text-align:center;letter-spacing:6px;color:#e5a400}
+input.nm{font:600 1.2rem Lexend,sans-serif;width:100%;padding:12px;border:3px solid var(--line);border-radius:14px;color:var(--ink)}
+.lg{border-collapse:collapse;width:100%;font-size:.9rem;margin-top:6px}.lg th,.lg td{text-align:left;padding:3px 8px 3px 0;border-bottom:1px solid var(--line)}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}.badge{background:var(--blue);color:#fff;border-radius:12px;padding:6px 14px;font-weight:700}.badge.o{background:var(--orange)}
+.where{background:#fff6d9;border:2px solid #f0d27a;border-radius:14px;padding:12px 14px;margin:10px 0;font-weight:600}
+.stp{display:flex;gap:10px;align-items:flex-start;background:#f1f7ff;border-radius:12px;padding:10px 12px;margin:8px 0}.stp .n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700;display:grid;place-items:center}
+.ans{background:var(--goodbg);border:2px solid var(--good);border-radius:14px;padding:12px 14px;margin:10px 0}.ans ul{margin:.3em 0 0;padding-left:1.2em}
+img.bk{display:block;width:100%;border-radius:12px;border:2px solid var(--line);margin:8px 0}
+@keyframes pop{0%{transform:scale(.8)}60%{transform:scale(1.08)}100%{transform:scale(1)}}.pop{animation:pop .35s}
+.nav{position:sticky;bottom:0;z-index:5;display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px;padding:10px 0 4px;margin-top:14px;background:linear-gradient(to top,#fff 78%,rgba(255,255,255,0))}
+.nav .btn{padding:10px 6px;font-size:1rem;min-height:52px}
+.rn{font:600 10.5px Lexend,sans-serif;fill:#17324d}.rl{font:700 11px Lexend,sans-serif;fill:#8aa3bd}
+.bub{font:700 14px Lexend,sans-serif;fill:#b35f00;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.opt.sel{border-color:var(--blue);background:#eef5ff}.opt .nb{margin-left:8px;background:var(--blue);color:#fff;border-radius:50%;width:26px;height:26px;display:inline-grid;place-items:center;font-weight:700}
+.vt:hover circle{fill:#ffe9b0}
+.qhead span:last-child{white-space:nowrap}
+</style></head><body><a href="index.html" id="back" style="display:inline-block;margin:10px 14px 0;color:#2a6fdb;font:700 15px/1.2 system-ui,sans-serif;text-decoration:none">← Alle lessen</a>
+<div class="wrap">
+<header class="bar" id="bar" hidden>
+ <div class="who"><span id="av"></span><span id="nm"></span></div>
+ <button class="chip" id="tp" type="button">🗣 Stem kiezen</button><button class="chip" id="ts" type="button"></button><span class="chip pts" id="pt">0 punten</span>
+</header>
+<div id="vmsg" class="fb tip" hidden></div><div class="card" id="vp" hidden></div>
+<div class="prog" id="pg" hidden><i></i></div>
+<main id="stage"></main>
+</div>
+<script src="resultaten.js"></script>
+<script>
+'use strict';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const KEY='@@KEY@@';
+let DB={name:'',lv:{},book:{},voice:true,sound:true};
+try{const r=localStorage.getItem(KEY);if(r)DB=Object.assign(DB,JSON.parse(r))}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}}
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=ri(0,i);[a[i],a[j]]=[a[j],a[i]]}return a}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* ---------- geluid en stem ---------- */
+let AC=null;
+function tone(f,t,d,type,g){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),v=AC.createGain();o.type=type||'sine';o.frequency.value=f;v.gain.setValueAtTime(0.0001,AC.currentTime+t);v.gain.exponentialRampToValueAtTime(g||.12,AC.currentTime+t+.02);v.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+t+d);o.connect(v);v.connect(AC.destination);o.start(AC.currentTime+t);o.stop(AC.currentTime+t+d+.05)}catch(e){}}
+function sfx(k){if(!DB.sound)return;
+  if(k==='ok'){[523,659,784].forEach((f,i)=>tone(f,i*.1,.25))}
+  else if(k==='no'){tone(300,0,.18,'triangle',.08);tone(260,.14,.22,'triangle',.08)}
+  else if(k==='tap')tone(620,0,.07,'sine',.07);
+  else if(k==='win'){[523,659,784,1047,784,1047].forEach((f,i)=>tone(f,i*.12,.3))}}
+let VOICES=[];
+function loadVoices(){try{VOICES=speechSynthesis.getVoices().filter(v=>/^nl([-_]|$)/i.test(v.lang))}catch(e){VOICES=[]}}
+try{loadVoices();speechSynthesis.addEventListener('voiceschanged',loadVoices)}catch(e){}
+function vScore(v){let n=0;if(/nl[-_]NL/i.test(v.lang))n+=3;if(/natural|online|neural|premium|enhanced|siri/i.test(v.name))n+=5;if(/colette|fenna|claire|ellen|google nederlands|female|vrouw|dena/i.test(v.name))n+=3;if(/maarten|xander|frank|ruben|arnaud/i.test(v.name))n-=2;if(v.localService)n+=1;return n}
+function bestVoice(){loadVoices();if(!VOICES.length)return null;if(DB.voiceName){const m=VOICES.find(v=>v.name===DB.voiceName);if(m)return m}return VOICES.slice().sort((a,b)=>vScore(b)-vScore(a))[0]}
+function stopSpeech(){try{speechSynthesis.cancel()}catch(e){}}
+let vmT=0;
+function noVoiceMsg(){const m=$('#vmsg');m.textContent='Op dit apparaat is geen Nederlandse stem gevonden. Daarom lees ik niet voor. Installeer een Nederlandse stem in de instellingen van je apparaat (bij Spraak), of gebruik Microsoft Edge of Google Chrome.';m.hidden=false;clearTimeout(vmT);vmT=setTimeout(()=>{m.hidden=true},9000)}
+function speak(t){if(!t)return;try{const v=bestVoice();if(!v){noVoiceMsg();return}stopSpeech();const u=new SpeechSynthesisUtterance(t);u.voice=v;u.lang=v.lang;u.rate=DB.rate||.9;u.pitch=1.05;speechSynthesis.speak(u)}catch(e){}}
+function listenBtn(t){const b=document.createElement('button');b.type='button';b.className='btn alt small';b.textContent='\u{1F50A} Lees voor';b.onclick=()=>speak(t);return b}
+const say=s=>String(s).replace(/<[^>]+>/g,' ').replace(/∠/g,'hoek ').replace(/°/g,' graden').replace(/₁/g,' 1').replace(/₂/g,' 2').replace(/[∟┐]/g,'hoekje').replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim();
+
+let S={lv:null,i:0,tries:0,pts:0,qs:[],locked:false,log:[],mode:'',t0:0,seq:[],snap:[],keep:false,saved:false,fin:false};const stage=$('#stage');
